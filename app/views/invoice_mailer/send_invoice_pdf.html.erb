@@ -45,7 +45,7 @@
   </head>
   <body>
     <div class="header">
-      <h1>🧾 Invoice from Atma Nirbhar Farm</h1>
+      <h1>🧾 Invoice from <%= AdminSetting.current.business_name %></h1>
       <p>Your monthly delivery invoice is ready!</p>
     </div>
 
@@ -104,10 +104,10 @@
     <p><strong>💳 Payment Instructions:</strong><br>
     Please make your payment by the due date mentioned above. You can scan the UPI QR code in the invoice or contact us for other payment methods.</p>
 
-    <p>Thank you for choosing Atma Nirbhar Farm for your fresh milk delivery needs. We appreciate your continued trust in our services!</p>
+    <p>Thank you for choosing <%= AdminSetting.current.business_name %> for your fresh milk delivery needs. We appreciate your continued trust in our services!</p>
 
     <div class="footer">
-      <h4>🏠 Atma Nirbhar Farm</h4>
+      <h4>🏠 <%= AdminSetting.current.business_name %></h4>
       <div class="contact-info">
         📍 Bangalore<br>
         📞 +91 9972808044 | +91 9008860329<br>

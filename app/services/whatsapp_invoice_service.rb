@@ -151,7 +151,7 @@ class WhatsappInvoiceService
 
       📎 Download your invoice: #{pdf_url}
 
-      Thank you for choosing Atma Nirbhar Farm! 🙏
+      Thank you for choosing #{AdminSetting.current.business_name}! 🙏
     MESSAGE
   end
 end

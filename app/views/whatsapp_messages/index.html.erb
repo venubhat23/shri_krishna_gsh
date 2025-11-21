@@ -71,7 +71,7 @@
                 <label for="individual-message" class="form-label fw-semibold">
                   <i class="fas fa-comment-alt me-2 text-muted"></i>Your Message
                 </label>
-                <textarea id="individual-message" class="form-control modern-textarea" rows="4" placeholder="👋 Hello! Thank you for being a valued customer of Atma Nirbhar Farm!
+                <textarea id="individual-message" class="form-control modern-textarea" rows="4" placeholder="👋 Hello! Thank you for being a valued customer of <%= AdminSetting.current.business_name %>!
 
 🥛 We hope you're enjoying our fresh, pure desi cow milk.
 
@@ -81,7 +81,7 @@
 
 🙏 Thank you for your continued trust!
 
-🏠 Atma Nirbhar Farm, Bangalore"></textarea>
+🏠 <%= AdminSetting.current.business_name %>, Bangalore"></textarea>
               </div>
 
               <button type="submit" class="btn btn-primary btn-lg w-100 modern-btn" id="send-individual-btn">
@@ -169,7 +169,7 @@ We hope you are enjoying our fresh desi cow milk! 🥛
 
 🙏 Thank you for your understanding and continued support!
 
-🏠 Atma Nirbhar Farm, Bangalore"></textarea>
+🏠 <%= AdminSetting.current.business_name %>, Bangalore"></textarea>
               </div>
 
               <button type="submit" class="btn btn-warning btn-lg w-100 modern-btn" id="send-unpaid-btn" disabled>
@@ -264,14 +264,14 @@ We hope you are enjoying our fresh desi cow milk! 🥛
 
 ✨ May this auspicious festival bring joy, prosperity, and good health to you and your family!
 
-🥛 Thank you for being a valued customer and trusting Atma Nirbhar Farm for your daily milk needs.
+🥛 Thank you for being a valued customer and trusting <%= AdminSetting.current.business_name %> for your daily milk needs.
 
 🙏 We wish you a year filled with happiness and success!
 
 📱 WhatsApp: +91 9972808044
 ☎️ Call: +91 9008860329
 
-🏠 Atma Nirbhar Farm, Bangalore
+🏠 <%= AdminSetting.current.business_name %>, Bangalore
 💚 Spreading joy with pure milk!"></textarea>
             </div>
 

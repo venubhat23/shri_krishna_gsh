@@ -215,7 +215,7 @@ class EnhancedTwilioWhatsappService
 
       Please find your invoice attached. Thank you! 🙏
 
-      - Atma Nirbhar Farm
+      - #{AdminSetting.current.business_name}
     MESSAGE
   end
 end

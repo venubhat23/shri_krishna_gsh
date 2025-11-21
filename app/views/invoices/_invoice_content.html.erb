@@ -350,9 +350,9 @@
             <!-- <img src="path-to-your-logo.png" alt="Company Logo" class="logo"> -->
           </td>
           <td class="company-info-cell">
-            <h1 class="company-name">Atma Nirbhar Farm</h1>
+            <h1 class="company-name"><%= AdminSetting.current.business_name %></h1>
             <div class="company-details">
-              Atma Nirbhar Farm, Opp. Kiran Hospital,<br>
+              <%= AdminSetting.current.business_name %>, Opp. Kiran Hospital,<br>
               Near Kiran Hospital, Kiran Hospital Road,<br>
               Rajkot - 360001, Gujarat, India<br>
               Phone: +91-9876543210 | Email: info@atmanirfarm.com<br>
@@ -527,7 +527,7 @@
           <td class="signature-cell">
             <div class="signature-box"></div>
             <div class="signature-label">AUTHORISED SIGNATORY FOR</div>
-            <div class="signature-name">Atma Nirbhar Farm</div>
+            <div class="signature-name"><%= AdminSetting.current.business_name %></div>
           </td>
         </tr>
       </table>

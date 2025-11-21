@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atma Nirbhar Farm - Pure Desi Cow Milk</title>
+    <title><%= AdminSetting.current.business_name %> - Pure Desi Cow Milk</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -829,7 +829,7 @@
             width: 100vw;
             height: 100vh;
             background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(139, 69, 19, 0.4)),
-                        url('/images/farm1.png?v=2025110601') center/cover no-repeat;
+                        url('/Lord-Krishna-In-a-Forest-With-Cow-Natural-Image.jpg?v=2025110601') center/cover no-repeat;
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -1073,7 +1073,7 @@
     <!-- Attractive Loader Overlay -->
     <div class="farm-loader-overlay" id="farmLoader">
         <div class="loader-container">
-            <h2 class="loader-title">Atma Nirbhar Farm</h2>
+            <h2 class="loader-title"><%= AdminSetting.current.business_name %></h2>
             <p class="loader-message">Setting up your farm experience...</p>
 
             <!-- Progress Circle -->
@@ -1149,9 +1149,9 @@
                         <!-- Header -->
                         <div class="farm-header">
                             <div class="farm-logo">
-                                <img src="/images/farm5.png" alt="Atma Nirbhar Farm Logo" style="width: 100%; height: 100%; object-fit: contain; border-radius: 0%;">
+                                <img src="/Lord-Krishna-In-a-Forest-With-Cow-Natural-Image.jpg" alt="<%= AdminSetting.current.business_name %> Logo" style="width: 100%; height: 100%; object-fit: contain; border-radius: 0%;">
                             </div>
-                            <h1 class="farm-title">Atma Nirbhar Farm</h1>
+                            <h1 class="farm-title"><%= AdminSetting.current.business_name %></h1>
                             <p class="farm-subtitle">Premium Desi Cow Milk & Dairy Products</p>
                         </div>
                         
@@ -1170,7 +1170,7 @@
                                         <i class="fas fa-check-circle"></i>
                                         <div>
                                             <div class="fw-bold">Successfully logged out!</div>
-                                            <div class="small">Thank you for using Atma Nirbhar Farm</div>
+                                            <div class="small">Thank you for using <%= AdminSetting.current.business_name %></div>
                                         </div>
                                     </div>
                                 <% end %>
@@ -1489,7 +1489,7 @@
             const testImg = new Image();
             testImg.onload = () => console.log('✅ farm1.png loaded successfully');
             testImg.onerror = () => console.error('❌ farm1.png failed to load');
-            testImg.src = '/images/farm1.png?v=' + Date.now();
+            testImg.src = '/Lord-Krishna-In-a-Forest-With-Cow-Natural-Image.jpg?v=' + Date.now();
         }
 
         // Auto-run debug on console errors

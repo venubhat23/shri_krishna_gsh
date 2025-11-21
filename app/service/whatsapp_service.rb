@@ -3,8 +3,8 @@ require 'twilio-ruby'
 
 class WhatsappService
   # Configuration
-  ACCOUNT_SID = 'ACc88b1a0b859971f4c033598e67967411'
-  AUTH_TOKEN  = '93ebd7621541cebb9ccb65cc01ef9316'
+  # ACCOUNT_SID = 'ACc88b1a0b859971f4c033598e67967411'
+  # AUTH_TOKEN  = '93ebd7621541cebb9ccb65cc01ef9316'
   FROM_NUMBER = 'whatsapp:+14155238886' # Twilio Sandbox WhatsApp number
   
   def initialize

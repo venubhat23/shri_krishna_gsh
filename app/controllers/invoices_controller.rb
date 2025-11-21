@@ -1245,7 +1245,7 @@ end
       👇 Click below to download your invoice:
       #{public_url}
 
-      Thank you for trusting Atma Nirbhar Farm! 🙏
+      Thank you for trusting #{AdminSetting.current.business_name}! 🙏
 
       🏠 Bangalore
       📞 +91 9972808044 | +91 9008860329
@@ -1380,7 +1380,7 @@ end
 
     message += <<~FOOTER
 
-      Thank you for trusting Atma Nirbhar Farm! 🙏
+      Thank you for trusting #{AdminSetting.current.business_name}! 🙏
 
       🏠 Bangalore
       📞 +91 9972808044 | +91 9008860329

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atma Nirbhar Farm Software Product Launch Event</title>
+    <title><%= AdminSetting.current.business_name %> Software Product Launch Event</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+Kannada:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -402,19 +402,19 @@
         <!-- Logo Section - All in Same Line -->
         <div class="logo-section">
             <div class="logo-left">
-                <img src="/images/farm1.png" alt="Atma Nirbhar Farm Logo 1">
+                <img src="/Lord-Krishna-In-a-Forest-With-Cow-Natural-Image.jpg" alt="<%= AdminSetting.current.business_name %> Logo 1">
             </div>
             <div class="logo-center">
-                <img src="/images/farm5.png" alt="Atma Nirbhar Farm Main Logo">
+                <img src="/Lord-Krishna-In-a-Forest-With-Cow-Natural-Image.jpg" alt="<%= AdminSetting.current.business_name %> Main Logo">
             </div>
             <div class="logo-right">
-                <img src="/images/farm1.png" alt="Atma Nirbhar Farm Logo 2">
+                <img src="/Lord-Krishna-In-a-Forest-With-Cow-Natural-Image.jpg" alt="<%= AdminSetting.current.business_name %> Logo 2">
             </div>
         </div>
 
         <!-- Main Title Section -->
         <div class="main-title">
-            <h1 class="product-title">Atma Nirbhar Farm Software Product Launch Event</h1>
+            <h1 class="product-title"><%= AdminSetting.current.business_name %> Software Product Launch Event</h1>
             <div class="launch-date">📅 12th Nov, 2025 | 🕐 11:30 AM | 📍 Vijaynagar</div>
             <div class="welcome-message">
                 🙏 <strong>Welcome to the Future of Farm Management</strong> 🌾
@@ -456,7 +456,7 @@
                 });
             });
 
-            console.log('🌾 Atma Nirbhar Farm Software Launch Event - Welcome Page Ready! 🥛');
+            console.log('🌾 <%= AdminSetting.current.business_name %> Software Launch Event - Welcome Page Ready! 🥛');
         });
 
         // PDF Download Function
@@ -471,7 +471,7 @@
                 printWindow.document.write(`
                     <html>
                     <head>
-                        <title>Atma Nirbhar Farm Software Product Launch Event</title>
+                        <title><%= AdminSetting.current.business_name %> Software Product Launch Event</title>
                         <style>
                             body {
                                 font-family: 'Arial', sans-serif;
@@ -634,9 +634,9 @@
                             </div>
 
                             <div class="footer">
-                                <p><strong>Thank you for being part of the Atma Nirbhar Farm journey!</strong></p>
+                                <p><strong>Thank you for being part of the <%= AdminSetting.current.business_name %> journey!</strong></p>
                                 <p>Together, we're building a sustainable future with pure, natural dairy products and innovative farm management technology.</p>
-                                <p style="margin-top: 20px; font-weight: bold;">© 2025 Atma Nirbhar Farm. All rights reserved.</p>
+                                <p style="margin-top: 20px; font-weight: bold;">© 2025 <%= AdminSetting.current.business_name %>. All rights reserved.</p>
                             </div>
                         </div>
                     </body>

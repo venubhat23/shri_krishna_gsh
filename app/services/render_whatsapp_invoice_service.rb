@@ -136,7 +136,7 @@ class RenderWhatsappInvoiceService
     due_date = invoice.due_date.strftime("%d %b %Y")
 
     <<~MESSAGE
-      🏪 *Atma Nirbhar Farm*
+      🏪 *#{AdminSetting.current.business_name}*
 
       Hello #{customer_name}! 👋
 
@@ -153,7 +153,7 @@ class RenderWhatsappInvoiceService
       Thank you for your continued business! 🙏
 
       For any queries, please contact us.
-      - Atma Nirbhar Farm
+      - #{AdminSetting.current.business_name}
     MESSAGE
   end
 

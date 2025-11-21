@@ -1,4 +1,27 @@
 module ApplicationHelper
+  # Business/App name helper
+  def app_name
+    @app_name ||= AdminSetting.current.business_name.presence || "Shri Krishna Goshala"
+  end
+
+  def app_business_name
+    app_name
+  end
+
+  # Logo helper
+  def app_logo_path
+    "/Lord-Krishna-In-a-Forest-With-Cow-Natural-Image.jpg"
+  end
+
+  def app_logo_tag(options = {})
+    default_options = {
+      alt: "#{app_name} Logo",
+      class: "logo"
+    }
+    options = default_options.merge(options)
+    image_tag(app_logo_path, options)
+  end
+
   # Existing helper methods...
 
   # Enhanced searchable select helper

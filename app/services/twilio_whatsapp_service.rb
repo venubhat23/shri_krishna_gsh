@@ -146,7 +146,7 @@ class TwilioWhatsappService
       👇 Click below to download your invoice:
       #{public_url}
 
-      Thank you for trusting Atma Nirbhar Farm! 🙏
+      Thank you for trusting #{AdminSetting.current.business_name}! 🙏
 
       🏠 Bangalore
       📞 +91 9972808044 | +91 9008860329
@@ -192,7 +192,7 @@ class TwilioWhatsappService
   end
 
 def build_customer_signup_message(customer)
-  "NEW CUSTOMER SIGNUP! Name: #{customer.name}, Phone: #{customer.phone_number}, Email: #{customer.email || 'Not provided'}, Address: #{customer.address || 'Not provided'}, Member ID: #{customer.member_id || 'Auto-generated'}, Signup Time: #{Time.current.strftime('%d/%m/%Y %I:%M %p')}, Signed up via Mobile App, Atma Nirbhar Farm, +91 9972808044 | +91 9008860329"
+  "NEW CUSTOMER SIGNUP! Name: #{customer.name}, Phone: #{customer.phone_number}, Email: #{customer.email || 'Not provided'}, Address: #{customer.address || 'Not provided'}, Member ID: #{customer.member_id || 'Auto-generated'}, Signup Time: #{Time.current.strftime('%d/%m/%Y %I:%M %p')}, Signed up via Mobile App, #{AdminSetting.current.business_name}, +91 9972808044 | +91 9008860329"
 end
 
 def build_order_booking_message(customer, order_details)

@@ -17,12 +17,12 @@ class PublicController < ApplicationController
   end
 
   def atma_nirbhar
-    # This is the Atma Nirbhar Farm launch page with ribbon cutting
+    # This is the business launch page with ribbon cutting
     # The view is rendered automatically from app/views/public/atma_nirbhar.html.erb
   end
 
   def welcome
-    # This is the welcome landing page for Atma Nirbhar Farm
+    # This is the welcome landing page for the business
     # The view is rendered automatically from app/views/public/welcome.html.erb
   end
 

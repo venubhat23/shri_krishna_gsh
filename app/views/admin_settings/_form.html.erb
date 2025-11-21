@@ -20,9 +20,9 @@
         <div class="card-body">
           <div class="mb-3">
             <%= form.label :business_name, "Brand Name", class: "form-label" %>
-            <%= form.text_field :business_name, class: "form-control", required: true, 
-                placeholder: "Enter your brand name", 
-                value: admin_setting.business_name.present? ? admin_setting.business_name : (current_user&.name || "Atma Nirbhar Farm") %>
+            <%= form.text_field :business_name, class: "form-control", required: true,
+                placeholder: "Enter your brand name",
+                value: admin_setting.business_name.present? ? admin_setting.business_name : (current_user&.name || AdminSetting.current.business_name) %>
             <small class="form-text text-muted">This will be displayed as your brand name on invoices and documents</small>
           </div>
 

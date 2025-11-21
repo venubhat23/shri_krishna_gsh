@@ -3016,7 +3016,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <!-- Dynamic message with typewriter effect -->
       <div class="progress-message-container">
         <div id="progress-message" class="modern-progress-message">
-🌾 Initializing Atma Nirbhar Farm invoice system...
+🌾 Initializing <%= AdminSetting.current.business_name %> invoice system...
         </div>
         <div class="message-cursor"></div>
       </div>
@@ -5204,10 +5204,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function simulateInvoiceGeneration() {
     const steps = [
-      { id: 'step-1', message: '🌱 Atma Nirbhar Farm - Validating customer records and permissions...', percent: 25 },
-      { id: 'step-2', message: '📄 Generating premium invoices with Atma Nirbhar Farm branding...', percent: 50 },
+      { id: 'step-1', message: '🌱 <%= AdminSetting.current.business_name %> - Validating customer records and permissions...', percent: 25 },
+      { id: 'step-2', message: '📄 Generating premium invoices with <%= AdminSetting.current.business_name %> branding...', percent: 50 },
       { id: 'step-3', message: '📱 Sending personalized WhatsApp notifications to valued customers...', percent: 75 },
-      { id: 'step-4', message: '✨ Completing invoice generation for Atma Nirbhar Farm success!', percent: 100 }
+      { id: 'step-4', message: '✨ Completing invoice generation for <%= AdminSetting.current.business_name %> success!', percent: 100 }
     ];
 
     // Get modern loader elements
@@ -5429,7 +5429,7 @@ document.addEventListener('DOMContentLoaded', function() {
                   </div>
                   <div class="message-footer">
                     <p>Thank you for your business! 🙏</p>
-                    <p>- Atma Nirbhar Farm</p>
+                    <p>- <%= AdminSetting.current.business_name %></p>
                   </div>
                 </div>
               </div>

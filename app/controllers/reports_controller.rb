@@ -639,7 +639,7 @@ class ReportsController < ApplicationController
       <html>
       <head>
         <meta charset="utf-8">
-        <title>Enhanced Sales Report - Atma Nirbhar Farm</title>
+        <title>Enhanced Sales Report - #{AdminSetting.current.business_name}</title>
         <style>
           body { font-family: Arial, sans-serif; margin: 20px; }
           .header { text-align: center; margin-bottom: 30px; }
@@ -666,7 +666,7 @@ class ReportsController < ApplicationController
       </head>
       <body>
         <div class="header">
-          <div class="company-name">Enhanced Sales Report - Atma Nirbhar Farm</div>
+          <div class="company-name">Enhanced Sales Report - #{AdminSetting.current.business_name}</div>
           <div class="report-title">Mobile: 9972808044</div>
           <div class="report-details">
             Date Range: #{from_date.strftime('%d/%m/%Y')} to #{to_date.strftime('%d/%m/%Y')}<br>
@@ -793,7 +793,7 @@ class ReportsController < ApplicationController
       </head>
       <body>
         <div class="header">
-          <div class="report-title">GSTR-1 - Atma Nirbhar Farm</div>
+          <div class="report-title">GSTR-1 - #{AdminSetting.current.business_name}</div>
           <div class="company-info">
             Mobile: 9972808044<br>
             GST No: 29AOIPT8113K1ZC

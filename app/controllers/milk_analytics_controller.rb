@@ -3379,7 +3379,7 @@ class MilkAnalyticsController < ApplicationController
 
       # Company details (if available)
       pdf.font 'Helvetica', style: :bold, size: 12
-      pdf.text 'Atma Nirbhar Farm', color: '2C3E50'
+      pdf.text AdminSetting.current.business_name.presence || "Shri Krishna Goshala", color: '2C3E50'
       pdf.font 'Helvetica', size: 10
       pdf.text 'Milk Supply & Delivery Management'
       pdf.move_down 15

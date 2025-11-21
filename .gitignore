@@ -12,6 +12,10 @@
 # Ignore all environment files.
 /.env*
 
+# Ignore nested git repositories
+delivery_management/
+delivery_management_shri_krishna/
+
 # Ignore all logfiles and tempfiles.
 /log/*
 /tmp/*
