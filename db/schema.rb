@@ -408,3 +408,4 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_20_134130) do
     t.index ["total_amount"], name: "index_invoices_on_total_amount"
     t.index ["year"], name: "index_invoices_on_year"
   end
+end

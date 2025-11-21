@@ -2,32 +2,32 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: 5
-  host: dpg-d36i5fjuibrs739c9h80-a.oregon-postgres.render.com
+  host: dpg-d4fihhq4d50c73a380bg-a.oregon-postgres.render.com
   port: 5432
-  username: atma_nirbhar_farm_db_user
-  password: 0F30EugdHfYajacs30xqh0kmAiB0Xj0P
+  username: krishna_goshala_user
+  password: dUiyMlTdL4rtOPtr8UZmamiMeiUWffs6
 
 development:
   <<: *default
-  database: atma_nirbhar_farm_db
+  database: krishna_goshala
 
 test:
   <<: *default
-  database: mahadev_test_db
+  database: krishna_goshala_test
 
 production:
   primary:
     <<: *default
-    database: atma_nirbhar_farm_db
+    database: krishna_goshala
 
   cable:
     <<: *default
-    database: atma_nirbhar_farm_db
+    database: krishna_goshala
 
   queue:
     <<: *default
-    database: atma_nirbhar_farm_db
+    database: krishna_goshala
 
   cache:
     <<: *default
-    database: atma_nirbhar_farm_db
+    database: krishna_goshala
