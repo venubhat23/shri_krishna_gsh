@@ -23,10 +23,18 @@ class User < ApplicationRecord
   has_many :customers, dependent: :destroy
   has_many :pending_payments, dependent: :destroy
   
+  # Enum for roles
+  enum :role, {
+    user: 0,
+    admin: 1,
+    delivery_person: 2,
+    customer: 3
+  }
+
   # Validations
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true
-  validates :role, presence: true, inclusion: { in: %w[admin user delivery_person customer] }
+  validates :role, presence: true
   validates :phone, presence: true
   validates :employee_id, uniqueness: true, allow_blank: true
   

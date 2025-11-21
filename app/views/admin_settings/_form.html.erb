@@ -118,6 +118,111 @@
     </div>
   </div>
 
+  <!-- Sidebar Visibility Controls Section -->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h4><i class="fas fa-bars me-2"></i>Sidebar Menu Visibility</h4>
+          <small class="text-muted">Control which menu items are visible in the sidebar navigation</small>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-3 mb-3">
+              <div class="form-check form-switch">
+                <%= form.check_box :show_dashboard, class: "form-check-input", checked: admin_setting.show_dashboard? %>
+                <%= form.label :show_dashboard, "Dashboard", class: "form-check-label" %>
+              </div>
+            </div>
+
+            <div class="col-md-3 mb-3">
+              <div class="form-check form-switch">
+                <%= form.check_box :show_orders, class: "form-check-input", checked: admin_setting.show_orders? %>
+                <%= form.label :show_orders, "Orders", class: "form-check-label" %>
+              </div>
+            </div>
+
+            <div class="col-md-3 mb-3">
+              <div class="form-check form-switch">
+                <%= form.check_box :show_customers, class: "form-check-input", checked: admin_setting.show_customers? %>
+                <%= form.label :show_customers, "Customers", class: "form-check-label" %>
+              </div>
+            </div>
+
+            <div class="col-md-3 mb-3">
+              <div class="form-check form-switch">
+                <%= form.check_box :show_products, class: "form-check-input", checked: admin_setting.show_products? %>
+                <%= form.label :show_products, "Products", class: "form-check-label" %>
+              </div>
+            </div>
+
+            <div class="col-md-3 mb-3">
+              <div class="form-check form-switch">
+                <%= form.check_box :show_categories, class: "form-check-input", checked: admin_setting.show_categories? %>
+                <%= form.label :show_categories, "Categories", class: "form-check-label" %>
+              </div>
+            </div>
+
+            <div class="col-md-3 mb-3">
+              <div class="form-check form-switch">
+                <%= form.check_box :show_delivery_assignments, class: "form-check-input", checked: admin_setting.show_delivery_assignments? %>
+                <%= form.label :show_delivery_assignments, "Deliveries", class: "form-check-label" %>
+              </div>
+            </div>
+
+            <div class="col-md-3 mb-3">
+              <div class="form-check form-switch">
+                <%= form.check_box :show_invoices, class: "form-check-input", checked: admin_setting.show_invoices? %>
+                <%= form.label :show_invoices, "Invoices", class: "form-check-label" %>
+              </div>
+            </div>
+
+            <div class="col-md-3 mb-3">
+              <div class="form-check form-switch">
+                <%= form.check_box :show_milk_analytics, class: "form-check-input", checked: admin_setting.show_milk_analytics? %>
+                <%= form.label :show_milk_analytics, "Milk Analytics", class: "form-check-label" %>
+              </div>
+            </div>
+
+            <div class="col-md-3 mb-3">
+              <div class="form-check form-switch">
+                <%= form.check_box :show_procurement, class: "form-check-input", checked: admin_setting.show_procurement? %>
+                <%= form.label :show_procurement, "Procurement", class: "form-check-label" %>
+              </div>
+            </div>
+
+            <div class="col-md-3 mb-3">
+              <div class="form-check form-switch">
+                <%= form.check_box :show_payouts, class: "form-check-input", checked: admin_setting.show_payouts? %>
+                <%= form.label :show_payouts, "Payouts", class: "form-check-label" %>
+              </div>
+            </div>
+
+            <div class="col-md-3 mb-3">
+              <div class="form-check form-switch">
+                <%= form.check_box :show_reports, class: "form-check-input", checked: admin_setting.show_reports? %>
+                <%= form.label :show_reports, "Reports", class: "form-check-label" %>
+              </div>
+            </div>
+
+            <div class="col-md-3 mb-3">
+              <div class="form-check form-switch">
+                <%= form.check_box :show_users, class: "form-check-input", checked: admin_setting.show_users? %>
+                <%= form.label :show_users, "Users", class: "form-check-label" %>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-info mt-3">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Note:</strong> Changes to sidebar visibility will take effect immediately after saving.
+            The Settings menu cannot be hidden to ensure you can always access this page.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="row">
     <div class="col-md-12">
       <div class="card">

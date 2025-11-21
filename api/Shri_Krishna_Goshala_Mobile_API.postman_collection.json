@@ -1,0 +1,1660 @@
+{
+  "info": {
+    "name": "Shri Krishna Goshala - Mobile API Collection",
+    "description": "Complete API collection for Shri Krishna Goshala mobile application with delivery management, customer orders, and subscription handling",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwt_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "{{$dotenv_BASE_URL}}",
+      "type": "string",
+      "description": "Base URL for the API (e.g., https://your-domain.com)"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string",
+      "description": "JWT authentication token - set this after login"
+    },
+    {
+      "key": "customer_id",
+      "value": "1",
+      "type": "string",
+      "description": "Sample customer ID for testing"
+    },
+    {
+      "key": "product_id",
+      "value": "1",
+      "type": "string",
+      "description": "Sample product ID for testing"
+    }
+  ],
+  "item": [
+    {
+      "name": "🔐 Authentication",
+      "description": "User and customer authentication endpoints",
+      "item": [
+        {
+          "name": "Unified Signup - Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"phone_number\": \"9876543210\",\n  \"password\": \"securepassword123\",\n  \"address\": \"123 Main Street, Bangalore, Karnataka 560001\",\n  \"role\": \"customer\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/signup",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "signup"]
+            },
+            "description": "Universal signup endpoint for customers. Role defaults to 'customer' if not specified."
+          }
+        },
+        {
+          "name": "Unified Signup - Delivery Person",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Delivery Person Name\",\n  \"email\": \"delivery@example.com\",\n  \"phone\": \"9876543211\",\n  \"password\": \"deliverypass123\",\n  \"role\": \"delivery_person\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/signup",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "signup"]
+            },
+            "description": "Universal signup endpoint for delivery persons and admins"
+          }
+        },
+        {
+          "name": "Customer Signup (Legacy)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"phone_number\": \"9876543210\",\n  \"password\": \"securepassword123\",\n  \"address\": \"123 Main Street, Bangalore, Karnataka 560001\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/customer_signup",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "customer_signup"]
+            },
+            "description": "[LEGACY] Use unified signup instead - kept for backward compatibility"
+          }
+        },
+        {
+          "name": "Unified Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone_number\": \"9876543210\",\n  \"password\": \"securepassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "login"]
+            },
+            "description": "Universal login endpoint - automatically detects user type (customer/delivery person) and returns appropriate token. Supports login via phone number or email."
+          }
+        },
+        {
+          "name": "Unified Login - By Email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"customer@example.com\",\n  \"password\": \"securepassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "login"]
+            },
+            "description": "Login using email address - works for both customers and delivery persons"
+          }
+        },
+        {
+          "name": "Customer Login (Legacy)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone_number\": \"9876543210\",\n  \"password\": \"securepassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/customer_login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "customer_login"]
+            },
+            "description": "[LEGACY] Use unified login instead - kept for backward compatibility"
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/refresh_token",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "refresh_token"]
+            },
+            "description": "Refresh expired JWT token"
+          }
+        },
+        {
+          "name": "Regenerate Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/regenerate_token",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "regenerate_token"]
+            },
+            "description": "Generate a new authentication token"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🏷️ Categories",
+      "description": "Product category management",
+      "item": [
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/categories",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "categories"]
+            },
+            "description": "Retrieve all product categories"
+          }
+        },
+        {
+          "name": "Get Category by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/categories/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "categories", "1"]
+            },
+            "description": "Get specific category details"
+          }
+        },
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Dairy Products\",\n  \"description\": \"Fresh dairy products from our goshala\",\n  \"active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/categories",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "categories"]
+            },
+            "description": "Create a new product category"
+          }
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Premium Dairy Products\",\n  \"description\": \"Premium quality dairy products\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/categories/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "categories", "1"]
+            },
+            "description": "Update category information"
+          }
+        },
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/v1/categories/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "categories", "1"]
+            },
+            "description": "Delete a category"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🥛 Products",
+      "description": "Product management and inventory",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/products",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products"]
+            },
+            "description": "Get all available products"
+          }
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/products/{{product_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products", "{{product_id}}"]
+            },
+            "description": "Get specific product details"
+          }
+        },
+        {
+          "name": "Get Low Stock Products",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/products/low_stock",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products", "low_stock"]
+            },
+            "description": "Get products with low inventory"
+          }
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Fresh Cow Milk\",\n  \"description\": \"Pure, fresh cow milk from our goshala\",\n  \"price\": 55.0,\n  \"category_id\": 1,\n  \"stock_quantity\": 100,\n  \"unit\": \"liter\",\n  \"active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/products",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products"]
+            },
+            "description": "Add a new product"
+          }
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Premium Fresh Cow Milk\",\n  \"description\": \"Premium quality fresh cow milk\",\n  \"price\": 60.0,\n  \"stock_quantity\": 150\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/products/{{product_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products", "{{product_id}}"]
+            },
+            "description": "Update product information"
+          }
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/v1/products/{{product_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products", "{{product_id}}"]
+            },
+            "description": "Remove a product"
+          }
+        }
+      ]
+    },
+    {
+      "name": "👥 Customers",
+      "description": "Customer management",
+      "item": [
+        {
+          "name": "Get All Customers",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/customers",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "customers"]
+            },
+            "description": "Get list of all customers"
+          }
+        },
+        {
+          "name": "Get Customer by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/customers/{{customer_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "customers", "{{customer_id}}"]
+            },
+            "description": "Get specific customer details"
+          }
+        },
+        {
+          "name": "Create Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Rajesh Kumar\",\n  \"email\": \"rajesh.kumar@example.com\",\n  \"phone_number\": \"9876543210\",\n  \"address\": \"456 Gandhi Nagar, Bangalore, Karnataka 560002\",\n  \"member_id\": \"SK001\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/customers",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "customers"]
+            },
+            "description": "Add a new customer"
+          }
+        },
+        {
+          "name": "Update Customer Location",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"latitude\": 12.9716,\n  \"longitude\": 77.5946\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/customers/{{customer_id}}/update_location",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "customers", "{{customer_id}}", "update_location"]
+            },
+            "description": "Update customer's GPS location"
+          }
+        },
+        {
+          "name": "Update Customer Settings",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notification_preferences\": {\n    \"whatsapp\": true,\n    \"email\": false,\n    \"sms\": true\n  },\n  \"delivery_preferences\": {\n    \"preferred_time\": \"morning\",\n    \"special_instructions\": \"Ring the bell twice\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/customers/{{customer_id}}/settings",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "customers", "{{customer_id}}", "settings"]
+            },
+            "description": "Update customer preferences and settings"
+          }
+        }
+      ]
+    },
+    {
+      "name": "📍 Customer Addresses",
+      "description": "Address management for customers",
+      "item": [
+        {
+          "name": "Get All Customer Addresses",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/customer_addresses",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "customer_addresses"]
+            },
+            "description": "Get all customer addresses"
+          }
+        },
+        {
+          "name": "Get Customer Address by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/customer_address/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "customer_address", "1"]
+            },
+            "description": "Get specific address details"
+          }
+        },
+        {
+          "name": "Create Customer Address",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": {{customer_id}},\n  \"address_line_1\": \"123 Shri Krishna Apartments\",\n  \"address_line_2\": \"Near Goshala Temple\",\n  \"city\": \"Bangalore\",\n  \"state\": \"Karnataka\",\n  \"postal_code\": \"560001\",\n  \"landmark\": \"Opposite to temple\",\n  \"is_default\": true,\n  \"address_type\": \"home\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/customer_address",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "customer_address"]
+            },
+            "description": "Add new customer address"
+          }
+        },
+        {
+          "name": "Update Customer Address",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address_line_1\": \"456 Updated Address\",\n  \"city\": \"Updated City\",\n  \"landmark\": \"New landmark\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/customer_address/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "customer_address", "1"]
+            },
+            "description": "Update address information"
+          }
+        },
+        {
+          "name": "Delete Customer Address",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/v1/customer_address/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "customer_address", "1"]
+            },
+            "description": "Remove customer address"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🛒 Orders",
+      "description": "Single-day order management",
+      "item": [
+        {
+          "name": "Place Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": {{customer_id}},\n  \"items\": [\n    {\n      \"product_id\": 1,\n      \"quantity\": 2,\n      \"price\": 55.0\n    },\n    {\n      \"product_id\": 2,\n      \"quantity\": 1,\n      \"price\": 30.0\n    }\n  ],\n  \"delivery_date\": \"2024-01-15\",\n  \"delivery_time_slot\": \"morning\",\n  \"notes\": \"Please deliver fresh milk in the morning\",\n  \"payment_method\": \"cash\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/place_order",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "place_order"]
+            },
+            "description": "Place a new order for delivery"
+          }
+        },
+        {
+          "name": "Get Orders",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/orders?customer_id={{customer_id}}&status=pending",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "orders"],
+              "query": [
+                {
+                  "key": "customer_id",
+                  "value": "{{customer_id}}"
+                },
+                {
+                  "key": "status",
+                  "value": "pending"
+                }
+              ]
+            },
+            "description": "Get orders with optional filters"
+          }
+        }
+      ]
+    },
+    {
+      "name": "📅 Subscriptions",
+      "description": "Multi-day subscription management",
+      "item": [
+        {
+          "name": "Get All Subscriptions",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/subscriptions?customer_id={{customer_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "subscriptions"],
+              "query": [
+                {
+                  "key": "customer_id",
+                  "value": "{{customer_id}}"
+                }
+              ]
+            },
+            "description": "Get customer subscriptions"
+          }
+        },
+        {
+          "name": "Create Subscription",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": {{customer_id}},\n  \"product_id\": {{product_id}},\n  \"quantity\": 2,\n  \"frequency\": \"daily\",\n  \"start_date\": \"2024-01-01\",\n  \"end_date\": \"2024-01-31\",\n  \"delivery_time\": \"morning\",\n  \"notes\": \"Regular daily milk delivery\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/subscriptions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "subscriptions"]
+            },
+            "description": "Create a new subscription"
+          }
+        },
+        {
+          "name": "Update Subscription",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantity\": 3,\n  \"frequency\": \"alternate_days\",\n  \"notes\": \"Updated to alternate day delivery\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/subscriptions/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "subscriptions", "1"]
+            },
+            "description": "Update subscription details"
+          }
+        },
+        {
+          "name": "Cancel Subscription",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/v1/subscriptions/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "subscriptions", "1"]
+            },
+            "description": "Cancel/delete a subscription"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🚚 Delivery Assignments",
+      "description": "Delivery task management for delivery personnel",
+      "item": [
+        {
+          "name": "Get All Delivery Assignments",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/delivery_assignments?status=pending&delivery_person_id=1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "delivery_assignments"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "pending"
+                },
+                {
+                  "key": "delivery_person_id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get delivery assignments with filters"
+          }
+        },
+        {
+          "name": "Get Today's Delivery Assignments",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/delivery_assignments/today",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "delivery_assignments", "today"]
+            },
+            "description": "Get today's delivery assignments for logged-in delivery person"
+          }
+        },
+        {
+          "name": "Get Delivery Assignment by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/delivery_assignments/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "delivery_assignments", "1"]
+            },
+            "description": "Get specific delivery assignment details"
+          }
+        },
+        {
+          "name": "Start Nearest Delivery",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"latitude\": 12.9716,\n  \"longitude\": 77.5946\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/delivery_assignments/start_nearest",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "delivery_assignments", "start_nearest"]
+            },
+            "description": "Start the nearest delivery based on GPS location"
+          }
+        },
+        {
+          "name": "Complete Delivery Assignment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"payment_status\": \"paid\",\n  \"payment_method\": \"cash\",\n  \"amount_collected\": 110.0,\n  \"notes\": \"Delivered successfully to customer\",\n  \"completion_time\": \"2024-01-15T10:30:00Z\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/delivery_assignments/1/complete",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "delivery_assignments", "1", "complete"]
+            },
+            "description": "Mark delivery as completed with payment details"
+          }
+        },
+        {
+          "name": "Mark Delivery as Completed (Simple)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"payment_status\": \"paid\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/delivery_assignments/1/mark_completed",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "delivery_assignments", "1", "mark_completed"]
+            },
+            "description": "Simple completion API for quick marking"
+          }
+        },
+        {
+          "name": "Bulk Complete Deliveries",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assignment_ids\": [1, 2, 3, 4],\n  \"payment_status\": \"paid\",\n  \"notes\": \"Bulk completion for area deliveries\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/delivery_assignments/bulk_complete",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "delivery_assignments", "bulk_complete"]
+            },
+            "description": "Complete multiple deliveries at once"
+          }
+        },
+        {
+          "name": "Add Items to Delivery",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"product_id\": 3,\n      \"quantity\": 1,\n      \"price\": 25.0\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/delivery_assignments/1/add_items",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "delivery_assignments", "1", "add_items"]
+            },
+            "description": "Add additional items to existing delivery"
+          }
+        }
+      ]
+    },
+    {
+      "name": "📦 Delivery Items",
+      "description": "Individual delivery item management",
+      "item": [
+        {
+          "name": "Get Delivery Items",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/delivery_assignments/1/delivery_items",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "delivery_assignments", "1", "delivery_items"]
+            },
+            "description": "Get all items in a delivery assignment"
+          }
+        },
+        {
+          "name": "Create Delivery Item",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_id\": {{product_id}},\n  \"quantity\": 2,\n  \"price\": 55.0,\n  \"notes\": \"Fresh milk delivery\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/delivery_assignments/1/delivery_items",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "delivery_assignments", "1", "delivery_items"]
+            },
+            "description": "Add item to delivery assignment"
+          }
+        },
+        {
+          "name": "Get Delivery Item by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/delivery_items/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "delivery_items", "1"]
+            },
+            "description": "Get specific delivery item details"
+          }
+        },
+        {
+          "name": "Update Delivery Item",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantity\": 3,\n  \"price\": 60.0,\n  \"notes\": \"Updated quantity as requested\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/delivery_items/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "delivery_items", "1"]
+            },
+            "description": "Update delivery item details"
+          }
+        },
+        {
+          "name": "Delete Delivery Item",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/v1/delivery_items/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "delivery_items", "1"]
+            },
+            "description": "Remove item from delivery"
+          }
+        }
+      ]
+    },
+    {
+      "name": "📋 Delivery Schedules",
+      "description": "Delivery schedule management",
+      "item": [
+        {
+          "name": "Get All Delivery Schedules",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/delivery_schedules?date=2024-01-15",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "delivery_schedules"],
+              "query": [
+                {
+                  "key": "date",
+                  "value": "2024-01-15"
+                }
+              ]
+            },
+            "description": "Get delivery schedules with date filter"
+          }
+        },
+        {
+          "name": "Get Delivery Schedule by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/delivery_schedules/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "delivery_schedules", "1"]
+            },
+            "description": "Get specific schedule details"
+          }
+        },
+        {
+          "name": "Create Delivery Schedule",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": {{customer_id}},\n  \"product_id\": {{product_id}},\n  \"quantity\": 2,\n  \"delivery_date\": \"2024-01-15\",\n  \"delivery_person_id\": 1,\n  \"time_slot\": \"morning\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/delivery_schedules",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "delivery_schedules"]
+            },
+            "description": "Create new delivery schedule"
+          }
+        },
+        {
+          "name": "Update Delivery Schedule",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantity\": 3,\n  \"delivery_date\": \"2024-01-16\",\n  \"time_slot\": \"evening\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/delivery_schedules/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "delivery_schedules", "1"]
+            },
+            "description": "Update schedule information"
+          }
+        },
+        {
+          "name": "Delete Delivery Schedule",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/v1/delivery_schedules/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "delivery_schedules", "1"]
+            },
+            "description": "Remove delivery schedule"
+          }
+        }
+      ]
+    },
+    {
+      "name": "📢 Advertisements",
+      "description": "Marketing content and promotions",
+      "item": [
+        {
+          "name": "Get All Advertisements",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/advertisements?active=true",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "advertisements"],
+              "query": [
+                {
+                  "key": "active",
+                  "value": "true"
+                }
+              ]
+            },
+            "description": "Get active advertisements for mobile app"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🧾 Invoices",
+      "description": "Invoice and billing information",
+      "item": [
+        {
+          "name": "Get Customer Invoices",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/invoices?customer_id={{customer_id}}&status=pending",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "invoices"],
+              "query": [
+                {
+                  "key": "customer_id",
+                  "value": "{{customer_id}}"
+                },
+                {
+                  "key": "status",
+                  "value": "pending"
+                }
+              ]
+            },
+            "description": "Get customer invoices with status filter"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🏖️ Vacations",
+      "description": "Customer vacation and delivery pause management",
+      "item": [
+        {
+          "name": "Get Customer Vacations",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/vacations?customer_id={{customer_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "vacations"],
+              "query": [
+                {
+                  "key": "customer_id",
+                  "value": "{{customer_id}}"
+                }
+              ]
+            },
+            "description": "Get customer vacation records"
+          }
+        },
+        {
+          "name": "Get Vacation by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/vacations/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "vacations", "1"]
+            },
+            "description": "Get specific vacation details"
+          }
+        },
+        {
+          "name": "Create Vacation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": {{customer_id}},\n  \"start_date\": \"2024-02-01\",\n  \"end_date\": \"2024-02-15\",\n  \"reason\": \"Family vacation trip\",\n  \"pause_deliveries\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/vacations",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "vacations"]
+            },
+            "description": "Schedule customer vacation"
+          }
+        },
+        {
+          "name": "Pause Vacation",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/vacations/1/pause",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "vacations", "1", "pause"]
+            },
+            "description": "Temporarily pause vacation"
+          }
+        },
+        {
+          "name": "Resume Vacation",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/vacations/1/unpause",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "vacations", "1", "unpause"]
+            },
+            "description": "Resume paused vacation"
+          }
+        },
+        {
+          "name": "Cancel Vacation",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/v1/vacations/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "vacations", "1"]
+            },
+            "description": "Cancel vacation entirely"
+          }
+        },
+        {
+          "name": "Vacation Dry Run",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": {{customer_id}},\n  \"start_date\": \"2024-02-01\",\n  \"end_date\": \"2024-02-15\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/vacations/dry_run",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "vacations", "dry_run"]
+            },
+            "description": "Preview vacation impact without applying"
+          }
+        },
+        {
+          "name": "Complete Ended Vacations",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/vacations/complete_ended",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "vacations", "complete_ended"]
+            },
+            "description": "Mark expired vacations as completed"
+          }
+        }
+      ]
+    },
+    {
+      "name": "⚙️ Settings",
+      "description": "App settings, preferences, and content management",
+      "item": [
+        {
+          "name": "Get App Settings",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/settings",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "settings"]
+            },
+            "description": "Get general app settings"
+          }
+        },
+        {
+          "name": "Get FAQ",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/settings/faq",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "settings", "faq"]
+            },
+            "description": "Get frequently asked questions"
+          }
+        },
+        {
+          "name": "Ask FAQ Question",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"How do I cancel my milk subscription?\",\n  \"category\": \"subscriptions\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/settings/faq/ask",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "settings", "faq", "ask"]
+            },
+            "description": "Submit FAQ question"
+          }
+        },
+        {
+          "name": "Get Terms of Service",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/settings/cms/terms-of-service",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "settings", "cms", "terms-of-service"]
+            },
+            "description": "Get terms and conditions"
+          }
+        },
+        {
+          "name": "Get Privacy Policy",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/settings/cms/privacy-policy",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "settings", "cms", "privacy-policy"]
+            },
+            "description": "Get privacy policy content"
+          }
+        },
+        {
+          "name": "Contact Support",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Customer Name\",\n  \"email\": \"customer@example.com\",\n  \"phone\": \"9876543210\",\n  \"subject\": \"Delivery Issue\",\n  \"message\": \"I need help with my recent delivery order\",\n  \"priority\": \"medium\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/settings/contact",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "settings", "contact"]
+            },
+            "description": "Submit support request"
+          }
+        },
+        {
+          "name": "Get Referral Program Info",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/settings/referral",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "settings", "referral"]
+            },
+            "description": "Get referral program details and user's referral code"
+          }
+        },
+        {
+          "name": "Get Delivery Preferences",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/settings/delivery-preferences",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "settings", "delivery-preferences"]
+            },
+            "description": "Get customer's delivery preferences"
+          }
+        },
+        {
+          "name": "Update User Preferences",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notifications\": {\n    \"whatsapp\": true,\n    \"email\": false,\n    \"sms\": true,\n    \"push\": true\n  },\n  \"delivery_preferences\": {\n    \"preferred_time\": \"morning\",\n    \"leave_at_door\": false,\n    \"call_before_delivery\": true\n  },\n  \"theme\": \"light\",\n  \"language\": \"en\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/settings/preferences",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "settings", "preferences"]
+            },
+            "description": "Update user preferences and settings"
+          }
+        },
+        {
+          "name": "Update Language",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"language\": \"hi\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/settings/language",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "settings", "language"]
+            },
+            "description": "Change app language preference"
+          }
+        },
+        {
+          "name": "Get User Addresses",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/settings/addresses",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "settings", "addresses"]
+            },
+            "description": "Get all saved addresses for user"
+          }
+        },
+        {
+          "name": "Add New Address",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address_line_1\": \"789 Temple Road\",\n  \"address_line_2\": \"Near Krishna Temple\",\n  \"city\": \"Bangalore\",\n  \"state\": \"Karnataka\",\n  \"postal_code\": \"560003\",\n  \"landmark\": \"Opposite to temple entrance\",\n  \"address_type\": \"office\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/settings/addresses",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "settings", "addresses"]
+            },
+            "description": "Add new address to user account"
+          }
+        },
+        {
+          "name": "Update Address",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address_line_1\": \"Updated Address Line 1\",\n  \"landmark\": \"Updated landmark\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/settings/addresses/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "settings", "addresses", "1"]
+            },
+            "description": "Update existing address"
+          }
+        },
+        {
+          "name": "Delete Address",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/api/v1/settings/addresses/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "settings", "addresses", "1"]
+            },
+            "description": "Remove address from account"
+          }
+        },
+        {
+          "name": "Set Default Address",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/settings/addresses/1/set_default",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "settings", "addresses", "1", "set_default"]
+            },
+            "description": "Set address as default delivery location"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🏦 Bank Details",
+      "description": "Banking and payment information",
+      "item": [
+        {
+          "name": "Get Goshala Bank Details",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/bank_details",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "bank_details"]
+            },
+            "description": "Get bank details for payments to Shri Krishna Goshala"
+          }
+        }
+      ]
+    },
+    {
+      "name": "📱 Legacy Deliveries (Backward Compatibility)",
+      "description": "Legacy delivery APIs for backward compatibility",
+      "item": [
+        {
+          "name": "Start Legacy Delivery",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"delivery_person_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/deliveries/start",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "deliveries", "start"]
+            },
+            "description": "Legacy: Start delivery session"
+          }
+        },
+        {
+          "name": "Complete Legacy Delivery",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"payment_status\": \"paid\",\n  \"notes\": \"Delivered successfully\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/deliveries/1/complete",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "deliveries", "1", "complete"]
+            },
+            "description": "Legacy: Complete delivery"
+          }
+        },
+        {
+          "name": "Get Legacy Delivery Customers",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/deliveries/customers",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "deliveries", "customers"]
+            },
+            "description": "Legacy: Get customers for delivery"
+          }
+        },
+        {
+          "name": "Get Legacy Today's Summary",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/deliveries/today_summary",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "deliveries", "today_summary"]
+            },
+            "description": "Legacy: Get today's delivery summary"
+          }
+        }
+      ]
+    },
+    {
+      "name": "📁 File Upload",
+      "description": "File upload functionality",
+      "item": [
+        {
+          "name": "Upload File to Specific Folder",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "description",
+                  "value": "Product image upload",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/upload/products",
+              "host": ["{{base_url}}"],
+              "path": ["api", "upload", "products"]
+            },
+            "description": "Upload file to specific folder (e.g., products, profiles, documents)"
+          }
+        },
+        {
+          "name": "Upload File (Default Folder)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "description",
+                  "value": "General file upload",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/upload",
+              "host": ["{{base_url}}"],
+              "path": ["api", "upload"]
+            },
+            "description": "Upload file to default folder"
+          }
+        }
+      ]
+    }
+  ]
+}

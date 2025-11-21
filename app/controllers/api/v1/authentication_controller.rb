@@ -3,34 +3,42 @@ module Api
     class AuthenticationController < BaseController
       skip_before_action :authenticate_request, only: [:login, :signup, :customer_login, :refresh_token, :customer_signup]
 
-      # POST /api/v1/login
+      # POST /api/v1/login - Unified login endpoint
       def login
-        if params[:role] == 'customer'
-          customer_login
-        else
-          # For admin and delivery_person
-          @user = User.find_by(phone: params[:phone])
+        identifier = params[:phone] || params[:phone_number] || params[:email]
+        password = params[:password]
 
-          if @user&.authenticate(params[:password]) && %w[admin delivery_person].include?(@user.role)
-            token = JsonWebToken.encode(user_id: @user.id)
-            refresh_token, refresh_record = issue_refresh_token(@user)
-            render json: {
-              token: token,
-              refresh_token: refresh_token,
-              token_expires_in: 24.hours.to_i,
-              refresh_token_expires_in: (refresh_record.expires_at - Time.current).to_i,
-              user: {
-                id: @user.id,
-                name: @user.name,
-                role: @user.role,
-                email: @user.email,
-                phone: @user.phone
-              }
-            }, status: :ok
-          else
-            render json: { error: 'Invalid credentials' }, status: :unauthorized
+        return render json: { error: 'Phone/email and password are required' }, status: :bad_request if identifier.blank? || password.blank?
+
+        # Try to authenticate as customer first (by phone)
+        if identifier.match(/^\d+$/) # If identifier is numeric (phone)
+          customer = Customer.find_by(phone_number: identifier)
+          if customer&.authenticate(password) && customer.is_active?
+            return render_customer_response(customer)
           end
         end
+
+        # Try to authenticate as customer by email
+        if identifier.include?('@') # If identifier is email
+          customer = Customer.find_by(email: identifier)
+          if customer&.authenticate(password) && customer.is_active?
+            return render_customer_response(customer)
+          end
+        end
+
+        # Try to authenticate as user (delivery person/admin) by phone
+        user = User.find_by(phone: identifier)
+        if user&.authenticate(password) && %w[admin delivery_person].include?(user.role)
+          return render_user_response(user)
+        end
+
+        # Try to authenticate as user by email
+        user = User.find_by(email: identifier)
+        if user&.authenticate(password) && %w[admin delivery_person].include?(user.role)
+          return render_user_response(user)
+        end
+
+        render json: { error: 'Invalid credentials or account inactive' }, status: :unauthorized
       end
 
       # POST /api/v1/customer_login
@@ -61,62 +69,35 @@ module Api
         end
       end
 
-      # POST /api/v1/signup
+      # POST /api/v1/signup - Unified signup endpoint
       def signup
-        if params[:role] == "customer"
-          @user1 = User.first
-          @user = Customer.new(customer_params.merge(user: @user1))
-        else
-          @user = User.new(user_params)
-        end
-        if @user.save
-          # If role is customer, create customer record
-          if params[:role] == "customer"
-              @customer = @user
+        # Determine user type based on role parameter or defaults to customer
+        user_type = params[:role].present? ? params[:role].downcase : 'customer'
 
-              # Send WhatsApp notification for successful signup
-              send_signup_notification(@customer)
+        return render json: { error: 'Invalid role. Must be customer, delivery_person, or admin' }, status: :bad_request unless %w[customer delivery_person admin].include?(user_type)
 
-              token = JsonWebToken.encode(customer_id: @user.id)
-              refresh_token, refresh_record = issue_refresh_token(@customer)
-
-              render json: {
-                token: token,
-                refresh_token: refresh_token,
-                token_expires_in: 24.hours.to_i,
-                refresh_token_expires_in: (refresh_record.expires_at - Time.current).to_i,
-                customer: {
-                  id: @customer.id,
-                  name: @customer.name,
-                  address: @customer.address,
-                  phone_number: @customer.phone_number,
-                  email: @customer.email,
-                  latitude: @customer.latitude,
-                  longitude: @customer.longitude
-                }
-              }, status: :created
+        if user_type == 'customer'
+          # Create customer account
+          @customer = Customer.new(unified_customer_signup_params)
+          @customer.user_id = User.where(id: 1).last.id
+          if @customer.save
+            # Send WhatsApp notification for successful signup
+            send_signup_notification(@customer)
+            render_customer_signup_response(@customer)
           else
-            # For admin and delivery_person roles
-            token = JsonWebToken.encode(user_id: @user.id)
-            refresh_token, refresh_record = issue_refresh_token(@user)
-            render json: {
-              token: token,
-              refresh_token: refresh_token,
-              token_expires_in: 24.hours.to_i,
-              refresh_token_expires_in: (refresh_record.expires_at - Time.current).to_i,
-              user: {
-                id: @user.id,
-                name: @user.name,
-                role: @user.role,
-                email: @user.email,
-                phone: @user.phone
-              }
-            }, status: :created
+            Rails.logger.error "Customer signup validation failed: #{@customer.errors.full_messages.join(', ')}"
+            render json: { errors: @customer.errors.full_messages }, status: :unprocessable_content
           end
         else
-          Rails.logger.error "Customer signup validation failed: #{@user.errors.full_messages.join(', ')}"
-          Rails.logger.error "Customer params: #{customer_params.inspect}"
-          render json: { errors: @user.errors.full_messages }, status: :unprocessable_content
+          # Create user account (delivery_person or admin)
+          @user = User.new(unified_user_signup_params.merge(role: user_type))
+
+          if @user.save
+            render_user_signup_response(@user)
+          else
+            Rails.logger.error "User signup validation failed: #{@user.errors.full_messages.join(', ')}"
+            render json: { errors: @user.errors.full_messages }, status: :unprocessable_content
+          end
         end
       end
 
@@ -225,6 +206,90 @@ module Api
 
       private
 
+      def render_customer_response(customer)
+        token = JsonWebToken.encode(customer_id: customer.id)
+        refresh_token, refresh_record = issue_refresh_token(customer)
+        render json: {
+          token: token,
+          refresh_token: refresh_token,
+          token_expires_in: 24.hours.to_i,
+          refresh_token_expires_in: (refresh_record.expires_at - Time.current).to_i,
+          user_type: 'customer',
+          customer: {
+            id: customer.id,
+            name: customer.name,
+            address: customer.address,
+            phone_number: customer.phone_number,
+            email: customer.email,
+            preferred_language: customer.preferred_language,
+            delivery_time_preference: customer.delivery_time_preference,
+            notification_method: customer.notification_method
+          }
+        }, status: :ok
+      end
+
+      def render_user_response(user)
+        token = JsonWebToken.encode(user_id: user.id)
+        refresh_token, refresh_record = issue_refresh_token(user)
+        render json: {
+          token: token,
+          refresh_token: refresh_token,
+          token_expires_in: 24.hours.to_i,
+          refresh_token_expires_in: (refresh_record.expires_at - Time.current).to_i,
+          user_type: user.role,
+          user: {
+            id: user.id,
+            name: user.name,
+            role: user.role,
+            email: user.email,
+            phone: user.phone
+          }
+        }, status: :ok
+      end
+
+      def render_customer_signup_response(customer)
+        token = JsonWebToken.encode(customer_id: customer.id)
+        refresh_token, refresh_record = issue_refresh_token(customer)
+        render json: {
+          token: token,
+          refresh_token: refresh_token,
+          token_expires_in: 24.hours.to_i,
+          refresh_token_expires_in: (refresh_record.expires_at - Time.current).to_i,
+          user_type: 'customer',
+          customer: {
+            id: customer.id,
+            name: customer.name,
+            address: customer.address,
+            phone_number: customer.phone_number,
+            email: customer.email,
+            preferred_language: customer.preferred_language,
+            delivery_time_preference: customer.delivery_time_preference,
+            notification_method: customer.notification_method,
+            latitude: customer.latitude,
+            longitude: customer.longitude
+          }
+        }, status: :created
+      end
+
+      def render_user_signup_response(user)
+        token = JsonWebToken.encode(user_id: user.id)
+        refresh_token, refresh_record = issue_refresh_token(user)
+        render json: {
+          token: token,
+          refresh_token: refresh_token,
+          token_expires_in: 24.hours.to_i,
+          refresh_token_expires_in: (refresh_record.expires_at - Time.current).to_i,
+          user_type: user.role,
+          user: {
+            id: user.id,
+            name: user.name,
+            role: user.role,
+            email: user.email,
+            phone: user.phone
+          }
+        }, status: :created
+      end
+
       def issue_refresh_token(entity)
         user_agent = request.user_agent
         ip_address = request.remote_ip
@@ -281,6 +346,46 @@ module Api
         end
 
         permitted_params.except(:phone)
+      end
+
+      def unified_customer_signup_params
+        # Handle both nested and flat parameter structures
+        auth_params = params[:authentication].present? ? params[:authentication] : params
+
+        permitted_params = auth_params.permit(:name, :email, :phone, :phone_number, :password, :password_confirmation, :address,
+                                            :latitude, :longitude, :preferred_language, :delivery_time_preference,
+                                            :notification_method, :address_type, :address_landmark, :alt_phone_number, :city)
+
+        # Map phone to phone_number if phone is provided but phone_number is not
+        if permitted_params[:phone].present? && permitted_params[:phone_number].blank?
+          permitted_params[:phone_number] = permitted_params[:phone]
+        end
+
+        # If address is missing but city is provided, use city as address
+        if permitted_params[:address].blank? && permitted_params[:city].present?
+          permitted_params[:address] = permitted_params[:city]
+        end
+
+        # If address is still blank, provide a default
+        if permitted_params[:address].blank?
+          permitted_params[:address] = "Address not provided"
+        end
+
+        permitted_params.except(:phone)
+      end
+
+      def unified_user_signup_params
+        # Handle both nested and flat parameter structures
+        auth_params = params[:authentication].present? ? params[:authentication] : params
+
+        permitted_params = auth_params.permit(:name, :email, :phone, :password, :password_confirmation)
+
+        # Ensure required fields are present
+        return permitted_params if permitted_params[:name].present? &&
+                                  permitted_params[:password].present? &&
+                                  (permitted_params[:email].present? || permitted_params[:phone].present?)
+
+        permitted_params
       end
 
       def customer_signup_params

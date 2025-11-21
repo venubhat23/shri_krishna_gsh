@@ -89,7 +89,11 @@ class AdminSettingsController < ApplicationController
   def admin_setting_params
     params.require(:admin_setting).permit(:business_name, :address, :mobile, :email, :gstin, :pan_number,
                                           :account_holder_name, :bank_name, :account_number, :ifsc_code,
-                                          :upi_id, :terms_and_conditions)
+                                          :upi_id, :terms_and_conditions, :faq, :contact_us, :privacy_policy,
+                                          :show_dashboard, :show_orders, :show_customers, :show_products,
+                                          :show_categories, :show_delivery_assignments, :show_invoices,
+                                          :show_milk_analytics, :show_procurement, :show_payouts,
+                                          :show_reports, :show_users, :show_settings)
   end
 
   def set_default_values

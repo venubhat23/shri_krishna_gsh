@@ -1,25 +1,45 @@
-# app/models/report.rb
 class Report < ApplicationRecord
   belongs_to :user
-  
+
   validates :name, presence: true
   validates :report_type, presence: true
   validates :from_date, presence: true
   validates :to_date, presence: true
-  
-  # Serialize content as JSON for milk analytics reports
-  serialize :content, coder: JSON
-  
-  scope :gst_reports, -> { where(report_type: 'gst') }
-  scope :milk_analytics_reports, -> { where(report_type: %w[daily_procurement_delivery vendor_performance profit_loss wastage_analysis monthly_summary]) }
-  scope :recent, -> { order(created_at: :desc) }
+
+  REPORT_TYPES = %w[gst sales enhanced_sales delivery customer product financial].freeze
+
+  validates :report_type, inclusion: { in: REPORT_TYPES }
+
   scope :by_user, ->(user) { where(user: user) }
-  
-  def formatted_date_range
-    "#{from_date.strftime('%b %d')} - #{to_date.strftime('%b %d, %Y')}"
+  scope :by_type, ->(type) { where(report_type: type) }
+  scope :recent, -> { order(created_at: :desc) }
+
+  def display_name
+    "#{name} (#{from_date.strftime('%b %d')} - #{to_date.strftime('%b %d, %Y')})"
   end
-  
-  def formatted_created_at
-    created_at.strftime("%B %d, %Y at %I:%M %p")
+
+  def date_range
+    "#{from_date.strftime('%B %d, %Y')} to #{to_date.strftime('%B %d, %Y')}"
+  end
+
+  def type_display_name
+    case report_type
+    when 'gst'
+      'GST Report'
+    when 'sales'
+      'Sales Report'
+    when 'enhanced_sales'
+      'Enhanced Sales Report'
+    when 'delivery'
+      'Delivery Report'
+    when 'customer'
+      'Customer Report'
+    when 'product'
+      'Product Performance Report'
+    when 'financial'
+      'Financial Summary Report'
+    else
+      report_type.humanize
+    end
   end
 end

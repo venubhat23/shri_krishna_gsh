@@ -1398,15 +1398,17 @@
             <!-- Sidebar Brand -->
             <!-- Navigation Menu -->
             <ul class="nav flex-column" role="menubar">
-              <li class="nav-item" role="none">
-                <%= link_to root_path,
-                    class: "nav-link #{'active' if current_page?(root_path)}",
-                    role: "menuitem",
-                    "aria-current": current_page?(root_path) ? "page" : nil do %>
-                  <i class="fas fa-chart-line nav-icon" aria-hidden="true"></i>
-                  <span class="nav-text">Dashboard</span>
-                <% end %>
-              </li>
+              <% if AdminSetting.current.show_dashboard? %>
+                <li class="nav-item" role="none">
+                  <%= link_to root_path,
+                      class: "nav-link #{'active' if current_page?(root_path)}",
+                      role: "menuitem",
+                      "aria-current": current_page?(root_path) ? "page" : nil do %>
+                    <i class="fas fa-chart-line nav-icon" aria-hidden="true"></i>
+                    <span class="nav-text">Dashboard</span>
+                  <% end %>
+                </li>
+              <% end %>
 
               <% if franchise_logged_in? %>
                 <!-- Franchise-specific menu items -->
@@ -1421,146 +1423,172 @@
               <% else %>
                 <!-- Admin menu items -->
 
-              <li class="nav-item" role="none">
-                <%= link_to orders_path,
-                    class: "nav-link #{'active' if current_page?(orders_path) || controller_name == 'orders'}",
-                    role: "menuitem",
-                    "aria-current": (current_page?(orders_path) || controller_name == 'orders') ? "page" : nil do %>
-                  <i class="fas fa-shopping-cart nav-icon" aria-hidden="true"></i>
-                  <span class="nav-text">Orders</span>
-                <% end %>
-              </li>
+              <% if AdminSetting.current.show_orders? %>
+                <li class="nav-item" role="none">
+                  <%= link_to orders_path,
+                      class: "nav-link #{'active' if current_page?(orders_path) || controller_name == 'orders'}",
+                      role: "menuitem",
+                      "aria-current": (current_page?(orders_path) || controller_name == 'orders') ? "page" : nil do %>
+                    <i class="fas fa-shopping-cart nav-icon" aria-hidden="true"></i>
+                    <span class="nav-text">Orders</span>
+                  <% end %>
+                </li>
+              <% end %>
 
-              <li class="nav-item" role="none">
-                <%= link_to products_path,
-                    class: "nav-link #{'active' if current_page?(products_path) || controller_name == 'products'}",
-                    role: "menuitem",
-                    "aria-current": (current_page?(products_path) || controller_name == 'products') ? "page" : nil do %>
-                  <i class="fas fa-cube nav-icon" aria-hidden="true"></i>
-                  <span class="nav-text">Products</span>
-                <% end %>
-              </li>
+              <% if AdminSetting.current.show_products? %>
+                <li class="nav-item" role="none">
+                  <%= link_to products_path,
+                      class: "nav-link #{'active' if current_page?(products_path) || controller_name == 'products'}",
+                      role: "menuitem",
+                      "aria-current": (current_page?(products_path) || controller_name == 'products') ? "page" : nil do %>
+                    <i class="fas fa-cube nav-icon" aria-hidden="true"></i>
+                    <span class="nav-text">Products</span>
+                  <% end %>
+                </li>
+              <% end %>
+
+              <% if AdminSetting.current.show_categories? %>
+                <li class="nav-item" role="none">
+                  <%= link_to categories_path,
+                      class: "nav-link #{'active' if current_page?(categories_path) || controller_name == 'categories'}",
+                      role: "menuitem",
+                      "aria-current": (current_page?(categories_path) || controller_name == 'categories') ? "page" : nil do %>
+                    <i class="fas fa-tags nav-icon" aria-hidden="true"></i>
+                    <span class="nav-text">Categories</span>
+                  <% end %>
+                </li>
+              <% end %>
+
+              <% if AdminSetting.current.show_inventory? %>
+                <li class="nav-item" role="none">
+                  <%= link_to coupons_path,
+                      class: "nav-link #{'active' if current_page?(coupons_path) || controller_name == 'coupons'}",
+                      role: "menuitem",
+                      "aria-current": (current_page?(coupons_path) || controller_name == 'coupons') ? "page" : nil do %>
+                    <i class="fas fa-ticket-alt nav-icon" aria-hidden="true"></i>
+                    <span class="nav-text">Coupons</span>
+                  <% end %>
+                </li>
+              <% end %>
               
-              <li class="nav-item" role="none">
-                <%= link_to categories_path,
-                    class: "nav-link #{'active' if current_page?(categories_path) || controller_name == 'categories'}",
-                    role: "menuitem",
-                    "aria-current": (current_page?(categories_path) || controller_name == 'categories') ? "page" : nil do %>
-                  <i class="fas fa-tags nav-icon" aria-hidden="true"></i>
-                  <span class="nav-text">Categories</span>
-                <% end %>
-              </li>
+              <% if AdminSetting.current.show_customers? %>
+                <li class="nav-item" role="none">
+                  <%= link_to customers_path,
+                      class: "nav-link #{'active' if current_page?(customers_path) || controller_name == 'customers'}",
+                      role: "menuitem",
+                      "aria-current": (current_page?(customers_path) || controller_name == 'customers') ? "page" : nil do %>
+                    <i class="fas fa-users nav-icon" aria-hidden="true"></i>
+                    <span class="nav-text">Customers</span>
+                  <% end %>
+                </li>
+              <% end %>
 
-              <li class="nav-item" role="none">
-                <%= link_to coupons_path,
-                    class: "nav-link #{'active' if current_page?(coupons_path) || controller_name == 'coupons'}",
-                    role: "menuitem",
-                    "aria-current": (current_page?(coupons_path) || controller_name == 'coupons') ? "page" : nil do %>
-                  <i class="fas fa-ticket-alt nav-icon" aria-hidden="true"></i>
-                  <span class="nav-text">Coupons</span>
-                <% end %>
-              </li>
+              <% if AdminSetting.current.show_analytics? %>
+                <li class="nav-item" role="none">
+                  <%= link_to customer_patterns_path,
+                      class: "nav-link #{'active' if current_page?(customer_patterns_path) || controller_name == 'customer_patterns'}",
+                      role: "menuitem",
+                      "aria-current": (current_page?(customer_patterns_path) || controller_name == 'customer_patterns') ? "page" : nil do %>
+                    <i class="fas fa-chart-bar nav-icon" aria-hidden="true"></i>
+                    <span class="nav-text">📊 Customer Patterns</span>
+                  <% end %>
+                </li>
+              <% end %>
+
+              <% if AdminSetting.current.show_customers? %>
+                <li class="nav-item" role="none">
+                  <%= link_to customer_points_path,
+                      class: "nav-link #{'active' if current_page?(customer_points_path) || controller_name == 'customer_points'}",
+                      role: "menuitem",
+                      "aria-current": (current_page?(customer_points_path) || controller_name == 'customer_points') ? "page" : nil do %>
+                    <i class="fas fa-star nav-icon" aria-hidden="true"></i>
+                    <span class="nav-text">Customer Points</span>
+                  <% end %>
+                </li>
+
+                <li class="nav-item" role="none">
+                  <%= link_to customer_wallets_path,
+                      class: "nav-link #{'active' if current_page?(customer_wallets_path) || controller_name == 'customer_wallets'}",
+                      role: "menuitem",
+                      "aria-current": (current_page?(customer_wallets_path) || controller_name == 'customer_wallets') ? "page" : nil do %>
+                    <i class="fas fa-wallet nav-icon" aria-hidden="true"></i>
+                    <span class="nav-text">Customer Wallets</span>
+                  <% end %>
+                </li>
+              <% end %>
+
+              <% if AdminSetting.current.show_ai_insights? %>
+                <li class="nav-item" role="none">
+                  <%= link_to ai_insights_path,
+                      class: "nav-link #{'active' if current_page?(ai_insights_path) || controller_name == 'ai_insights'}",
+                      role: "menuitem",
+                      "aria-current": (current_page?(ai_insights_path) || controller_name == 'ai_insights') ? "page" : nil do %>
+                    <i class="fas fa-brain nav-icon" aria-hidden="true"></i>
+                    <span class="nav-text">🤖 AI-Insights</span>
+                  <% end %>
+                </li>
+              <% end %>
+
+              <% if AdminSetting.current.show_customers? %>
+                <li class="nav-item" role="none">
+                  <%= link_to customer_details_path,
+                      class: "nav-link #{'active' if current_page?(customer_details_path) || controller_name == 'customer_details'}",
+                      role: "menuitem",
+                      "aria-current": (current_page?(customer_details_path) || controller_name == 'customer_details') ? "page" : nil do %>
+                    <i class="fas fa-user-tag nav-icon" aria-hidden="true"></i>
+                    <span class="nav-text">Customer Detail</span>
+                  <% end %>
+                </li>
+              <% end %>
+
+              <% if AdminSetting.current.show_inventory? %>
+                <li class="nav-item" role="none">
+                  <%= link_to advertisements_path,
+                      class: "nav-link #{'active' if current_page?(advertisements_path) || controller_name == 'advertisements'}",
+                      role: "menuitem",
+                      "aria-current": (current_page?(advertisements_path) || controller_name == 'advertisements') ? "page" : nil do %>
+                    <i class="fas fa-bullhorn nav-icon" aria-hidden="true"></i>
+                    <span class="nav-text">Ads</span>
+                  <% end %>
+                </li>
+              <% end %>
+
+              <% if AdminSetting.current.show_users? %>
+                <li class="nav-item" role="none">
+                  <%= link_to delivery_people_path,
+                      class: "nav-link #{'active' if current_page?(delivery_people_path) || current_page?(new_delivery_person_path) || controller_name == 'delivery_people'}",
+                      role: "menuitem",
+                      "aria-current": (current_page?(delivery_people_path) || current_page?(new_delivery_person_path) || controller_name == 'delivery_people') ? "page" : nil do %>
+                    <i class="fas fa-user-tie nav-icon" aria-hidden="true"></i>
+                    <span class="nav-text">Delivery Team</span>
+                  <% end %>
+                </li>
+              <% end %>
               
-              <li class="nav-item" role="none">
-                <%= link_to customers_path,
-                    class: "nav-link #{'active' if current_page?(customers_path) || controller_name == 'customers'}",
-                    role: "menuitem",
-                    "aria-current": (current_page?(customers_path) || controller_name == 'customers') ? "page" : nil do %>
-                  <i class="fas fa-users nav-icon" aria-hidden="true"></i>
-                  <span class="nav-text">Customers</span>
-                <% end %>
-              </li>
+              <% if AdminSetting.current.show_delivery_assignments? %>
+                <li class="nav-item" role="none">
+                  <%= link_to delivery_assignments_path,
+                      class: "nav-link #{'active' if current_page?(delivery_assignments_path) || current_page?(new_delivery_assignment_path) || controller_name == 'delivery_assignments'}",
+                      role: "menuitem",
+                      "aria-current": (current_page?(delivery_assignments_path) || current_page?(new_delivery_assignment_path) || controller_name == 'delivery_assignments') ? "page" : nil do %>
+                    <i class="fas fa-route nav-icon" aria-hidden="true"></i>
+                    <span class="nav-text">Assignments</span>
+                  <% end %>
+                </li>
+              <% end %>
 
-              <li class="nav-item" role="none">
-                <%= link_to customer_patterns_path,
-                    class: "nav-link #{'active' if current_page?(customer_patterns_path) || controller_name == 'customer_patterns'}",
-                    role: "menuitem",
-                    "aria-current": (current_page?(customer_patterns_path) || controller_name == 'customer_patterns') ? "page" : nil do %>
-                  <i class="fas fa-chart-bar nav-icon" aria-hidden="true"></i>
-                  <span class="nav-text">📊 Customer Patterns</span>
-                <% end %>
-              </li>
-
-              <li class="nav-item" role="none">
-                <%= link_to customer_points_path,
-                    class: "nav-link #{'active' if current_page?(customer_points_path) || controller_name == 'customer_points'}",
-                    role: "menuitem",
-                    "aria-current": (current_page?(customer_points_path) || controller_name == 'customer_points') ? "page" : nil do %>
-                  <i class="fas fa-star nav-icon" aria-hidden="true"></i>
-                  <span class="nav-text">Customer Points</span>
-                <% end %>
-              </li>
-
-              <li class="nav-item" role="none">
-                <%= link_to customer_wallets_path,
-                    class: "nav-link #{'active' if current_page?(customer_wallets_path) || controller_name == 'customer_wallets'}",
-                    role: "menuitem",
-                    "aria-current": (current_page?(customer_wallets_path) || controller_name == 'customer_wallets') ? "page" : nil do %>
-                  <i class="fas fa-wallet nav-icon" aria-hidden="true"></i>
-                  <span class="nav-text">Customer Wallets</span>
-                <% end %>
-              </li>
-
-              <li class="nav-item" role="none">
-                <%= link_to ai_insights_path,
-                    class: "nav-link #{'active' if current_page?(ai_insights_path) || controller_name == 'ai_insights'}",
-                    role: "menuitem",
-                    "aria-current": (current_page?(ai_insights_path) || controller_name == 'ai_insights') ? "page" : nil do %>
-                  <i class="fas fa-brain nav-icon" aria-hidden="true"></i>
-                  <span class="nav-text">🤖 AI-Insights</span>
-                <% end %>
-              </li>
-
-              <li class="nav-item" role="none">
-                <%= link_to customer_details_path,
-                    class: "nav-link #{'active' if current_page?(customer_details_path) || controller_name == 'customer_details'}",
-                    role: "menuitem",
-                    "aria-current": (current_page?(customer_details_path) || controller_name == 'customer_details') ? "page" : nil do %>
-                  <i class="fas fa-user-tag nav-icon" aria-hidden="true"></i>
-                  <span class="nav-text">Customer Detail</span>
-                <% end %>
-              </li>
-
-              <li class="nav-item" role="none">
-                <%= link_to advertisements_path,
-                    class: "nav-link #{'active' if current_page?(advertisements_path) || controller_name == 'advertisements'}",
-                    role: "menuitem",
-                    "aria-current": (current_page?(advertisements_path) || controller_name == 'advertisements') ? "page" : nil do %>
-                  <i class="fas fa-bullhorn nav-icon" aria-hidden="true"></i>
-                  <span class="nav-text">Ads</span>
-                <% end %>
-              </li>
-              
-              <li class="nav-item" role="none">
-                <%= link_to delivery_people_path, 
-                    class: "nav-link #{'active' if current_page?(delivery_people_path) || current_page?(new_delivery_person_path) || controller_name == 'delivery_people'}", 
-                    role: "menuitem",
-                    "aria-current": (current_page?(delivery_people_path) || current_page?(new_delivery_person_path) || controller_name == 'delivery_people') ? "page" : nil do %>
-                  <i class="fas fa-user-tie nav-icon" aria-hidden="true"></i>
-                  <span class="nav-text">Delivery Team</span>
-                <% end %>
-              </li>
-              
-              <li class="nav-item" role="none">
-                <%= link_to delivery_assignments_path, 
-                    class: "nav-link #{'active' if current_page?(delivery_assignments_path) || current_page?(new_delivery_assignment_path) || controller_name == 'delivery_assignments'}", 
-                    role: "menuitem",
-                    "aria-current": (current_page?(delivery_assignments_path) || current_page?(new_delivery_assignment_path) || controller_name == 'delivery_assignments') ? "page" : nil do %>
-                  <i class="fas fa-route nav-icon" aria-hidden="true"></i>
-                  <span class="nav-text">Assignments</span>
-                <% end %>
-              </li>
-              
-              <!-- Milk Analytics Module -->
-              <li class="nav-item" role="none">
-                <%= link_to milk_analytics_path, 
-                    class: "nav-link #{'active' if controller_name.in?(%w[milk_analytics procurement_schedules procurement_assignments])}", 
-                    role: "menuitem",
-                    "aria-current": controller_name.in?(%w[milk_analytics procurement_schedules procurement_assignments]) ? "page" : nil do %>
-                  <i class="fas fa-glass-milk nav-icon" aria-hidden="true" style="margin-left: -8px;"></i>
-                  <span class="nav-text">📊 Milk Analytics</span>
-                <% end %>
-              </li>
+              <% if AdminSetting.current.show_milk_analytics? %>
+                <!-- Milk Analytics Module -->
+                <li class="nav-item" role="none">
+                  <%= link_to milk_analytics_path,
+                      class: "nav-link #{'active' if controller_name.in?(%w[milk_analytics procurement_schedules procurement_assignments])}",
+                      role: "menuitem",
+                      "aria-current": controller_name.in?(%w[milk_analytics procurement_schedules procurement_assignments]) ? "page" : nil do %>
+                    <i class="fas fa-glass-milk nav-icon" aria-hidden="true" style="margin-left: -8px;"></i>
+                    <span class="nav-text">📊 Milk Analytics</span>
+                  <% end %>
+                </li>
+              <% end %>
               
               <li class="nav-item" role="none">
                 <%= link_to schedules_path, 
@@ -1645,15 +1673,17 @@
                 <% end %>
               </li>
 
-              <li class="nav-item" role="none">
-                <%= link_to payouts_path,
-                    class: "nav-link #{'active' if current_page?(payouts_path) || controller_name == 'payouts'}",
-                    role: "menuitem",
-                    "aria-current": (current_page?(payouts_path) || controller_name == 'payouts') ? "page" : nil do %>
-                  <i class="fas fa-credit-card nav-icon" aria-hidden="true"></i>
-                  <span class="nav-text">💳 Payouts</span>
-                <% end %>
-              </li>
+              <% if AdminSetting.current.show_payouts? %>
+                <li class="nav-item" role="none">
+                  <%= link_to payouts_path,
+                      class: "nav-link #{'active' if current_page?(payouts_path) || controller_name == 'payouts'}",
+                      role: "menuitem",
+                      "aria-current": (current_page?(payouts_path) || controller_name == 'payouts') ? "page" : nil do %>
+                    <i class="fas fa-credit-card nav-icon" aria-hidden="true"></i>
+                    <span class="nav-text">💳 Payouts</span>
+                  <% end %>
+                </li>
+              <% end %>
 
               <li class="nav-item" role="none">
                 <%= link_to '/delivery-review',

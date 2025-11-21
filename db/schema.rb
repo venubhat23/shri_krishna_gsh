@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_20_134130) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_21_075533) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -34,6 +34,27 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_20_134130) do
     t.text "faq"
     t.text "contact_us"
     t.text "privacy_policy"
+    t.boolean "show_dashboard", default: true
+    t.boolean "show_orders", default: true
+    t.boolean "show_customers", default: true
+    t.boolean "show_products", default: true
+    t.boolean "show_categories", default: true
+    t.boolean "show_delivery_assignments", default: true
+    t.boolean "show_invoices", default: true
+    t.boolean "show_milk_analytics", default: true
+    t.boolean "show_procurement", default: true
+    t.boolean "show_payouts", default: true
+    t.boolean "show_reports", default: true
+    t.boolean "show_users", default: true
+    t.boolean "show_settings", default: true
+    t.boolean "show_ai_insights"
+    t.boolean "show_franchise"
+    t.boolean "show_affiliates"
+    t.boolean "show_sales"
+    t.boolean "show_inventory"
+    t.boolean "show_analytics"
+    t.boolean "show_notifications"
+    t.boolean "show_settings_advanced"
   end
 
   create_table "advertisements", force: :cascade do |t|
@@ -407,5 +428,153 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_20_134130) do
     t.index ["total_amount", "created_at"], name: "index_invoices_on_total_amount_and_created_at"
     t.index ["total_amount"], name: "index_invoices_on_total_amount"
     t.index ["year"], name: "index_invoices_on_year"
+  end
+
+  create_table "payouts", force: :cascade do |t|
+    t.string "name"
+    t.string "gst"
+    t.decimal "amount"
+    t.string "transaction_id"
+    t.string "paid_via"
+    t.date "date"
+    t.text "description"
+    t.string "type"
+    t.string "payin_payout"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.string "payout_type"
+  end
+
+  create_table "procurement_assignments", force: :cascade do |t|
+    t.bigint "procurement_schedule_id"
+    t.bigint "customer_id"
+    t.bigint "user_id"
+    t.date "scheduled_date"
+    t.string "status"
+    t.datetime "completed_at", precision: nil
+    t.bigint "product_id"
+    t.decimal "quantity"
+    t.string "unit"
+    t.text "notes"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.index ["customer_id"], name: "index_procurement_assignments_on_customer_id"
+    t.index ["procurement_schedule_id"], name: "index_procurement_assignments_on_procurement_schedule_id"
+    t.index ["product_id"], name: "index_procurement_assignments_on_product_id"
+    t.index ["scheduled_date"], name: "index_procurement_assignments_on_scheduled_date"
+  end
+
+  create_table "procurement_schedules", force: :cascade do |t|
+    t.string "vendor_name"
+    t.date "from_date"
+    t.date "to_date"
+    t.decimal "quantity"
+    t.decimal "buying_price"
+    t.decimal "selling_price"
+    t.string "status"
+    t.string "unit"
+    t.text "notes"
+    t.bigint "user_id"
+    t.bigint "product_id"
+    t.string "whatsapp_phone_number"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.index ["product_id"], name: "index_procurement_schedules_on_product_id"
+    t.index ["user_id"], name: "index_procurement_schedules_on_user_id"
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.string "name", null: false
+    t.decimal "price"
+    t.string "unit"
+    t.text "description"
+    t.bigint "category_id"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.string "hsn_sac"
+    t.decimal "cgst"
+    t.decimal "sgst"
+    t.decimal "igst"
+    t.decimal "gst_rate"
+    t.decimal "price_without_discount"
+    t.decimal "discount"
+    t.string "unit_type"
+    t.string "image_url"
+    t.decimal "available_quantity", default: "0.0"
+    t.boolean "is_active", default: true, null: false
+    t.boolean "is_subscription_eligible", default: false, null: false
+    t.index ["category_id"], name: "index_products_on_category_id"
+  end
+
+  create_table "referral_codes", force: :cascade do |t|
+    t.string "code"
+    t.bigint "user_id"
+    t.bigint "customer_id"
+    t.integer "uses_count", default: 0
+    t.integer "max_uses"
+    t.datetime "expires_at", precision: nil
+    t.boolean "is_active", default: true
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.integer "total_referrals", default: 0
+    t.decimal "reward_amount", default: "0.0"
+    t.string "status"
+    t.text "description"
+    t.decimal "total_credits", default: "0.0"
+    t.string "share_url_slug"
+    t.index ["share_url_slug"], name: "index_referral_codes_on_share_url_slug", unique: true
+  end
+
+  create_table "refresh_tokens", force: :cascade do |t|
+    t.string "token"
+    t.bigint "user_id"
+    t.datetime "expires_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "revoked_at", precision: nil
+    t.string "device_info"
+    t.string "ip_address"
+    t.string "token_hash"
+    t.bigint "customer_id"
+    t.string "user_agent"
+    t.string "created_by_ip"
+    t.string "replaced_by_token_hash"
+    t.index ["expires_at"], name: "index_refresh_tokens_on_expires_at"
+    t.index ["token"], name: "index_refresh_tokens_on_token"
+    t.index ["user_id"], name: "index_refresh_tokens_on_user_id"
+  end
+
+  create_table "reports", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "report_type", null: false
+    t.date "from_date", null: false
+    t.date "to_date", null: false
+    t.bigint "user_id", null: false
+    t.text "content"
+    t.string "file_path"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
+  end
+
+  create_table "support_tickets", force: :cascade do |t|
+    t.string "subject"
+    t.text "description"
+    t.string "status"
+    t.string "priority"
+    t.bigint "user_id"
+    t.bigint "customer_id"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.string "phone"
+    t.string "password_digest"
+    t.integer "role"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.string "employee_id"
   end
 end

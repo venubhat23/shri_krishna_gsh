@@ -131,29 +131,34 @@ class Product < ApplicationRecord
     category&.color || '#6c757d'
   end
 
+  # GST applicability check
+  def is_gst_applicable?
+    gst_rate.present? && gst_rate.to_f > 0
+  end
+
   # GST calculation methods
   def total_gst_percentage
-    return 0 unless is_gst_applicable
-    (total_cgst_percentage || 0) + (total_sgst_percentage || 0) + (total_igst_percentage || 0)
+    return 0 unless is_gst_applicable?
+    (cgst || 0) + (sgst || 0) + (igst || 0)
   end
 
   def cgst_amount_for(base_amount)
-    return 0 unless is_gst_applicable
-    (base_amount * (total_cgst_percentage || 0) / 100).round(2)
+    return 0 unless is_gst_applicable?
+    (base_amount * (cgst || 0) / 100).round(2)
   end
 
   def sgst_amount_for(base_amount)
-    return 0 unless is_gst_applicable
-    (base_amount * (total_sgst_percentage || 0) / 100).round(2)
+    return 0 unless is_gst_applicable?
+    (base_amount * (sgst || 0) / 100).round(2)
   end
 
   def igst_amount_for(base_amount)
-    return 0 unless is_gst_applicable
-    (base_amount * (total_igst_percentage || 0) / 100).round(2)
+    return 0 unless is_gst_applicable?
+    (base_amount * (igst || 0) / 100).round(2)
   end
 
   def total_tax_amount_for(base_amount)
-    return 0 unless is_gst_applicable
+    return 0 unless is_gst_applicable?
     cgst_amount_for(base_amount) + sgst_amount_for(base_amount) + igst_amount_for(base_amount)
   end
 

@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  # Favicon route to prevent 404 errors
+  get '/favicon.ico', to: proc { [204, {}, []] }
+
   # Admin interface
   namespace :admin do
     resources :affiliates do
@@ -443,6 +446,13 @@ Rails.application.routes.draw do
     collection do
       post :cleanup_tokens
       get :export_data
+    end
+  end
+
+  # Sidebar Configuration
+  resources :sidebar_configurations, path: 'sidebar-config', only: [:index] do
+    collection do
+      patch :update
     end
   end
   
