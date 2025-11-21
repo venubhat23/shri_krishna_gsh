@@ -2,13 +2,16 @@
 require 'twilio-ruby'
 
 class WhatsappService
-  # Configuration
-  # ACCOUNT_SID = 'ACc88b1a0b859971f4c033598e67967411'
-  # AUTH_TOKEN  = '93ebd7621541cebb9ccb65cc01ef9316'
+  # Configuration via environment variables:
+  # TWILIO_ACCOUNT_SID=your_account_sid
+  # TWILIO_AUTH_TOKEN=your_auth_token
   FROM_NUMBER = 'whatsapp:+14155238886' # Twilio Sandbox WhatsApp number
-  
+
   def initialize
-    @client = Twilio::REST::Client.new(ACCOUNT_SID, AUTH_TOKEN)
+    @client = Twilio::REST::Client.new(
+      ENV['TWILIO_ACCOUNT_SID'],
+      ENV['TWILIO_AUTH_TOKEN']
+    )
   end
   
   # Send a plain text WhatsApp message
