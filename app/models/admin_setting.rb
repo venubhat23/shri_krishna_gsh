@@ -30,24 +30,36 @@ class AdminSetting < ApplicationRecord
   def sidebar_menu_items
     {
       dashboard: { name: 'Dashboard', path: '/', icon: 'fa-tachometer-alt', show: show_dashboard? },
+      my_bookings: { name: 'My Bookings', path: '/my-bookings', icon: 'fa-shopping-cart', show: show_my_bookings? },
       orders: { name: 'Orders', path: '/orders', icon: 'fa-shopping-cart', show: show_orders? },
       customers: { name: 'Customers', path: '/customers', icon: 'fa-users', show: show_customers? },
+      customer_patterns: { name: 'Customer Patterns', path: '/customer-patterns', icon: 'fa-chart-bar', show: show_customer_patterns? },
+      customer_points: { name: 'Customer Points', path: '/customer-points', icon: 'fa-star', show: show_customer_points? },
+      customer_wallets: { name: 'Customer Wallets', path: '/customer-wallets', icon: 'fa-wallet', show: show_customer_wallets? },
+      ai_insights: { name: 'AI Insights', path: '/ai-insights', icon: 'fa-brain', show: show_ai_insights? },
+      customer_details: { name: 'Customer Details', path: '/customer_details', icon: 'fa-user-tag', show: show_customer_details? },
       products: { name: 'Products', path: '/products', icon: 'fa-box', show: show_products? },
       categories: { name: 'Categories', path: '/categories', icon: 'fa-tags', show: show_categories? },
-      delivery_assignments: { name: 'Deliveries', path: '/delivery_assignments', icon: 'fa-truck', show: show_delivery_assignments? },
-      invoices: { name: 'Invoices', path: '/invoices', icon: 'fa-file-invoice', show: show_invoices? },
-      sales: { name: 'Sales', path: '/sales', icon: 'fa-chart-line', show: show_sales? },
+      advertisements: { name: 'Advertisements', path: '/advertisements', icon: 'fa-bullhorn', show: show_advertisements? },
+      users: { name: 'Delivery Team', path: '/delivery_people', icon: 'fa-user-tie', show: show_users? },
+      delivery_assignments: { name: 'Assignments', path: '/delivery_assignments', icon: 'fa-route', show: show_delivery_assignments? },
       milk_analytics: { name: 'Milk Analytics', path: '/milk-supply-analytics', icon: 'fa-cow', show: show_milk_analytics? },
-      analytics: { name: 'Analytics', path: '/analytics', icon: 'fa-analytics', show: show_analytics? },
-      ai_insights: { name: 'AI Insights', path: '/ai-insights', icon: 'fa-brain', show: show_ai_insights? },
+      schedules: { name: 'Schedules', path: '/schedules', icon: 'fa-calendar', show: show_schedules? },
       procurement: { name: 'Procurement', path: '/procurement_schedules', icon: 'fa-industry', show: show_procurement? },
-      inventory: { name: 'Inventory', path: '/inventory', icon: 'fa-warehouse', show: show_inventory? },
+      invoices: { name: 'Invoices', path: '/invoices', icon: 'fa-file-invoice', show: show_invoices? },
       franchise: { name: 'Franchise', path: '/franchises', icon: 'fa-store', show: show_franchise? },
       affiliates: { name: 'Affiliates', path: '/admin/affiliates', icon: 'fa-handshake', show: show_affiliates? },
+      pending_payments: { name: 'Pending Payments', path: '/pending_payments', icon: 'fa-clock', show: show_pending_payments? },
       payouts: { name: 'Payouts', path: '/payouts', icon: 'fa-money-bill-wave', show: show_payouts? },
+      delivery_review: { name: 'Delivery Review', path: '/delivery-review', icon: 'fa-clipboard-check', show: show_delivery_review? },
+      purchase_invoices: { name: 'Purchase Invoices', path: '/purchase_invoices', icon: 'fa-file-import', show: show_purchase_invoices? },
+      sales_invoices: { name: 'Sales Invoices', path: '/sales_invoices', icon: 'fa-file-export', show: show_sales_invoices? },
+      sales: { name: 'Sales', path: '/sales', icon: 'fa-chart-line', show: show_sales? },
+      analytics: { name: 'Analytics', path: '/analytics', icon: 'fa-analytics', show: show_analytics? },
       reports: { name: 'Reports', path: '/reports', icon: 'fa-chart-bar', show: show_reports? },
+      whatsapp_messages: { name: 'WhatsApp Messages', path: '/whatsapp_messages', icon: 'fa-whatsapp', show: show_whatsapp_messages? },
+      inventory: { name: 'Inventory', path: '/inventory', icon: 'fa-warehouse', show: show_inventory? },
       notifications: { name: 'Notifications', path: '/notifications', icon: 'fa-bell', show: show_notifications? },
-      users: { name: 'Users', path: '/users', icon: 'fa-user-cog', show: show_users? },
       settings_advanced: { name: 'Advanced Settings', path: '/settings/advanced', icon: 'fa-tools', show: show_settings_advanced? },
       settings: { name: 'Settings', path: '/admin_settings', icon: 'fa-cog', show: show_settings? }
     }
@@ -140,5 +152,53 @@ class AdminSetting < ApplicationRecord
 
   def show_settings_advanced?
     show_settings_advanced.nil? ? true : show_settings_advanced
+  end
+
+  def show_my_bookings?
+    show_my_bookings.nil? ? true : show_my_bookings
+  end
+
+  def show_customer_patterns?
+    show_customer_patterns.nil? ? true : show_customer_patterns
+  end
+
+  def show_customer_points?
+    show_customer_points.nil? ? true : show_customer_points
+  end
+
+  def show_customer_wallets?
+    show_customer_wallets.nil? ? true : show_customer_wallets
+  end
+
+  def show_customer_details?
+    show_customer_details.nil? ? true : show_customer_details
+  end
+
+  def show_advertisements?
+    show_advertisements.nil? ? true : show_advertisements
+  end
+
+  def show_schedules?
+    show_schedules.nil? ? true : show_schedules
+  end
+
+  def show_pending_payments?
+    show_pending_payments.nil? ? true : show_pending_payments
+  end
+
+  def show_delivery_review?
+    show_delivery_review.nil? ? true : show_delivery_review
+  end
+
+  def show_purchase_invoices?
+    show_purchase_invoices.nil? ? true : show_purchase_invoices
+  end
+
+  def show_sales_invoices?
+    show_sales_invoices.nil? ? true : show_sales_invoices
+  end
+
+  def show_whatsapp_messages?
+    show_whatsapp_messages.nil? ? true : show_whatsapp_messages
   end
 end

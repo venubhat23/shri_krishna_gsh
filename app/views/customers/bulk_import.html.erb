@@ -3,9 +3,18 @@
   <h1 class="h2">
     <i class="fas fa-upload me-2"></i>Bulk Add Customers
   </h1>
-  <%= link_to customers_path, class: "btn btn-outline-secondary" do %>
-    <i class="fas fa-arrow-left me-2"></i>Back to Customers
-  <% end %>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group me-2">
+      <%= link_to new_customer_path, class: "btn btn-success" do %>
+        <i class="fas fa-user-plus me-2"></i>Create Customer
+      <% end %>
+    </div>
+    <div class="btn-group">
+      <%= link_to customers_path, class: "btn btn-outline-secondary" do %>
+        <i class="fas fa-arrow-left me-2"></i>Back to Customers
+      <% end %>
+    </div>
+  </div>
 </div>
 
 <div class="row">
@@ -515,22 +524,295 @@
 </div>
 
 <!-- Success Modal -->
-<div class="modal fade" id="successModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body text-center py-4">
-        <div class="success-icon mb-3">
-          <i class="fas fa-check-circle text-success" style="font-size: 3rem;"></i>
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content success-modal-content">
+      <div class="modal-body text-center py-5">
+        <div class="success-icon mb-4">
+          <div class="success-checkmark">
+            <div class="check-icon">
+              <span class="icon-line line-tip"></span>
+              <span class="icon-line line-long"></span>
+              <div class="icon-circle"></div>
+              <div class="icon-fix"></div>
+            </div>
+          </div>
         </div>
-        <h5 class="modal-title mb-2">Upload Successful!</h5>
+        <h4 class="modal-title mb-3 text-success" id="successModalLabel">Upload Successful!</h4>
         <p class="text-muted mb-4" id="successMessage">Customers have been added successfully.</p>
-        <button type="button" class="btn btn-primary" id="goToCustomersBtn">
-          Go to Customers
-        </button>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-success btn-lg me-2" id="goToCustomersBtn">
+            <i class="fas fa-users me-2"></i>Go to Customers
+          </button>
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-2"></i>Close
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Success Modal CSS -->
+<style>
+/* Success Modal Styling */
+.success-modal-content {
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  overflow: hidden;
+  position: relative;
+}
+
+.success-modal-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #28a745, #20c997, #28a745);
+}
+
+/* Animated Success Checkmark */
+.success-checkmark {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: block;
+  stroke-width: 3;
+  stroke: #28a745;
+  stroke-miterlimit: 10;
+  margin: 0 auto;
+  position: relative;
+  background: linear-gradient(135deg, rgba(40, 167, 69, 0.1) 0%, rgba(32, 201, 151, 0.1) 100%);
+  animation: success-scale 0.3s ease-in-out 0.9s both;
+}
+
+.success-checkmark .check-icon {
+  width: 80px;
+  height: 80px;
+  position: relative;
+  border-radius: 50%;
+  box-sizing: content-box;
+  border: 3px solid #28a745;
+}
+
+.success-checkmark .check-icon::before {
+  top: 3px;
+  left: -2px;
+  width: 30px;
+  transform-origin: 100% 50%;
+  border-radius: 100px 0 0 100px;
+}
+
+.success-checkmark .check-icon::after {
+  top: 0;
+  left: 30px;
+  width: 60px;
+  transform-origin: 0 50%;
+  border-radius: 0 100px 100px 0;
+  animation: success-rotate 4.25s ease-in;
+}
+
+.success-checkmark .check-icon::before,
+.success-checkmark .check-icon::after {
+  content: '';
+  height: 100px;
+  position: absolute;
+  background: #ffffff;
+  transform: rotate(-45deg);
+}
+
+.success-checkmark .icon-line {
+  height: 3px;
+  background-color: #28a745;
+  display: block;
+  border-radius: 2px;
+  position: absolute;
+  z-index: 10;
+}
+
+.success-checkmark .icon-line.line-tip {
+  top: 46px;
+  left: 14px;
+  width: 25px;
+  transform: rotate(45deg);
+  animation: success-icon-line-tip 0.75s;
+}
+
+.success-checkmark .icon-line.line-long {
+  top: 38px;
+  right: 8px;
+  width: 47px;
+  transform: rotate(-45deg);
+  animation: success-icon-line-long 0.75s;
+}
+
+.success-checkmark .icon-circle {
+  top: -3px;
+  left: -3px;
+  z-index: 10;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  position: absolute;
+  box-sizing: content-box;
+  border: 3px solid rgba(40, 167, 69, 0.5);
+}
+
+.success-checkmark .icon-fix {
+  top: 8px;
+  width: 5px;
+  left: 26px;
+  z-index: 1;
+  height: 85px;
+  position: absolute;
+  transform: rotate(-45deg);
+  background-color: #ffffff;
+}
+
+/* Modal Backdrop Fix */
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  pointer-events: none !important;
+}
+
+.modal {
+  pointer-events: none !important;
+}
+
+.modal-dialog {
+  pointer-events: auto !important;
+}
+
+/* Ensure modal is above sidebar and other elements */
+.modal {
+  z-index: 9999 !important;
+}
+
+.modal-backdrop {
+  z-index: 9998 !important;
+}
+
+/* Success animations */
+@keyframes success-scale {
+  0%, 20% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes success-rotate {
+  0% {
+    transform: rotate(-45deg);
+  }
+  5% {
+    transform: rotate(-45deg);
+  }
+  12% {
+    transform: rotate(-405deg);
+  }
+  100% {
+    transform: rotate(-405deg);
+  }
+}
+
+@keyframes success-icon-line-tip {
+  0% {
+    width: 0;
+    left: 1px;
+    top: 19px;
+  }
+  54% {
+    width: 0;
+    left: 1px;
+    top: 19px;
+  }
+  70% {
+    width: 50px;
+    left: -8px;
+    top: 37px;
+  }
+  84% {
+    width: 17px;
+    left: 21px;
+    top: 48px;
+  }
+  100% {
+    width: 25px;
+    left: 14px;
+    top: 46px;
+  }
+}
+
+@keyframes success-icon-line-long {
+  0% {
+    width: 0;
+    right: 46px;
+    top: 54px;
+  }
+  65% {
+    width: 0;
+    right: 46px;
+    top: 54px;
+  }
+  84% {
+    width: 55px;
+    right: 0px;
+    top: 35px;
+  }
+  100% {
+    width: 47px;
+    right: 8px;
+    top: 38px;
+  }
+}
+
+/* Button styling */
+.modal-actions .btn {
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.modal-actions .btn-success:hover {
+  background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+}
+
+.modal-actions .btn-outline-secondary:hover {
+  background: #6c757d;
+  border-color: #6c757d;
+  transform: translateY(-1px);
+}
+
+/* Mobile responsive */
+@media (max-width: 576px) {
+  .success-modal-content {
+    margin: 1rem;
+    border-radius: 15px;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .modal-actions .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  .modal-actions .btn:last-child {
+    margin-bottom: 0;
+  }
+}
+</style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -1314,26 +1596,75 @@ Sample Party 2,8999999991,255/93 Shastri Nagar Lucknow,sample2@example.com,09AAB
   }
 
   function validateTableData() {
-    // Validate all rows
+    // First do client-side validation for immediate feedback
     tableData.forEach((row, index) => {
       validateRow(index);
     });
-    
-    const validRows = tableData.filter(row => row.isValid && hasAnyData(row));
-    const invalidRows = tableData.filter(row => !row.isValid && hasAnyData(row));
-    
-    if (validRows.length === 0) {
-      showTableValidationMessage('No valid customer data found. Please fill in the required fields.', 'danger');
+
+    const rowsWithData = tableData.filter(row => hasAnyData(row));
+
+    if (rowsWithData.length === 0) {
+      showTableValidationMessage('No customer data found. Please fill in some rows first.', 'danger');
       isValidTableCSV = false;
-    } else if (invalidRows.length > 0) {
-      showTableValidationMessage(`Found ${validRows.length} valid customers and ${invalidRows.length} rows with errors. Please fix the errors before importing.`, 'warning');
-      isValidTableCSV = false;
-    } else {
-      showTableValidationMessage(`✓ All ${validRows.length} customers are valid and ready to import!`, 'success');
-      isValidTableCSV = true;
+      updateTableStats();
+      return;
     }
-    
-    updateTableStats();
+
+    // Show loading state
+    showTableValidationMessage('🔍 Validating data with server...', 'info');
+    validateTableBtn.disabled = true;
+    validateTableBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Validating...';
+
+    // Convert table data to CSV format for server validation
+    const headers = ['name', 'phone_number', 'address', 'email', 'gst_number', 'pan_number', 'member_id', 'latitude', 'longitude', 'delivery_person_id', 'product_id', 'quantity', 'start_date', 'end_date'];
+    const csvRows = [headers.join(',')];
+
+    rowsWithData.forEach(row => {
+      const csvRow = headers.map(header => {
+        let value = row[header] || '';
+        // Escape commas and quotes in CSV
+        if (value.toString().includes(',') || value.toString().includes('"')) {
+          value = '"' + value.toString().replace(/"/g, '""') + '"';
+        }
+        return value;
+      });
+      csvRows.push(csvRow.join(','));
+    });
+
+    const csvData = csvRows.join('\n');
+
+    // Send to server for enhanced validation
+    fetch('/customers/validate_enhanced_csv', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      },
+      body: `csv_data=${encodeURIComponent(csvData)}`
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.valid) {
+        showTableValidationMessage(data.message, 'success');
+        isValidTableCSV = true;
+      } else {
+        // Format error message with proper line breaks for HTML display
+        const formattedMessage = data.message.replace(/\n/g, '<br>');
+        showTableValidationMessage(formattedMessage, 'danger');
+        isValidTableCSV = false;
+      }
+    })
+    .catch(error => {
+      console.error('Validation error:', error);
+      showTableValidationMessage('Error validating data. Please try again.', 'danger');
+      isValidTableCSV = false;
+    })
+    .finally(() => {
+      // Reset button state
+      validateTableBtn.disabled = false;
+      validateTableBtn.innerHTML = '<i class="fas fa-check-circle me-1"></i>Validate Table';
+      updateTableStats();
+    });
   }
 
   function showTableValidationMessage(message, type) {

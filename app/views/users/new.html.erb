@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Join Our Farm - <%= AdminSetting.current.business_name %></title>
+    <title>Sign Up - <%= AdminSetting.current.business_name %></title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,894 +14,411 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Poppins', sans-serif;
+        html, body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            height: 100%;
             min-height: 100vh;
-            overflow-x: hidden;
-            margin: 0;
-            padding: 0;
         }
 
-        /* Farm-themed Background */
-        .farm-wrapper {
-            position: relative;
-            min-height: 100vh;
+        /* Main Container with Beautiful Blue Gradient */
+        .login-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100vw;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            overflow-x: hidden;
-            overflow-y: auto;
+            height: 100vh;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 35%, #1e40af 100%);
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 20px;
         }
 
-        /* Animated Background Elements */
-        .background-elements {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        /* Floating Clouds */
-        .cloud {
-            position: absolute;
-            background: white;
-            border-radius: 50px;
-            opacity: 0.8;
-            animation: float-cloud 20s linear infinite;
-        }
-
-        .cloud::before,
-        .cloud::after {
-            content: '';
-            position: absolute;
-            background: white;
-            border-radius: 50px;
-        }
-
-        .cloud-1 {
-            width: 80px;
-            height: 30px;
-            top: 10%;
-            left: -100px;
-            animation-duration: 25s;
-        }
-
-        .cloud-1::before {
-            width: 40px;
-            height: 40px;
-            top: -20px;
-            left: 10px;
-        }
-
-        .cloud-1::after {
-            width: 60px;
-            height: 35px;
-            top: -15px;
-            right: 5px;
-        }
-
-        .cloud-2 {
-            width: 60px;
-            height: 25px;
-            top: 20%;
-            left: -80px;
-            animation-duration: 30s;
-            animation-delay: -10s;
-        }
-
-        .cloud-2::before {
-            width: 35px;
-            height: 35px;
-            top: -18px;
-            left: 8px;
-        }
-
-        .cloud-2::after {
-            width: 45px;
-            height: 30px;
-            top: -12px;
-            right: 3px;
-        }
-
-        @keyframes float-cloud {
-            from {
-                left: -120px;
-            }
-            to {
-                left: 100vw;
-            }
-        }
-
-        /* Grass Animation */
-        .grass-field {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 150px;
-            background: linear-gradient(to top, #228B22, #32CD32);
-            z-index: 1;
-        }
-
-        .grass {
-            position: absolute;
-            bottom: 0;
-            width: 4px;
-            background: #228B22;
-            border-radius: 2px;
-            animation: sway 3s ease-in-out infinite;
-            transform-origin: bottom;
-        }
-
-        @keyframes sway {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(2deg); }
-            75% { transform: rotate(-2deg); }
-        }
-
-        /* Animated Cow */
-        .cow-container {
-            position: absolute;
-            bottom: 120px;
-            right: 10%;
-            z-index: 2;
-            animation: cow-move 15s ease-in-out infinite;
-        }
-
-        .cow {
-            font-size: 4rem;
-            color: #8B4513;
-            animation: cow-bounce 2s ease-in-out infinite;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
-        }
-
-        @keyframes cow-move {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(-50px); }
-        }
-
-        @keyframes cow-bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        /* Sun Animation */
-        .sun {
-            position: absolute;
-            top: 8%;
-            right: 10%;
-            width: 80px;
-            height: 80px;
-            background: #FFD700;
-            border-radius: 50%;
-            animation: sun-glow 3s ease-in-out infinite;
-            z-index: 1;
-        }
-
-        .sun::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: sun-rays 4s linear infinite;
-        }
-
-        @keyframes sun-glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
-            50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.8); }
-        }
-
-        @keyframes sun-rays {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Farm Trees */
-        .tree {
-            position: absolute;
-            bottom: 150px;
-            z-index: 1;
-        }
-
-        .tree-1 {
-            left: 15%;
-            font-size: 3rem;
-            color: #228B22;
-            animation: tree-sway 4s ease-in-out infinite;
-        }
-
-        .tree-2 {
-            left: 25%;
-            font-size: 2.5rem;
-            color: #32CD32;
-            animation: tree-sway 4s ease-in-out infinite;
-            animation-delay: -2s;
-        }
-
-        @keyframes tree-sway {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(1deg); }
-            75% { transform: rotate(-1deg); }
-        }
-
-        /* Milk Drops Animation */
-        .milk-drop {
-            position: absolute;
-            width: 8px;
-            height: 12px;
-            background: white;
-            border-radius: 0 50% 50% 50%;
-            opacity: 0.8;
-            animation: milk-fall 3s linear infinite;
-            z-index: 0;
-        }
-
-        @keyframes milk-fall {
-            0% {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            10% {
-                opacity: 0.8;
-            }
-            90% {
-                opacity: 0.8;
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(100vh);
-            }
-        }
-
-        /* Signup Card Styles */
-        .farm-signup-card {
+        /* Login Card */
+        .login-card {
             background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(15px);
-            border-radius: 25px;
-            box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.15),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            border: none;
-            overflow: hidden;
-            animation: card-float 0.8s ease-out;
-            position: relative;
-            z-index: 10;
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow:
+                0 25px 50px rgba(0, 0, 0, 0.25),
+                0 0 0 1px rgba(255, 255, 255, 0.05);
+            padding: 48px 40px;
             width: 100%;
-            max-width: 550px;
-            margin: 1rem;
-            min-height: auto;
+            max-width: 480px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
-        .farm-signup-card::before {
+        .login-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 6px;
-            background: linear-gradient(90deg, #32CD32, #228B22, #90EE90, #32CD32);
-            background-size: 400% 100%;
-            animation: gradient-shift 3s ease-in-out infinite;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
         }
 
-        @keyframes gradient-shift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        @keyframes card-float {
-            from {
-                opacity: 0;
-                transform: translateY(30px) scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        /* Farm Header */
-        .farm-header {
-            text-align: center;
-            padding: 2.5rem 2rem 1.5rem;
-        }
-
-        .farm-logo {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #32CD32, #228B22);
-            border-radius: 50%;
+        /* Logo Container */
+        .logo-container {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 24px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1.5rem;
-            animation: logo-pulse 2s ease-in-out infinite;
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
             position: relative;
-            box-shadow: 0 10px 30px rgba(50, 205, 50, 0.4);
         }
 
-        .farm-logo::before {
+        .logo-container::before {
             content: '';
             position: absolute;
-            top: -5px;
-            left: -5px;
-            right: -5px;
-            bottom: -5px;
-            background: linear-gradient(45deg, #32CD32, transparent, #228B22, transparent);
-            border-radius: 50%;
-            animation: logo-ring 4s linear infinite;
-            z-index: -1;
+            inset: 2px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        @keyframes logo-pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+        .logo-image {
+            width: 90px;
+            height: 90px;
+            border-radius: 14px;
+            object-fit: cover;
+            position: relative;
+            z-index: 1;
         }
 
-        @keyframes logo-ring {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        /* Title Section */
+        .title-section {
+            margin-bottom: 32px;
         }
 
-        .farm-logo i {
-            font-size: 2.2rem;
-            color: white;
-            animation: icon-wiggle 3s ease-in-out infinite;
-        }
-
-        @keyframes icon-wiggle {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(-5deg); }
-            75% { transform: rotate(5deg); }
-        }
-
-        .farm-title {
-            font-size: 2rem;
+        .main-title {
+            font-size: 28px;
             font-weight: 700;
-            background: linear-gradient(135deg, #228B22, #32CD32);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.5rem;
-            animation: title-glow 3s ease-in-out infinite;
+            color: #1f2937;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
         }
 
-        @keyframes title-glow {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.2); }
-        }
-
-        .farm-subtitle {
-            color: #666;
-            font-size: 0.95rem;
+        .subtitle {
+            font-size: 16px;
+            color: #6b7280;
             font-weight: 500;
-            margin-bottom: 0;
         }
 
         /* Form Styles */
-        .farm-form {
-            padding: 0 2rem 2rem;
-            animation: form-slide-up 0.8s ease-out 0.3s both;
+        .login-form {
             width: 100%;
-            box-sizing: border-box;
         }
 
-        @keyframes form-slide-up {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
         }
 
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
+            gap: 16px;
+            margin-bottom: 20px;
         }
 
-        .form-floating {
-            position: relative;
-            margin-bottom: 1.5rem;
-        }
-
-        .form-floating .form-control {
-            border: 2px solid rgba(50, 205, 50, 0.2);
-            border-radius: 15px;
-            padding: 1.5rem 1rem 0.75rem;
-            font-size: 1rem;
-            background: rgba(255, 255, 255, 0.9);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        }
-
-        .form-floating .form-control:focus {
-            border-color: #32CD32;
-            box-shadow: 
-                0 0 0 0.2rem rgba(50, 205, 50, 0.25),
-                0 8px 25px rgba(50, 205, 50, 0.15);
-            background: rgba(255, 255, 255, 1);
-            transform: translateY(-2px);
-            outline: none;
-        }
-
-        .form-floating label {
-            padding: 1rem;
-            color: #666;
+        .form-control {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            background: #f9fafb;
+            color: #1f2937;
             font-weight: 500;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
 
-        .form-floating .form-control:focus ~ label,
-        .form-floating .form-control:not(:placeholder-shown) ~ label {
-            color: #32CD32;
-            transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+        .form-control::placeholder {
+            color: #9ca3af;
+            font-weight: 400;
         }
 
-        /* Farm Button */
-        .farm-btn {
+        .form-control:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Login Button */
+        .login-button {
             width: 100%;
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
+            padding: 16px;
+            font-size: 16px;
             font-weight: 600;
-            border-radius: 15px;
-            background: linear-gradient(135deg, #32CD32, #228B22);
-            border: none;
             color: white;
-            box-shadow: 0 8px 25px rgba(50, 205, 50, 0.4);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            margin-top: 1rem;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 8px;
+            box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
         }
 
-        .farm-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
         }
 
-        .farm-btn:hover::before {
-            left: 100%;
+        .login-button:active {
+            transform: translateY(0);
         }
 
-        .farm-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(50, 205, 50, 0.5);
-            background: linear-gradient(135deg, #228B22, #32CD32);
+        /* Sign In Link Section */
+        .signin-section {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+            text-align: center;
         }
 
-        .farm-btn:active {
+        .signin-text {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .signin-button {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+            border: 2px solid #3b82f6;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .signin-button:hover {
+            background: #3b82f6;
+            color: white;
             transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            text-decoration: none;
+        }
+
+        .signin-button:active {
+            transform: translateY(0);
+        }
+
+        /* Copyright Footer */
+        .copyright {
+            position: absolute;
+            bottom: 24px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
         }
 
         /* Flash Messages */
-        .farm-alert {
-            border: none;
-            border-radius: 12px;
-            padding: 1rem 1.25rem;
-            margin-bottom: 1.5rem;
-            backdrop-filter: blur(10px);
-            animation: alert-slide-down 0.4s ease-out;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .farm-alert.alert-danger {
-            background: rgba(220, 53, 69, 0.1);
-            color: #721c24;
-            border: 2px solid rgba(220, 53, 69, 0.2);
-        }
-
-        .farm-alert.alert-success {
-            background: rgba(40, 167, 69, 0.1);
-            color: #155724;
-            border: 2px solid rgba(40, 167, 69, 0.2);
-        }
-
-        @keyframes alert-slide-down {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .signin-link {
-            text-align: center;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 2px solid rgba(50, 205, 50, 0.2);
-            position: relative;
-        }
-
-        .signin-link::before {
-            content: '';
-            position: absolute;
-            top: -1px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 2px;
-            background: linear-gradient(90deg, #32CD32, #228B22);
-        }
-
-        .signin-link p {
-            color: #666;
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
             font-weight: 500;
-            margin: 0;
         }
 
-        .signin-link a {
-            color: #32CD32;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            position: relative;
+        .alert-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            border: 1px solid rgba(239, 68, 68, 0.2);
         }
 
-        .signin-link a::after {
-            content: '';
-            position: absolute;
-            bottom: -3px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #32CD32, #228B22);
-            transition: width 0.4s ease;
-            border-radius: 2px;
+        .alert-success {
+            background: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+            border: 1px solid rgba(34, 197, 94, 0.2);
         }
 
-        .signin-link a:hover::after {
-            width: 100%;
-        }
-
-        .signin-link a:hover {
-            color: #228B22;
-            transform: translateY(-2px);
-        }
-
-        /* Responsive Design */
+        /* Mobile Responsive */
         @media (max-width: 768px) {
-            .form-row {
-                grid-template-columns: 1fr;
-                gap: 0.5rem;
+            .login-wrapper {
+                padding: 16px;
             }
-            
-            .farm-wrapper {
-                padding: 0.5rem;
-            }
-            
-            .cow-container {
-                display: none;
-            }
-            
-            .tree-1, .tree-2 {
-                display: none;
-            }
-            
-            .farm-header {
-                padding: 1.5rem 1.5rem 1rem;
-            }
-            
-            .farm-form {
-                padding: 0 1.5rem 1.5rem;
-            }
-            
-            .farm-title {
-                font-size: 1.6rem;
-            }
-            
-            .farm-logo {
-                width: 60px;
-                height: 60px;
-                margin-bottom: 1rem;
-            }
-            
-            .farm-logo i {
-                font-size: 1.8rem;
-            }
-            
-            .farm-signup-card {
-                margin: 0.5rem;
+
+            .login-card {
+                padding: 32px 24px;
                 border-radius: 20px;
             }
-            
-            .form-floating .form-control {
-                padding: 1.25rem 0.75rem 0.5rem;
-                font-size: 0.9rem;
+
+            .logo-container {
+                width: 100px;
+                height: 100px;
+                margin-bottom: 20px;
             }
-            
-            .form-floating label {
-                padding: 0.75rem;
-                font-size: 0.8rem;
+
+            .logo-image {
+                width: 75px;
+                height: 75px;
             }
-            
-            .farm-btn {
-                padding: 0.875rem 1.5rem;
-                font-size: 1rem;
+
+            .main-title {
+                font-size: 24px;
             }
-        }
-        
-        @media (max-width: 576px) {
-            .farm-wrapper {
-                padding: 0.25rem;
+
+            .subtitle {
+                font-size: 14px;
             }
-            
-            .farm-signup-card {
-                margin: 0.25rem;
-                border-radius: 15px;
+
+            .form-control {
+                padding: 14px 16px;
+                font-size: 15px;
             }
-            
-            .farm-header {
-                padding: 1rem 1rem 0.5rem;
+
+            .login-button {
+                padding: 14px;
+                font-size: 15px;
             }
-            
-            .farm-form {
-                padding: 0 1rem 1rem;
-            }
-            
-            .farm-title {
-                font-size: 1.4rem;
-                line-height: 1.2;
-            }
-            
-            .farm-subtitle {
-                font-size: 0.85rem;
-            }
-            
-            .farm-logo {
-                width: 50px;
-                height: 50px;
-            }
-            
-            .farm-logo i {
-                font-size: 1.5rem;
-            }
-            
-            .form-floating {
-                margin-bottom: 1rem;
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 16px;
             }
         }
 
-        /* Create grass blades dynamically */
-        .grass-blade {
-            position: absolute;
-            bottom: 0;
-            width: 3px;
-            height: 25px;
-            background: linear-gradient(to top, #228B22, #32CD32);
-            border-radius: 2px;
-            animation: blade-sway 2s ease-in-out infinite;
-            transform-origin: bottom;
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 24px 20px;
+                border-radius: 16px;
+            }
+
+            .logo-container {
+                width: 80px;
+                height: 80px;
+            }
+
+            .logo-image {
+                width: 60px;
+                height: 60px;
+            }
+
+            .main-title {
+                font-size: 22px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="farm-wrapper">
-        <!-- Animated Background -->
-        <div class="background-elements">
-            <!-- Clouds -->
-            <div class="cloud cloud-1"></div>
-            <div class="cloud cloud-2"></div>
-            
-            <!-- Sun -->
-            <div class="sun"></div>
-            
-            <!-- Trees -->
-            <div class="tree tree-1">🌳</div>
-            <div class="tree tree-2">🌲</div>
-            
-            <!-- Animated Cow -->
-            <div class="cow-container">
-                <div class="cow">🐄</div>
+    <div class="login-wrapper">
+        <div class="login-card">
+            <!-- Logo Section -->
+            <div class="logo-container">
+                <img src="/Lord-Krishna-In-a-Forest-With-Cow-Natural-Image.jpg" alt="Krishna Logo" class="logo-image">
             </div>
-            
-            <!-- Grass Field -->
-            <div class="grass-field"></div>
-        </div>
-        
-        <!-- Main Content -->
-        <div class="farm-signup-card">
-            <!-- Header -->
-            <div class="farm-header">
-                <div class="farm-logo">
-                    <i class="fas fa-user-plus"></i>
-                </div>
-                <h1 class="farm-title">Join Our Farm</h1>
-                <p class="farm-subtitle">Create your account to access fresh dairy products</p>
+
+            <!-- Title Section -->
+            <div class="title-section">
+                <h1 class="main-title">Join <%= AdminSetting.current.business_name %></h1>
+                <p class="subtitle">Create your admin account</p>
             </div>
-            
-            <!-- Signup Form -->
-            <div class="farm-form">
-                <%= form_with model: @user, url: signup_path, method: :post, local: true do |form| %>
-                    <% if @user.errors.any? %>
-                        <div class="farm-alert alert-danger">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <div>
-                                <ul style="margin: 0; padding-left: 1rem;">
-                                    <% @user.errors.full_messages.each do |message| %>
-                                        <li><%= message %></li>
-                                    <% end %>
-                                </ul>
-                            </div>
-                        </div>
-                    <% end %>
-                    
-                    <% if flash[:alert] %>
-                        <div class="farm-alert alert-danger">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <%= flash[:alert] %>
-                        </div>
-                    <% end %>
-                    
-                    <% if flash[:notice] %>
-                        <div class="farm-alert alert-success">
-                            <i class="fas fa-check-circle"></i>
-                            <div>
-                                <div class="fw-bold">Account created successfully!</div>
-                                <div class="small">Welcome to <%= AdminSetting.current.business_name %></div>
-                            </div>
-                        </div>
-                    <% end %>
-                    
-                    <div class="form-row">
-                        <div class="form-floating">
-                            <%= form.text_field :name, class: "form-control", id: "name", placeholder: "name@example.com", required: true %>
-                            <label for="name">
-                                <i class="fas fa-user me-2"></i>Full Name
-                            </label>
-                        </div>
-                        
-                        <div class="form-floating">
-                            <%= form.email_field :email, class: "form-control", id: "email", placeholder: "name@example.com", required: true %>
-                            <label for="email">
-                                <i class="fas fa-envelope me-2"></i>Email Address
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-floating">
-                            <%= form.telephone_field :phone, class: "form-control", id: "phone", placeholder: "Phone Number" %>
-                            <label for="phone">
-                                <i class="fas fa-phone me-2"></i>Phone Number
-                            </label>
-                        </div>
-                        
-                        <div class="form-floating">
-                            <%= form.select :role, options_for_select([
-                                ['Admin', 'admin'],
-                                ['Delivery Person', 'delivery_person'],
-                                ['User', 'user']
-                            ], @user.role), { prompt: 'Select your role' }, { class: "form-control", id: "role", required: true } %>
-                            <label for="role">
-                                <i class="fas fa-user-tag me-2"></i>Role
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-floating">
-                            <%= form.password_field :password, class: "form-control", id: "password", placeholder: "Password", required: true %>
-                            <label for="password">
-                                <i class="fas fa-lock me-2"></i>Password
-                            </label>
-                        </div>
-                        
-                        <div class="form-floating">
-                            <%= form.password_field :password_confirmation, class: "form-control", id: "password_confirmation", placeholder: "Confirm Password", required: true %>
-                            <label for="password_confirmation">
-                                <i class="fas fa-lock me-2"></i>Confirm Password
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <div class="d-grid">
-                        <%= form.submit "Join Our Farm Community", class: "btn farm-btn" %>
+
+            <!-- Sign Up Form -->
+            <%= form_with model: @user, url: signup_path, method: :post, local: true, class: "login-form" do |form| %>
+                <% if @user && @user.errors.any? %>
+                    <div class="alert alert-danger">
+                        <% @user.errors.full_messages.each do |message| %>
+                            <div><%= message %></div>
+                        <% end %>
                     </div>
                 <% end %>
-                
-                <div class="signin-link">
-                    <p>Already have an account? <a href="/login">Sign in here</a></p>
+
+                <% if flash[:alert] %>
+                    <div class="alert alert-danger">
+                        <%= flash[:alert] %>
+                    </div>
+                <% end %>
+
+                <% if flash[:notice] %>
+                    <div class="alert alert-success">
+                        <%= flash[:notice] %>
+                    </div>
+                <% end %>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <%= form.text_field :name,
+                            class: "form-control",
+                            placeholder: "Full Name",
+                            required: true %>
+                    </div>
+
+                    <div class="form-group">
+                        <%= form.email_field :email,
+                            class: "form-control",
+                            placeholder: "Email Address",
+                            required: true %>
+                    </div>
                 </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <%= form.telephone_field :phone,
+                            class: "form-control",
+                            placeholder: "Phone Number" %>
+                    </div>
+
+                    <div class="form-group">
+                        <%= form.select :role, options_for_select([
+                            ['Admin', 'admin'],
+                            ['Delivery Person', 'delivery_person'],
+                            ['User', 'user']
+                        ], @user&.role), { prompt: 'Select Role' }, { class: "form-control", required: true } %>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <%= form.password_field :password,
+                            class: "form-control",
+                            placeholder: "Password",
+                            required: true %>
+                    </div>
+
+                    <div class="form-group">
+                        <%= form.password_field :password_confirmation,
+                            class: "form-control",
+                            placeholder: "Confirm Password",
+                            required: true %>
+                    </div>
+                </div>
+
+                <%= form.submit "Create Account", class: "login-button" %>
+            <% end %>
+
+            <!-- Sign In Link -->
+            <div class="signin-section">
+                <p class="signin-text">Already have an account?</p>
+                <%= link_to "Sign In", login_path, class: "signin-button" %>
             </div>
         </div>
+
+        <!-- Copyright Footer -->
+        <div class="copyright">
+            © 2025 <%= AdminSetting.current.business_name %>
+        </div>
     </div>
-
-    <script>
-        // Create animated grass blades
-        function createGrassField() {
-            const grassField = document.querySelector('.grass-field');
-            const screenWidth = window.innerWidth;
-            const grassCount = Math.floor(screenWidth / 8);
-            
-            for (let i = 0; i < grassCount; i++) {
-                const grass = document.createElement('div');
-                grass.classList.add('grass-blade');
-                grass.style.left = `${(i * 8) + Math.random() * 4}px`;
-                grass.style.height = `${15 + Math.random() * 15}px`;
-                grass.style.animationDelay = `${Math.random() * 2}s`;
-                grass.style.animationDuration = `${2 + Math.random() * 2}s`;
-                grassField.appendChild(grass);
-            }
-        }
-
-        // Create floating milk drops
-        function createMilkDrops() {
-            setInterval(() => {
-                const drop = document.createElement('div');
-                drop.classList.add('milk-drop');
-                drop.style.left = Math.random() * window.innerWidth + 'px';
-                drop.style.animationDelay = Math.random() * 2 + 's';
-                document.querySelector('.background-elements').appendChild(drop);
-                
-                // Remove drop after animation
-                setTimeout(() => {
-                    drop.remove();
-                }, 3000);
-            }, 2000);
-        }
-
-        // Initialize animations
-        document.addEventListener('DOMContentLoaded', function() {
-            createGrassField();
-            createMilkDrops();
-            
-            // Auto-hide flash messages
-            setTimeout(function() {
-                const alerts = document.querySelectorAll('.farm-alert');
-                alerts.forEach(alert => {
-                    alert.style.animation = 'fadeOut 0.5s ease-out forwards';
-                    setTimeout(() => alert.remove(), 500);
-                });
-            }, 4000);
-        });
-
-        // Add CSS for fade out animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fadeOut {
-                from { opacity: 1; }
-                to { opacity: 0; }
-            }
-            
-            @keyframes blade-sway {
-                0%, 100% { transform: rotate(0deg); }
-                25% { transform: rotate(1deg); }
-                75% { transform: rotate(-1deg); }
-            }
-        `;
-        document.head.appendChild(style);
-        
-        // Add window resize handler for grass field
-        window.addEventListener('resize', function() {
-            const grassField = document.querySelector('.grass-field');
-            grassField.innerHTML = '';
-            createGrassField();
-        });
-    </script>
 </body>
 </html>

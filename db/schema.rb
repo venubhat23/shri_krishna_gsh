@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_21_075533) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_22_020637) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -55,6 +55,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_21_075533) do
     t.boolean "show_analytics"
     t.boolean "show_notifications"
     t.boolean "show_settings_advanced"
+    t.boolean "show_my_bookings"
+    t.boolean "show_customer_patterns"
+    t.boolean "show_customer_points"
+    t.boolean "show_customer_wallets"
+    t.boolean "show_customer_details"
+    t.boolean "show_advertisements"
+    t.boolean "show_schedules"
+    t.boolean "show_pending_payments"
+    t.boolean "show_delivery_review"
+    t.boolean "show_purchase_invoices"
+    t.boolean "show_sales_invoices"
+    t.boolean "show_whatsapp_messages"
   end
 
   create_table "advertisements", force: :cascade do |t|
@@ -525,6 +537,22 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_21_075533) do
     t.index ["share_url_slug"], name: "index_referral_codes_on_share_url_slug", unique: true
   end
 
+  create_table "referrals", force: :cascade do |t|
+    t.bigint "affiliate_id", null: false
+    t.string "customer_name"
+    t.string "customer_phone"
+    t.string "customer_email"
+    t.string "status"
+    t.decimal "reward_amount"
+    t.text "notes"
+    t.datetime "referred_at"
+    t.datetime "approved_at"
+    t.datetime "rejected_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["affiliate_id"], name: "index_referrals_on_affiliate_id"
+  end
+
   create_table "refresh_tokens", force: :cascade do |t|
     t.string "token"
     t.bigint "user_id"
@@ -577,4 +605,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_21_075533) do
     t.datetime "updated_at", precision: nil, null: false
     t.string "employee_id"
   end
+
+  add_foreign_key "referrals", "affiliates"
 end

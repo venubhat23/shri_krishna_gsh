@@ -1723,16 +1723,17 @@ class MilkAnalyticsController < ApplicationController
   def calculate_vendor_performance(start_date, end_date)
     # Use SQL aggregation for vendor performance
     vendor_stats = ProcurementAssignment.unscoped
+                               .joins(:procurement_schedule)
                                .where(user: current_user)
-                               .where(date: start_date..end_date)
-                               .group(:vendor_name)
+                               .where(scheduled_date: start_date..end_date)
+                               .group('procurement_schedules.vendor_name')
                                .select(
-                                 'vendor_name',
+                                 'procurement_schedules.vendor_name',
                                  'COUNT(*) as total_assignments',
-                                 'COUNT(CASE WHEN status = \'completed\' THEN 1 END) as completed_assignments',
-                                 'AVG(CASE WHEN actual_quantity IS NOT NULL THEN actual_quantity END) as avg_quantity',
-                                 'SUM(COALESCE(actual_profit, 0)) as total_profit',
-                                 'STDDEV(buying_price) as price_variance'
+                                 'COUNT(CASE WHEN procurement_assignments.status = \'completed\' THEN 1 END) as completed_assignments',
+                                 'AVG(CASE WHEN procurement_assignments.quantity IS NOT NULL THEN procurement_assignments.quantity END) as avg_quantity',
+                                 'SUM(COALESCE(procurement_assignments.quantity * procurement_schedules.buying_price - procurement_assignments.quantity * procurement_schedules.selling_price, 0)) as total_profit',
+                                 'STDDEV(procurement_schedules.buying_price) as price_variance'
                                ).map do |result|
       reliability = result.total_assignments > 0 ? (result.completed_assignments.to_f / result.total_assignments * 100).round(2) : 0
       # Calculate price consistency: higher variance = lower consistency
@@ -1925,14 +1926,15 @@ class MilkAnalyticsController < ApplicationController
     # Use SQL aggregation instead of Ruby iteration
     # Clear any existing ORDER BY clauses that conflict with GROUP BY
     @vendor_summary = ProcurementAssignment.unscoped
+                   .joins(:procurement_schedule)
                    .where(user: current_user)
-                   .where(date: @start_date..@end_date)
+                   .where(scheduled_date: @start_date..@end_date)
                    .tap { |q| q.where!(product_id: @product_id) if @product_id.present? }
-                   .group(:vendor_name)
+                   .group('procurement_schedules.vendor_name')
                    .select(
-                     'vendor_name',
-                     'SUM(COALESCE(planned_quantity, 0)) as total_quantity',
-                     'SUM(COALESCE(planned_quantity, 0) * buying_price) as total_amount'
+                     'procurement_schedules.vendor_name',
+                     'SUM(COALESCE(procurement_assignments.quantity, 0)) as total_quantity',
+                     'SUM(COALESCE(procurement_assignments.quantity, 0) * procurement_schedules.buying_price) as total_amount'
                    ).map do |result|
       {
         name: result.vendor_name || 'Unknown Vendor',
@@ -1988,15 +1990,16 @@ class MilkAnalyticsController < ApplicationController
   def generate_vendor_performance_report(from_date, to_date)
     # Use SQL aggregation for vendor performance data
     vendors_data = ProcurementAssignment.unscoped
-                                       .where(date: from_date..to_date)
-                                       .group(:vendor_name)
+                                       .joins(:procurement_schedule)
+                                       .where(scheduled_date: from_date..to_date)
+                                       .group('procurement_schedules.vendor_name')
                                        .select(
-                                         'vendor_name',
+                                         'procurement_schedules.vendor_name',
                                          'COUNT(*) as total_assignments',
-                                         'COUNT(CASE WHEN status = \'completed\' THEN 1 END) as completed_assignments',
-                                         'SUM(COALESCE(actual_quantity, planned_quantity, 0)) as total_quantity',
-                                         'SUM(CASE WHEN actual_quantity IS NOT NULL THEN actual_cost ELSE planned_cost END) as total_cost',
-                                         'AVG(buying_price) as avg_price'
+                                         'COUNT(CASE WHEN procurement_assignments.status = \'completed\' THEN 1 END) as completed_assignments',
+                                         'SUM(COALESCE(procurement_assignments.quantity, 0)) as total_quantity',
+                                         'SUM(procurement_assignments.quantity * procurement_schedules.buying_price) as total_cost',
+                                         'AVG(procurement_schedules.buying_price) as avg_price'
                                        ).map do |result|
       total_assignments = result.total_assignments
       completed_assignments = result.completed_assignments
@@ -2260,22 +2263,24 @@ class MilkAnalyticsController < ApplicationController
     if @product_id.present?
       procurement_stats = ActiveRecord::Base.connection.exec_query(
         "SELECT
-          COUNT(DISTINCT vendor_name) as vendor_count,
-          SUM(COALESCE(planned_quantity, 0)) as total_quantity,
-          SUM(COALESCE(planned_quantity, 0) * COALESCE(buying_price, 0)) as total_cost
-        FROM procurement_assignments
-        WHERE user_id = $1 AND date BETWEEN $2 AND $3 AND product_id = $4",
+          COUNT(DISTINCT ps.vendor_name) as vendor_count,
+          SUM(COALESCE(pa.quantity, 0)) as total_quantity,
+          SUM(COALESCE(pa.quantity, 0) * COALESCE(ps.buying_price, 0)) as total_cost
+        FROM procurement_assignments pa
+        INNER JOIN procurement_schedules ps ON pa.procurement_schedule_id = ps.id
+        WHERE pa.user_id = $1 AND pa.scheduled_date BETWEEN $2 AND $3 AND pa.product_id = $4",
         "Dashboard Stats Query",
         [current_user.id, @start_date, @end_date, @product_id]
       ).first
     else
       procurement_stats = ActiveRecord::Base.connection.exec_query(
         "SELECT
-          COUNT(DISTINCT vendor_name) as vendor_count,
-          SUM(COALESCE(planned_quantity, 0)) as total_quantity,
-          SUM(COALESCE(planned_quantity, 0) * COALESCE(buying_price, 0)) as total_cost
-        FROM procurement_assignments
-        WHERE user_id = $1 AND date BETWEEN $2 AND $3",
+          COUNT(DISTINCT ps.vendor_name) as vendor_count,
+          SUM(COALESCE(pa.quantity, 0)) as total_quantity,
+          SUM(COALESCE(pa.quantity, 0) * COALESCE(ps.buying_price, 0)) as total_cost
+        FROM procurement_assignments pa
+        INNER JOIN procurement_schedules ps ON pa.procurement_schedule_id = ps.id
+        WHERE pa.user_id = $1 AND pa.scheduled_date BETWEEN $2 AND $3",
         "Dashboard Stats Query",
         [current_user.id, @start_date, @end_date]
       ).first

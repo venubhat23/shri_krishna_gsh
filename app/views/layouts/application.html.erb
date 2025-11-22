@@ -1410,7 +1410,7 @@
                 </li>
               <% end %>
 
-              <% if franchise_logged_in? %>
+              <% if franchise_logged_in? && AdminSetting.current.show_my_bookings? %>
                 <!-- Franchise-specific menu items -->
                 <li class="nav-item" role="none">
                   <%= link_to franchise_bookings_main_index_path,
@@ -1483,7 +1483,7 @@
                 </li>
               <% end %>
 
-              <% if AdminSetting.current.show_analytics? %>
+              <% if AdminSetting.current.show_customer_patterns? %>
                 <li class="nav-item" role="none">
                   <%= link_to customer_patterns_path,
                       class: "nav-link #{'active' if current_page?(customer_patterns_path) || controller_name == 'customer_patterns'}",
@@ -1495,7 +1495,7 @@
                 </li>
               <% end %>
 
-              <% if AdminSetting.current.show_customers? %>
+              <% if AdminSetting.current.show_customer_points? %>
                 <li class="nav-item" role="none">
                   <%= link_to customer_points_path,
                       class: "nav-link #{'active' if current_page?(customer_points_path) || controller_name == 'customer_points'}",
@@ -1506,6 +1506,8 @@
                   <% end %>
                 </li>
 
+              <% end %>
+              <% if AdminSetting.current.show_customer_wallets? %>
                 <li class="nav-item" role="none">
                   <%= link_to customer_wallets_path,
                       class: "nav-link #{'active' if current_page?(customer_wallets_path) || controller_name == 'customer_wallets'}",
@@ -1529,7 +1531,7 @@
                 </li>
               <% end %>
 
-              <% if AdminSetting.current.show_customers? %>
+              <% if AdminSetting.current.show_customer_details? %>
                 <li class="nav-item" role="none">
                   <%= link_to customer_details_path,
                       class: "nav-link #{'active' if current_page?(customer_details_path) || controller_name == 'customer_details'}",
@@ -1541,7 +1543,7 @@
                 </li>
               <% end %>
 
-              <% if AdminSetting.current.show_inventory? %>
+              <% if AdminSetting.current.show_advertisements? %>
                 <li class="nav-item" role="none">
                   <%= link_to advertisements_path,
                       class: "nav-link #{'active' if current_page?(advertisements_path) || controller_name == 'advertisements'}",
@@ -1590,48 +1592,57 @@
                 </li>
               <% end %>
               
+              <% if AdminSetting.current.show_schedules? %>
               <li class="nav-item" role="none">
-                <%= link_to schedules_path, 
-                    class: "nav-link #{'active' if current_page?(schedules_path) || controller_name == 'schedules'}", 
+                <%= link_to schedules_path,
+                    class: "nav-link #{'active' if current_page?(schedules_path) || controller_name == 'schedules'}",
                     role: "menuitem",
                     "aria-current": (current_page?(schedules_path) || controller_name == 'schedules') ? "page" : nil do %>
                   <i class="fas fa-calendar-alt nav-icon" aria-hidden="true"></i>
                   <span class="nav-text">Reschedule</span>
                 <% end %>
               </li>
+              <% end %>
               
+              <% if AdminSetting.current.show_schedules? %>
               <li class="nav-item" role="none">
-                <button type="button" 
-                    class="nav-link btn btn-link text-start w-100 border-0 #{'active' if current_page?(schedules_path) || controller_name == 'schedules'}" 
+                <button type="button"
+                    class="nav-link btn btn-link text-start w-100 border-0 #{'active' if current_page?(schedules_path) || controller_name == 'schedules'}"
                     role="menuitem"
-                    data-bs-toggle="modal" 
+                    data-bs-toggle="modal"
                     data-bs-target="#importLastMonthModal">
                   <i class="fas fa-download nav-icon" aria-hidden="true"></i>
                   <span class="nav-text">Import Last Month Deliveries</span>
                 </button>
               </li>
+              <% end %>
               
+              <% if AdminSetting.current.show_schedules? %>
               <li class="nav-item" role="none">
-                <button type="button" 
-                    class="nav-link btn btn-link text-start w-100 border-0" 
+                <button type="button"
+                    class="nav-link btn btn-link text-start w-100 border-0"
                     role="menuitem"
-                    data-bs-toggle="modal" 
+                    data-bs-toggle="modal"
                     data-bs-target="#unassignModal">
                   <i class="fas fa-user-times nav-icon" aria-hidden="true"></i>
                   <span class="nav-text">Unassign</span>
                 </button>
               </li>
+              <% end %>
               
+              <% if AdminSetting.current.show_invoices? %>
               <li class="nav-item" role="none">
-                <%= link_to invoices_path, 
-                    class: "nav-link #{'active' if current_page?(invoices_path) || controller_name == 'invoices'}", 
+                <%= link_to invoices_path,
+                    class: "nav-link #{'active' if current_page?(invoices_path) || controller_name == 'invoices'}",
                     role: "menuitem",
                     "aria-current": (current_page?(invoices_path) || controller_name == 'invoices') ? "page" : nil do %>
                   <i class="fas fa-receipt nav-icon" aria-hidden="true"></i>
                   <span class="nav-text">Invoices</span>
                 <% end %>
               </li>
+              <% end %>
 
+              <% if AdminSetting.current.show_franchise? %>
               <li class="nav-item" role="none">
                 <%= link_to franchises_path,
                     class: "nav-link #{'active' if current_page?(franchises_path) || controller_name == 'franchises'}",
@@ -1641,8 +1652,10 @@
                   <span class="nav-text">Franchises</span>
                 <% end %>
               </li>
+              <% end %>
 
               <!-- Affiliate Management Section -->
+              <% if AdminSetting.current.show_affiliates? %>
               <li class="nav-item" role="none">
                 <%= link_to admin_affiliates_path,
                     class: "nav-link #{'active' if controller_name == 'affiliates' && request.path.include?('/admin/')}",
@@ -1662,7 +1675,9 @@
                   <span class="nav-text">👥 Customer Referrals</span>
                 <% end %>
               </li>
+              <% end %>
 
+              <% if AdminSetting.current.show_pending_payments? %>
               <li class="nav-item" role="none">
                 <%= link_to pending_payments_path,
                     class: "nav-link #{'active' if current_page?(pending_payments_path) || controller_name == 'pending_payments'}",
@@ -1672,6 +1687,7 @@
                   <span class="nav-text">💰 Pending Payments</span>
                 <% end %>
               </li>
+              <% end %>
 
               <% if AdminSetting.current.show_payouts? %>
                 <li class="nav-item" role="none">
@@ -1685,6 +1701,7 @@
                 </li>
               <% end %>
 
+              <% if AdminSetting.current.show_delivery_review? %>
               <li class="nav-item" role="none">
                 <%= link_to '/delivery-review',
                     class: "nav-link #{'active' if controller_name == 'delivery_review'}",
@@ -1694,27 +1711,33 @@
                   <span class="nav-text">🚚 Delivery Review</span>
                 <% end %>
               </li>
+              <% end %>
               
+              <% if AdminSetting.current.show_purchase_invoices? %>
               <li class="nav-item" role="none">
-                <%= link_to purchase_invoices_path, 
-                    class: "nav-link #{'active' if current_page?(purchase_invoices_path) || controller_name == 'purchase_invoices'}", 
+                <%= link_to purchase_invoices_path,
+                    class: "nav-link #{'active' if current_page?(purchase_invoices_path) || controller_name == 'purchase_invoices'}",
                     role: "menuitem",
                     "aria-current": (current_page?(purchase_invoices_path) || controller_name == 'purchase_invoices') ? "page" : nil do %>
                   <i class="fas fa-shopping-cart nav-icon" aria-hidden="true"></i>
                   <span class="nav-text">Purchases</span>
                 <% end %>
               </li>
+              <% end %>
               
+              <% if AdminSetting.current.show_sales_invoices? %>
               <li class="nav-item" role="none">
-                <%= link_to sales_invoices_path, 
-                    class: "nav-link #{'active' if current_page?(sales_invoices_path) || controller_name == 'sales_invoices'}", 
+                <%= link_to sales_invoices_path,
+                    class: "nav-link #{'active' if current_page?(sales_invoices_path) || controller_name == 'sales_invoices'}",
                     role: "menuitem",
                     "aria-current": (current_page?(sales_invoices_path) || controller_name == 'sales_invoices') ? "page" : nil do %>
                   <i class="fas fa-chart-bar nav-icon" aria-hidden="true"></i>
                   <span class="nav-text">Sales</span>
                 <% end %>
               </li>
+              <% end %>
               
+              <% if AdminSetting.current.show_reports? %>
               <li class="nav-item" role="none">
                 <%= link_to reports_path,
                     class: "nav-link #{'active' if controller_name == 'reports'}",
@@ -1724,7 +1747,9 @@
                   <span class="nav-text">Reports</span>
                 <% end %>
               </li>
+              <% end %>
 
+              <% if AdminSetting.current.show_whatsapp_messages? %>
               <li class="nav-item" role="none">
                 <%= link_to whatsapp_messages_path,
                     class: "nav-link #{'active' if controller_name == 'whatsapp_messages'}",
@@ -1734,6 +1759,7 @@
                   <span class="nav-text">WhatsApp Message</span>
                 <% end %>
               </li>
+              <% end %>
 
               <li class="nav-item" role="none">
                 <%= link_to admin_settings_path, 

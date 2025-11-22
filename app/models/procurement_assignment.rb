@@ -3,19 +3,21 @@ class ProcurementAssignment < ApplicationRecord
   belongs_to :user
   belongs_to :product, optional: true
 
-  validates :vendor_name, presence: true
-  validates :date, presence: true, uniqueness: { scope: [:procurement_schedule_id, :vendor_name], on: :create }
-  validates :planned_quantity, :buying_price, :selling_price, presence: true, numericality: { greater_than: 0 }
-  validates :actual_quantity, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+  validates :procurement_schedule, presence: true
+  validates :scheduled_date, presence: true, uniqueness: { scope: [:procurement_schedule_id], on: :create }
+  validates :quantity, presence: true, numericality: { greater_than: 0 }
   validates :status, inclusion: { in: %w[pending completed cancelled] }
   validates :unit, presence: true
+
+  # Delegate methods to procurement_schedule
+  delegate :vendor_name, :buying_price, :selling_price, to: :procurement_schedule
 
   scope :pending, -> { where(status: 'pending') }
   scope :completed, -> { where(status: 'completed') }
   scope :cancelled, -> { where(status: 'cancelled') }
-  scope :for_date, ->(date) { where(date: date) }
-  scope :for_vendor, ->(vendor) { where(vendor_name: vendor) }
-  scope :for_date_range, ->(start_date, end_date) { where(date: start_date..end_date) }
+  scope :for_date, ->(date) { where(scheduled_date: date) }
+  scope :for_vendor, ->(vendor) { joins(:procurement_schedule).where(procurement_schedules: { vendor_name: vendor }) }
+  scope :for_date_range, ->(start_date, end_date) { where(scheduled_date: start_date..end_date) }
   scope :with_actual_quantity, -> { where.not(actual_quantity: nil) }
   scope :recent, -> { order(date: :desc) }
   scope :by_date, -> { order(:date) }

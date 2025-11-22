@@ -26,12 +26,15 @@ class SidebarConfigurationsController < ApplicationController
 
   def sidebar_params
     params.require(:admin_setting).permit(
-      :show_dashboard, :show_orders, :show_customers, :show_products,
-      :show_categories, :show_delivery_assignments, :show_invoices,
-      :show_sales, :show_milk_analytics, :show_analytics, :show_ai_insights,
-      :show_procurement, :show_inventory, :show_franchise, :show_affiliates,
-      :show_payouts, :show_reports, :show_notifications, :show_users,
-      :show_settings_advanced
+      :show_dashboard, :show_my_bookings, :show_orders, :show_customers,
+      :show_customer_patterns, :show_customer_points, :show_customer_wallets,
+      :show_ai_insights, :show_customer_details, :show_products,
+      :show_categories, :show_advertisements, :show_users, :show_delivery_assignments,
+      :show_milk_analytics, :show_schedules, :show_procurement, :show_invoices,
+      :show_franchise, :show_affiliates, :show_pending_payments, :show_payouts,
+      :show_delivery_review, :show_purchase_invoices, :show_sales_invoices,
+      :show_sales, :show_analytics, :show_reports, :show_whatsapp_messages,
+      :show_inventory, :show_notifications, :show_settings_advanced
     )
   end
 

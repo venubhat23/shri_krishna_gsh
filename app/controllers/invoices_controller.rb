@@ -137,23 +137,27 @@ end
     end
 
     if @invoice.save
-      # Create delivery assignments with completed status for each invoice item
-      # For quick invoices, customer_id will be nil
-      @invoice.invoice_items.each do |item|
-        delivery_assignment = DeliveryAssignment.create!(
-          customer_id: @invoice.customer_id,  # Will be nil for quick invoices
-          product: item.product,
-          scheduled_date: @invoice.invoice_date,
-          quantity: item.quantity,
-          unit: item.product.unit_type || 'pieces',
-          status: 'completed',
-          completed_at: @invoice.invoice_date.end_of_day,
-          invoice_generated: true,
-          invoice_id: @invoice.id,
-          booked_by: 0, # Admin
-          final_amount_after_discount: item.total_price
-        )
-        Rails.logger.info "Created delivery assignment: #{delivery_assignment.id} for product #{item.product.name}"
+      # Create delivery assignments only for regular invoices (not quick invoices)
+      # Quick invoices don't have customers, so we can't create delivery assignments
+      unless @invoice.is_quick_invoice?
+        @invoice.invoice_items.each do |item|
+          delivery_assignment = DeliveryAssignment.create!(
+            customer_id: @invoice.customer_id,
+            product: item.product,
+            scheduled_date: @invoice.invoice_date,
+            quantity: item.quantity,
+            unit: item.product.unit_type || 'pieces',
+            status: 'completed',
+            completed_at: @invoice.invoice_date.end_of_day,
+            invoice_generated: true,
+            invoice_id: @invoice.id,
+            booked_by: 0, # Admin
+            final_amount_after_discount: item.total_price
+          )
+          Rails.logger.info "Created delivery assignment: #{delivery_assignment.id} for product #{item.product.name}"
+        end
+      else
+        Rails.logger.info "Skipped creating delivery assignments for quick invoice (no customer)"
       end
 
       success_message = @invoice.is_quick_invoice? ?

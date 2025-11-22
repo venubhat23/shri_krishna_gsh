@@ -298,37 +298,160 @@ class CustomersController < ApplicationController
   # AJAX validation for enhanced CSV
   def validate_enhanced_csv
     csv_data = params[:csv_data]
-    
+
     if csv_data.blank?
       render json: { valid: false, message: "Please paste CSV data" }
       return
     end
-    
+
     begin
       require 'csv'
       csv = CSV.parse(csv_data.strip, headers: true, header_converters: :symbol)
-      
-      required_headers = [:name, :phone_number, :address, :email, :gst_number, :pan_number, :member_id, :latitude, :longitude]
+
+      # Check for required headers
+      required_headers = [:name, :phone_number, :address]
+      optional_headers = [:email, :gst_number, :pan_number, :member_id, :latitude, :longitude, :delivery_person_id, :product_id, :quantity, :start_date, :end_date]
+
+      # Check if any required headers are missing
       missing_headers = required_headers - csv.headers.compact.map(&:to_sym)
-      
+
       if missing_headers.any?
-        render json: { 
-          valid: false, 
-          message: "Missing required columns: #{missing_headers.join(', ')}" 
+        render json: {
+          valid: false,
+          message: "Missing required columns: #{missing_headers.join(', ')}"
+        }
+        return
+      end
+
+      # Check for common header typos
+      header_corrections = {
+        quality: 'quantity',
+        quanity: 'quantity',
+        qty: 'quantity',
+        mobile: 'phone_number',
+        mobile_number: 'phone_number',
+        phone: 'phone_number',
+        del_person_id: 'delivery_person_id',
+        delivery_id: 'delivery_person_id'
+      }
+
+      suggested_corrections = []
+      csv.headers.compact.map(&:to_sym).each do |header|
+        if header_corrections[header]
+          suggested_corrections << "#{header} → #{header_corrections[header]}"
+        end
+      end
+
+      if suggested_corrections.any?
+        render json: {
+          valid: false,
+          message: "Header name corrections needed: #{suggested_corrections.join(', ')}"
+        }
+        return
+      end
+
+      # Validate data content
+      errors = []
+      valid_rows = 0
+
+      csv.each_with_index do |row, index|
+        row_num = index + 2 # +2 because CSV is 1-indexed and we have headers
+        row_errors = []
+
+        # Validate required fields
+        if row[:name].blank?
+          row_errors << "Name is required"
+        end
+
+        if row[:phone_number].blank?
+          row_errors << "Phone number is required"
+        elsif !valid_phone_number?(row[:phone_number])
+          row_errors << "Invalid phone number format (must be 10 digits)"
+        end
+
+        if row[:address].blank?
+          row_errors << "Address is required"
+        end
+
+        # Validate optional fields if present
+        if row[:email].present? && !valid_email?(row[:email])
+          row_errors << "Invalid email format"
+        end
+
+        if row[:delivery_person_id].present? && !User.delivery_people.exists?(id: row[:delivery_person_id])
+          row_errors << "Delivery person ID #{row[:delivery_person_id]} not found"
+        end
+
+        if row[:product_id].present? && !Product.exists?(id: row[:product_id])
+          row_errors << "Product ID #{row[:product_id]} not found"
+        end
+
+        if row[:quantity].present? && (row[:quantity].to_f <= 0)
+          row_errors << "Quantity must be greater than 0"
+        end
+
+        if row[:start_date].present? && !valid_date?(row[:start_date])
+          row_errors << "Invalid start date format (use YYYY-MM-DD)"
+        end
+
+        if row[:end_date].present? && !valid_date?(row[:end_date])
+          row_errors << "Invalid end date format (use YYYY-MM-DD)"
+        end
+
+        if row_errors.any?
+          errors << "Row #{row_num}: #{row_errors.join(', ')}"
+        else
+          valid_rows += 1
+        end
+      end
+
+      if errors.any?
+        # Limit error display to first 10 errors
+        error_message = "Found #{errors.length} validation errors:\n\n"
+        error_message += errors.first(10).join("\n")
+        if errors.length > 10
+          error_message += "\n\n... and #{errors.length - 10} more errors."
+        end
+
+        render json: {
+          valid: false,
+          message: error_message,
+          error_count: errors.length,
+          valid_count: valid_rows
         }
       else
-        render json: { 
-          valid: true, 
-          message: "CSV format is valid. Found #{csv.count} rows ready for enhanced import with delivery assignments.",
-          row_count: csv.count,
+        render json: {
+          valid: true,
+          message: "✓ CSV is valid! Found #{valid_rows} customers ready for enhanced import with delivery assignments.",
+          row_count: valid_rows,
           headers: csv.headers
         }
       end
+
     rescue CSV::MalformedCSVError => e
       render json: { valid: false, message: "Invalid CSV format: #{e.message}" }
     rescue => e
       render json: { valid: false, message: "Error validating CSV: #{e.message}" }
     end
+  end
+
+  private
+
+  def valid_phone_number?(phone)
+    # Remove any non-digits and check if it's exactly 10 digits
+    phone_digits = phone.to_s.gsub(/\D/, '')
+    phone_digits.length == 10 && phone_digits.match?(/^[6-9]\d{9}$/)
+  end
+
+  def valid_email?(email)
+    email.to_s.match?(/\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i)
+  end
+
+  def valid_date?(date_str)
+    Date.parse(date_str.to_s)
+    true
+  rescue ArgumentError
+    false
   end
   
   # Download enhanced CSV template

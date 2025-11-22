@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= AdminSetting.current.business_name %> - Pure Desi Cow Milk</title>
+    <title><%= AdminSetting.current.business_name %> - Admin Portal</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -15,1488 +15,356 @@
         }
 
         html, body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             height: 100%;
             min-height: 100vh;
-            overflow-x: hidden;
-            margin: 0;
-            padding: 0;
-            width: 100%;
         }
 
-        /* Farm-themed Background with Desi Cow */
-        .farm-wrapper {
+        /* Main Container with Light Blue Background */
+        .login-wrapper {
             position: fixed;
             top: 0;
             left: 0;
-            min-height: 100vh;
-            height: 100vh;
             width: 100vw;
-            background:
-                linear-gradient(rgba(0, 0, 0, 0.4), rgba(139, 69, 19, 0.3)),
-                url('/Desi_cow_image.png?v=2025102303') center/cover no-repeat;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            overflow-x: hidden;
-            overflow-y: auto;
+            height: 100vh;
+            background: #90D5FF;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 20px;
         }
 
-        /* Animated Background Elements */
-        .background-elements {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        /* Farm Visual Elements with Images */
-        .farm-visual-elements {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        /* Desi Cow Image - Hidden (main background is now desi cow) */
-        .desi-cow-image {
-            display: none;
-        }
-
-        /* Milk Bottles Visual */
-        .milk-bottles {
-            position: absolute;
-            top: 15%;
-            left: 5%;
-            width: 120px;
-            height: 180px;
-            background: url('https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            opacity: 0.8;
-        }
-
-        /* Farm House */
-        .farm-house {
-            position: absolute;
-            bottom: 20%;
-            left: 8%;
-            width: 150px;
-            height: 120px;
-            background: url('https://images.unsplash.com/photo-1544364093-7ad5ac882d5d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80') center/cover no-repeat;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            opacity: 0.85;
-        }
-
-        /* Delivery Truck */
-        .delivery-truck-image {
-            position: absolute;
-            bottom: 15%;
-            right: 25%;
-            width: 140px;
-            height: 100px;
-            background: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80') center/cover no-repeat;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            opacity: 0.85;
-        }
-
-        /* Fresh Grass Field */
-        .grass-field-image {
-            position: absolute;
-            top: 25%;
-            right: 8%;
-            width: 130px;
-            height: 100px;
-            background: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80') center/cover no-repeat;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            opacity: 0.8;
-        }
-
-        /* Malnad Gidda Cow Image - Hidden (main background is now desi cow) */
-        .malnad-cow-image {
-            display: none;
-        }
-
-        /* Organic Label */
-        .organic-badge {
-            position: absolute;
-            top: 8%;
-            right: 15%;
-            width: 80px;
-            height: 80px;
-            background: url('https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
-            border-radius: 50%;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-            opacity: 0.9;
-        }
-
-        /* Grass Animation */
-        .grass-field {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 150px;
-            background: linear-gradient(to top, #228B22, #32CD32);
-            z-index: 1;
-        }
-
-        .grass {
-            position: absolute;
-            bottom: 0;
-            width: 4px;
-            background: #228B22;
-            border-radius: 2px;
-            animation: sway 3s ease-in-out infinite;
-            transform-origin: bottom;
-        }
-
-        @keyframes sway {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(2deg); }
-            75% { transform: rotate(-2deg); }
-        }
-
-        /* Animated Cow */
-        .cow-container {
-            position: absolute;
-            bottom: 120px;
-            right: 10%;
-            z-index: 2;
-            animation: cow-move 15s ease-in-out infinite;
-        }
-
-        .cow {
-            font-size: 4rem;
-            color: #8B4513;
-            animation: cow-bounce 2s ease-in-out infinite;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
-        }
-
-        @keyframes cow-move {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(-50px); }
-        }
-
-        @keyframes cow-bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        /* Sun Animation */
-        .sun {
-            position: absolute;
-            top: 8%;
-            right: 10%;
-            width: 80px;
-            height: 80px;
-            background: #FFD700;
-            border-radius: 50%;
-            animation: sun-glow 3s ease-in-out infinite;
-            z-index: 1;
-        }
-
-        .sun::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: sun-rays 4s linear infinite;
-        }
-
-        @keyframes sun-glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
-            50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.8); }
-        }
-
-        @keyframes sun-rays {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Farm Trees */
-        .tree {
-            position: absolute;
-            bottom: 150px;
-            z-index: 1;
-        }
-
-        .tree-1 {
-            left: 15%;
-            font-size: 3rem;
-            color: #228B22;
-            animation: tree-sway 4s ease-in-out infinite;
-        }
-
-        .tree-2 {
-            left: 25%;
-            font-size: 2.5rem;
-            color: #32CD32;
-            animation: tree-sway 4s ease-in-out infinite;
-            animation-delay: -2s;
-        }
-
-        @keyframes tree-sway {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(1deg); }
-            75% { transform: rotate(-1deg); }
-        }
-
-        /* Milk Drops Animation */
-        .milk-drop {
-            position: absolute;
-            width: 8px;
-            height: 12px;
-            background: white;
-            border-radius: 0 50% 50% 50%;
-            opacity: 0.8;
-            animation: milk-fall 3s linear infinite;
-            z-index: 0;
-        }
-
-        @keyframes milk-fall {
-            0% {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            10% {
-                opacity: 0.8;
-            }
-            90% {
-                opacity: 0.8;
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(100vh);
-            }
-        }
-
-        /* Enhanced Login Card Styles */
-        .farm-login-card {
+        /* Login Card */
+        .login-card {
             background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(25px);
-            border-radius: 30px;
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
             box-shadow:
-                0 30px 60px rgba(0, 0, 0, 0.4),
-                0 0 0 1px rgba(255, 255, 255, 0.6),
-                inset 0 1px 0 rgba(255, 255, 255, 0.5);
-            border: 3px solid rgba(139, 69, 19, 0.2);
-            overflow: hidden;
-            position: relative;
-            z-index: 10;
+                0 25px 50px rgba(0, 0, 0, 0.25),
+                0 0 0 1px rgba(255, 255, 255, 0.05);
+            padding: 48px 40px;
             width: 100%;
-            max-width: 480px;
-            margin: 1rem;
-            min-height: auto;
+            max-width: 420px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
-        .farm-login-card::before {
+        .login-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 6px;
-            background: linear-gradient(90deg, #8B4513, #D2B48C, #CD853F, #8B4513);
-            background-size: 400% 100%;
-            animation: gradient-shift 3s ease-in-out infinite;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
         }
 
-        @keyframes gradient-shift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        @keyframes card-float {
-            from {
-                opacity: 0;
-                transform: translateY(30px) scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        /* Farm Header */
-        .farm-header {
-            text-align: center;
-            padding: 2.5rem 2rem 1.5rem;
-        }
-
-        .farm-logo {
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(135deg, #32CD32, #228B22);
-            border-radius: 50%;
+        /* Logo Container */
+        .logo-container {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 24px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1.5rem;
-            animation: logo-pulse 2s ease-in-out infinite;
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
             position: relative;
-            box-shadow: 0 10px 30px rgba(50, 205, 50, 0.4);
         }
 
-        .farm-logo::before {
+        .logo-container::before {
             content: '';
             position: absolute;
-            top: -5px;
-            left: -5px;
-            right: -5px;
-            bottom: -5px;
-            background: linear-gradient(45deg, #32CD32, transparent, #228B22, transparent);
-            border-radius: 50%;
-            animation: logo-ring 4s linear infinite;
-            z-index: -1;
+            inset: 2px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        @keyframes logo-pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+        .logo-image {
+            width: 90px;
+            height: 90px;
+            border-radius: 14px;
+            object-fit: cover;
+            position: relative;
+            z-index: 1;
         }
 
-        @keyframes logo-ring {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        /* Title Section */
+        .title-section {
+            margin-bottom: 32px;
         }
 
-        .farm-logo i {
-            font-size: 3rem;
-            color: white;
-            animation: cow-wiggle 3s ease-in-out infinite;
-        }
-
-        @keyframes cow-wiggle {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(-5deg); }
-            75% { transform: rotate(5deg); }
-        }
-
-        .farm-title {
-            font-size: 2.2rem;
+        .main-title {
+            font-size: 28px;
             font-weight: 700;
-            background: linear-gradient(135deg, #228B22, #32CD32);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.5rem;
-            animation: title-glow 3s ease-in-out infinite;
+            color: #1f2937;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
         }
 
-        @keyframes title-glow {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.2); }
-        }
-
-        .farm-subtitle {
-            color: #666;
-            font-size: 1rem;
+        .subtitle {
+            font-size: 16px;
+            color: #6b7280;
             font-weight: 500;
-            margin-bottom: 0;
         }
 
         /* Form Styles */
-        .farm-form {
-            padding: 0 2rem 2rem;
-            animation: form-slide-up 0.8s ease-out 0.3s both;
+        .login-form {
             width: 100%;
-            box-sizing: border-box;
         }
 
-        @keyframes form-slide-up {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
         }
 
-        .form-floating {
-            position: relative;
-            margin-bottom: 1.5rem;
-        }
-
-        .form-floating .form-control {
-            border: 2px solid rgba(50, 205, 50, 0.2);
-            border-radius: 15px;
-            padding: 1.5rem 1rem 0.75rem;
-            font-size: 1rem;
-            background: rgba(255, 255, 255, 0.9);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        }
-
-        .form-floating .form-control:focus {
-            border-color: #32CD32;
-            box-shadow: 
-                0 0 0 0.2rem rgba(50, 205, 50, 0.25),
-                0 8px 25px rgba(50, 205, 50, 0.15);
-            background: rgba(255, 255, 255, 1);
-            transform: translateY(-2px);
-            outline: none;
-        }
-
-        .form-floating label {
-            padding: 1rem;
-            color: #666;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .form-floating .form-control:focus ~ label,
-        .form-floating .form-control:not(:placeholder-shown) ~ label {
-            color: #32CD32;
-            transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
-        }
-
-        /* Farm Button */
-        .farm-btn {
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 15px;
-            background: linear-gradient(135deg, #32CD32, #228B22);
-            border: none;
-            color: white;
-            box-shadow: 0 8px 25px rgba(50, 205, 50, 0.4);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .farm-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
+        .form-control {
             width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .farm-btn:hover::before {
-            left: 100%;
-        }
-
-        .farm-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(50, 205, 50, 0.5);
-            background: linear-gradient(135deg, #228B22, #32CD32);
-        }
-
-        .farm-btn:active {
-            transform: translateY(-1px);
-        }
-
-        /* Farm Features */
-        .farm-features {
-            margin-top: 2rem;
-            animation: features-fade-in 0.8s ease-out 0.6s both;
-        }
-
-        @keyframes features-fade-in {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.8rem;
-            margin-top: 1rem;
-        }
-
-        .feature-item {
-            text-align: center;
-            padding: 1rem 0.5rem;
-            background: rgba(50, 205, 50, 0.1);
+            padding: 16px 20px;
+            font-size: 16px;
+            border: 2px solid #e5e7eb;
             border-radius: 12px;
-            border: 1px solid rgba(50, 205, 50, 0.2);
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .feature-item:hover {
-            transform: translateY(-5px);
-            background: rgba(50, 205, 50, 0.15);
-            box-shadow: 0 8px 20px rgba(50, 205, 50, 0.2);
-        }
-
-        .feature-item i {
-            font-size: 1.5rem;
-            color: #228B22;
-            margin-bottom: 0.5rem;
-            display: block;
-            animation: feature-bounce 2s ease-in-out infinite;
-        }
-
-        .feature-item span {
-            font-size: 0.8rem;
+            background: #f9fafb;
+            color: #1f2937;
             font-weight: 500;
-            color: #666;
+            transition: all 0.2s ease;
         }
 
-        @keyframes feature-bounce {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+        .form-control::placeholder {
+            color: #9ca3af;
+            font-weight: 400;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Login Button */
+        .login-button {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 8px;
+            box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+        }
+
+        .login-button:active {
+            transform: translateY(0);
+        }
+
+        /* Sign Up Section */
+        .signup-section {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+            text-align: center;
+        }
+
+        .signup-text {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .signup-button {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+            border: 2px solid #3b82f6;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .signup-button:hover {
+            background: #3b82f6;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            text-decoration: none;
+        }
+
+        .signup-button:active {
+            transform: translateY(0);
+        }
+
+        /* Copyright Footer */
+        .copyright {
+            position: absolute;
+            bottom: 24px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
         }
 
         /* Flash Messages */
-        .farm-alert {
-            border: none;
-            border-radius: 12px;
-            padding: 1rem 1.25rem;
-            margin-bottom: 1.5rem;
-            backdrop-filter: blur(10px);
-            animation: alert-slide-down 0.4s ease-out;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 500;
         }
 
-        .farm-alert.alert-danger {
-            background: rgba(220, 53, 69, 0.1);
-            color: #721c24;
-            border: 2px solid rgba(220, 53, 69, 0.2);
+        .alert-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            border: 1px solid rgba(239, 68, 68, 0.2);
         }
 
-        .farm-alert.alert-success {
-            background: rgba(40, 167, 69, 0.1);
-            color: #155724;
-            border: 2px solid rgba(40, 167, 69, 0.2);
+        .alert-success {
+            background: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+            border: 1px solid rgba(34, 197, 94, 0.2);
         }
 
-        @keyframes alert-slide-down {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Fix for collapsed mobile view */
-        @media (max-width: 480px) and (orientation: portrait) {
-            .farm-wrapper {
-                padding: 0.5rem;
-            }
-            
-            .farm-login-card {
-                margin: 0.5rem;
-                max-width: calc(100vw - 1rem);
-                width: calc(100vw - 1rem);
-                min-width: 280px;
-            }
-            
-            .farm-header {
-                padding: 1rem 1rem 0.5rem;
-            }
-            
-            .farm-form {
-                padding: 0.5rem 1rem 1rem;
-            }
-            
-            .form-floating .form-control {
-                min-height: 50px;
-                padding: 1rem 0.75rem 0.25rem;
-            }
-            
-            .form-floating label {
-                padding: 0.75rem;
-            }
-        }
-
-        /* Responsive Design */
-        @media (max-width: 1200px) {
-            .farm-login-card {
-                margin: 1rem;
-                max-width: none;
-                width: auto;
-            }
-
-            .farm-wrapper {
-                background-attachment: scroll;
-                background-size: cover;
-            }
-        }
-        
-        @media (max-width: 992px) {
-            .cow-container {
-                right: 5%;
-                bottom: 100px;
-            }
-            
-            .cow {
-                font-size: 3rem;
-            }
-        }
-
+        /* Mobile Responsive */
         @media (max-width: 768px) {
-            .farm-wrapper {
-                padding: 0.5rem;
+            .login-wrapper {
+                padding: 16px;
             }
 
-            /* Hide some farm images on mobile for better performance */
-            .grass-field-image,
-            .organic-badge {
-                display: none;
-            }
-
-            /* Adjust remaining farm images */
-            .desi-cow-image {
-                width: 120px;
-                height: 90px;
-                bottom: 5%;
-                right: 2%;
-            }
-
-            .malnad-cow-image {
-                width: 100px;
-                height: 80px;
-                top: 8%;
-                left: 2%;
-            }
-
-            .milk-bottles {
-                width: 80px;
-                height: 120px;
-                top: 10%;
-                left: 2%;
-            }
-
-            .farm-house {
-                width: 100px;
-                height: 80px;
-                bottom: 15%;
-                left: 5%;
-            }
-
-            .delivery-truck-image {
-                width: 100px;
-                height: 70px;
-                bottom: 10%;
-                right: 20%;
-            }
-            
-            .farm-header {
-                padding: 1.5rem 1.5rem 1rem;
-            }
-            
-            .farm-form {
-                padding: 0 1.5rem 1.5rem;
-            }
-            
-            .farm-title {
-                font-size: 1.6rem;
-            }
-            
-            .farm-logo {
-                width: 60px;
-                height: 60px;
-                margin-bottom: 1rem;
-            }
-            
-            .farm-logo i {
-                font-size: 1.8rem;
-            }
-            
-            .feature-grid {
-                grid-template-columns: 1fr;
-                gap: 0.5rem;
-            }
-            
-            .farm-login-card {
-                margin: 0.5rem;
+            .login-card {
+                padding: 32px 24px;
                 border-radius: 20px;
             }
-            
-            .form-floating .form-control {
-                padding: 1.25rem 0.75rem 0.5rem;
-                font-size: 0.9rem;
+
+            .logo-container {
+                width: 100px;
+                height: 100px;
+                margin-bottom: 20px;
             }
-            
-            .form-floating label {
-                padding: 0.75rem;
-                font-size: 0.8rem;
+
+            .logo-image {
+                width: 75px;
+                height: 75px;
             }
-            
-            .farm-btn {
-                padding: 0.875rem 1.5rem;
-                font-size: 1rem;
+
+            .main-title {
+                font-size: 24px;
             }
-        }
-        
-        @media (max-width: 576px) {
-            .farm-wrapper {
-                padding: 0.25rem;
+
+            .subtitle {
+                font-size: 14px;
             }
-            
-            .farm-login-card {
-                margin: 0.25rem;
-                border-radius: 15px;
+
+            .form-control {
+                padding: 14px 16px;
+                font-size: 15px;
             }
-            
-            .farm-header {
-                padding: 1rem 1rem 0.5rem;
-            }
-            
-            .farm-form {
-                padding: 0 1rem 1rem;
-            }
-            
-            .farm-title {
-                font-size: 1.4rem;
-                line-height: 1.2;
-            }
-            
-            .farm-subtitle {
-                font-size: 0.85rem;
-            }
-            
-            .farm-logo {
-                width: 50px;
-                height: 50px;
-            }
-            
-            .farm-logo i {
-                font-size: 1.5rem;
-            }
-            
-            .form-floating {
-                margin-bottom: 1rem;
-            }
-            
-            .feature-item {
-                padding: 0.5rem;
-            }
-            
-            .feature-item i {
-                font-size: 1.2rem;
-            }
-            
-            .feature-item span {
-                font-size: 0.75rem;
+
+            .login-button {
+                padding: 14px;
+                font-size: 15px;
             }
         }
 
-        /* Create grass blades dynamically */
-        .grass-blade {
-            position: absolute;
-            bottom: 0;
-            width: 3px;
-            height: 25px;
-            background: linear-gradient(to top, #228B22, #32CD32);
-            border-radius: 2px;
-            animation: blade-sway 2s ease-in-out infinite;
-            transform-origin: bottom;
-        }
-
-        /* Attractive Loader Overlay */
-        .farm-loader-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(139, 69, 19, 0.4)),
-                        url('/Lord-Krishna-In-a-Forest-With-Cow-Natural-Image.jpg?v=2025110601') center/cover no-repeat;
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .farm-loader-overlay.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* Loader Container */
-        .loader-container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(25px);
-            border-radius: 30px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4),
-                        0 0 0 1px rgba(255, 255, 255, 0.6);
-            border: 3px solid rgba(139, 69, 19, 0.2);
-            padding: 3rem 2.5rem;
-            text-align: center;
-            max-width: 480px;
-            width: 90%;
-            position: relative;
-            overflow: hidden;
-            transform: translateY(30px) scale(0.9);
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .farm-loader-overlay.show .loader-container {
-            transform: translateY(0) scale(1);
-        }
-
-        .loader-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 6px;
-            background: linear-gradient(90deg, #8B4513, #D2B48C, #CD853F, #8B4513);
-            background-size: 400% 100%;
-            animation: gradient-shift 3s ease-in-out infinite;
-        }
-
-        /* Loader Title */
-        .loader-title {
-            font-size: 2rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #228B22, #32CD32);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 1rem;
-            animation: title-pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes title-pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-        }
-
-        /* Loader Message */
-        .loader-message {
-            font-size: 1.1rem;
-            color: #666;
-            margin-bottom: 2rem;
-            font-weight: 500;
-            animation: message-fade 3s ease-in-out infinite;
-        }
-
-        @keyframes message-fade {
-            0%, 100% { opacity: 0.7; }
-            50% { opacity: 1; }
-        }
-
-        /* Progress Circle */
-        .progress-circle {
-            position: relative;
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 1.5rem;
-        }
-
-        .progress-ring {
-            transform: rotate(-90deg);
-        }
-
-        .progress-ring-bg {
-            fill: none;
-            stroke: rgba(50, 205, 50, 0.1);
-            stroke-width: 8;
-        }
-
-        .progress-ring-fill {
-            fill: none;
-            stroke: url(#progressGradient);
-            stroke-width: 8;
-            stroke-linecap: round;
-            stroke-dasharray: 440;
-            stroke-dashoffset: 440;
-            transition: stroke-dashoffset 0.3s ease;
-            filter: drop-shadow(0 0 10px rgba(50, 205, 50, 0.3));
-        }
-
-        /* Progress Percentage */
-        .progress-percentage {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 2.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #228B22, #32CD32);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: percentage-glow 2s ease-in-out infinite;
-        }
-
-        @keyframes percentage-glow {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.2); }
-        }
-
-        /* Farm Icon */
-        .loader-icon {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 3rem;
-            color: #32CD32;
-            animation: icon-spin 4s linear infinite;
-            margin-top: 20px;
-        }
-
-        @keyframes icon-spin {
-            from { transform: translate(-50%, -50%) rotate(0deg); }
-            to { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-
-        /* Status Messages */
-        .status-message {
-            font-size: 0.95rem;
-            color: #888;
-            margin-bottom: 1rem;
-            min-height: 24px;
-            animation: status-slide 0.5s ease-in-out;
-        }
-
-        @keyframes status-slide {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Success Animation */
-        .success-check {
-            display: none;
-            font-size: 4rem;
-            color: #32CD32;
-            animation: success-bounce 1s ease-in-out;
-        }
-
-        @keyframes success-bounce {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-
-        /* Farm Loading Animation */
-        .farm-loading-animation {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 1rem 0;
-        }
-
-        .farm-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #32CD32, #228B22);
-            animation: farm-bounce 1.4s ease-in-out infinite;
-        }
-
-        .farm-dot:nth-child(1) { animation-delay: -0.32s; }
-        .farm-dot:nth-child(2) { animation-delay: -0.16s; }
-        .farm-dot:nth-child(3) { animation-delay: 0s; }
-
-        @keyframes farm-bounce {
-            0%, 80%, 100% {
-                transform: scale(0);
-                opacity: 0.5;
-            }
-            40% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        /* Mobile Responsiveness */
-        @media (max-width: 768px) {
-            .loader-container {
-                padding: 2rem 1.5rem;
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 24px 20px;
+                border-radius: 16px;
             }
 
-            .loader-title {
-                font-size: 1.5rem;
+            .logo-container {
+                width: 80px;
+                height: 80px;
             }
 
-            .progress-circle {
-                width: 120px;
-                height: 120px;
+            .logo-image {
+                width: 60px;
+                height: 60px;
             }
 
-            .progress-percentage {
-                font-size: 2rem;
-            }
-
-            .loader-icon {
-                font-size: 2.5rem;
+            .main-title {
+                font-size: 22px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Attractive Loader Overlay -->
-    <div class="farm-loader-overlay" id="farmLoader">
-        <div class="loader-container">
-            <h2 class="loader-title"><%= AdminSetting.current.business_name %></h2>
-            <p class="loader-message">Setting up your farm experience...</p>
-
-            <!-- Progress Circle -->
-            <div class="progress-circle">
-                <svg width="150" height="150" class="progress-ring">
-                    <!-- Gradient Definition -->
-                    <defs>
-                        <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" style="stop-color:#32CD32;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#228B22;stop-opacity:1" />
-                        </linearGradient>
-                    </defs>
-                    <!-- Background Circle -->
-                    <circle
-                        class="progress-ring-bg"
-                        cx="75"
-                        cy="75"
-                        r="70">
-                    </circle>
-                    <!-- Progress Circle -->
-                    <circle
-                        class="progress-ring-fill"
-                        cx="75"
-                        cy="75"
-                        r="70"
-                        id="progressCircle">
-                    </circle>
-                </svg>
-                <div class="progress-percentage" id="progressPercentage">0%</div>
-                <i class="fas fa-cow loader-icon" id="loaderIcon"></i>
-                <i class="fas fa-check success-check" id="successCheck"></i>
+    <div class="login-wrapper">
+        <div class="login-card">
+            <!-- Logo Section -->
+            <div class="logo-container">
+                <img src="/Lord-Krishna-In-a-Forest-With-Cow-Natural-Image.jpg" alt="Krishna Logo" class="logo-image">
             </div>
 
-            <!-- Status Message -->
-            <div class="status-message" id="statusMessage">Initializing...</div>
+            <!-- Title Section -->
+            <div class="title-section">
+                <h1 class="main-title"><%= AdminSetting.current.business_name %></h1>
+                <p class="subtitle">Admin Portal</p>
+            </div>
 
-            <!-- Farm Loading Animation -->
-            <div class="farm-loading-animation">
-                <div class="farm-dot"></div>
-                <div class="farm-dot"></div>
-                <div class="farm-dot"></div>
+            <!-- Login Form -->
+            <%= form_with url: login_path, method: :post, local: true, class: "login-form" do |form| %>
+                <% if flash[:alert] %>
+                    <div class="alert alert-danger">
+                        <%= flash[:alert] %>
+                    </div>
+                <% end %>
+
+                <% if flash[:notice] %>
+                    <div class="alert alert-success">
+                        <%= flash[:notice] %>
+                    </div>
+                <% end %>
+
+                <div class="form-group">
+                    <%= form.text_field :email,
+                        class: "form-control",
+                        placeholder: "Username",
+                        required: true %>
+                </div>
+
+                <div class="form-group">
+                    <%= form.password_field :password,
+                        class: "form-control",
+                        placeholder: "Password",
+                        required: true %>
+                </div>
+
+                <%= form.submit "Login", class: "login-button" %>
+            <% end %>
+
+            <!-- Sign Up Link -->
+            <div class="signup-section">
+                <p class="signup-text">Don't have an account?</p>
+                <%= link_to "Sign Up", signup_path, class: "signup-button" %>
             </div>
         </div>
-    </div>
 
-    <div class="farm-wrapper">
-        <!-- Farm Visual Elements -->
-        <div class="farm-visual-elements">
-            <!-- Authentic Desi Cow - Farm's Own Image -->
-            <div class="desi-cow-image" title="Authentic Desi Cow - Pure A2 Milk Producer"></div>
-
-            <!-- Desi Cow - Indigenous Indian Breed -->
-            <div class="malnad-cow-image" title="Indigenous Desi Cow - Traditional Indian Breed"></div>
-
-            <!-- Fresh Milk Bottles -->
-            <div class="milk-bottles"></div>
-
-            <!-- Traditional Farm House -->
-            <div class="farm-house"></div>
-
-            <!-- Delivery Truck -->
-            <div class="delivery-truck-image"></div>
-
-            <!-- Green Grass Field -->
-            <div class="grass-field-image"></div>
-
-            <!-- Organic Badge -->
-            <div class="organic-badge"></div>
-        </div>
-        
-        <!-- Main Content -->
-        <div class="farm-login-card">
-                        <!-- Header -->
-                        <div class="farm-header">
-                            <div class="farm-logo">
-                                <img src="/Lord-Krishna-In-a-Forest-With-Cow-Natural-Image.jpg" alt="<%= AdminSetting.current.business_name %> Logo" style="width: 100%; height: 100%; object-fit: contain; border-radius: 0%;">
-                            </div>
-                            <h1 class="farm-title"><%= AdminSetting.current.business_name %></h1>
-                            <p class="farm-subtitle">Premium Desi Cow Milk & Dairy Products</p>
-                        </div>
-                        
-                        <!-- Login Form -->
-                        <div class="farm-form">
-                            <%= form_with url: login_path, method: :post, local: true do |form| %>
-                                <% if flash[:alert] %>
-                                    <div class="farm-alert alert-danger">
-                                        <i class="fas fa-exclamation-triangle"></i>
-                                        <%= flash[:alert] %>
-                                    </div>
-                                <% end %>
-                                
-                                <% if flash[:notice] %>
-                                    <div class="farm-alert alert-success">
-                                        <i class="fas fa-check-circle"></i>
-                                        <div>
-                                            <div class="fw-bold">Successfully logged out!</div>
-                                            <div class="small">Thank you for using <%= AdminSetting.current.business_name %></div>
-                                        </div>
-                                    </div>
-                                <% end %>
-                                
-                                <div class="form-floating">
-                                    <%= form.email_field :email, class: "form-control", id: "email", placeholder: "name@example.com", value: "pramodbha8@gmail.com", required: true %>
-                                    <label for="email">
-                                        <i class="fas fa-envelope me-2"></i>Email Address
-                                    </label>
-                                </div>
-                                
-                                <div class="form-floating">
-                                    <%= form.password_field :password, class: "form-control", id: "password", placeholder: "Password", value: "••••••••", required: true %>
-                                    <label for="password">
-                                        <i class="fas fa-lock me-2"></i>Password
-                                    </label>
-                                </div>
-                                
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="remember">
-                                        <label class="form-check-label" for="remember">
-                                            Remember me
-                                        </label>
-                                    </div>
-                                    <a href="#" class="text-success text-decoration-none small fw-semibold">Forgot Password?</a>
-                                </div>
-                                
-                                <div class="d-grid">
-                                    <%= form.submit "Sign In to Farm", class: "btn farm-btn" %>
-                                </div>
-                            <% end %>
-                            
-                            <div class="text-center mt-3">
-                                <p class="text-muted mb-2">New to our farm?</p>
-                                <a href="/signup" class="text-success text-decoration-none fw-semibold">Join Our Farm Community</a>
-                            </div>
-
-                            <!-- Demo Button for Testing Loader -->
-                            <div class="text-center mt-3">
-                                <button type="button" class="btn btn-outline-success btn-sm" onclick="triggerFarmLoader()">
-                                    <i class="fas fa-play me-2"></i>Demo Loader Animation
-                                </button>
-                            </div>
-                            
-                            <!-- Farm Features -->
-                            <div class="farm-features">
-                                <div class="text-center mb-2">
-                                    <small class="text-muted fw-semibold">Why Choose Our Farm?</small>
-                                </div>
-                                <div class="feature-grid">
-                                    <div class="feature-item">
-                                        <i class="fas fa-cow"></i>
-                                        <span>Desi Gau Mata</span>
-                                    </div>
-                                    <div class="feature-item">
-                                        <i class="fas fa-seedling"></i>
-                                        <span>Natural Farming</span>
-                                    </div>
-                                    <div class="feature-item">
-                                        <i class="fas fa-glass-whiskey"></i>
-                                        <span>Fresh Milk Daily</span>
-                                    </div>
-                                    <div class="feature-item">
-                                        <i class="fas fa-home"></i>
-                                        <span>Farm to Home</span>
-                                    </div>
-                                    <div class="feature-item">
-                                        <i class="fas fa-heart"></i>
-                                        <span>Pure & Healthy</span>
-                                    </div>
-                                    <div class="feature-item">
-                                        <i class="fas fa-shipping-fast"></i>
-                                        <span>Swift Delivery</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+        <!-- Copyright Footer -->
+        <div class="copyright">
+            © 2025 <%= AdminSetting.current.business_name %>
         </div>
     </div>
-
-    <script>
-        // Attractive Loader with Farm Theme
-        class FarmLoader {
-            constructor() {
-                this.loader = document.getElementById('farmLoader');
-                this.progressCircle = document.getElementById('progressCircle');
-                this.progressPercentage = document.getElementById('progressPercentage');
-                this.statusMessage = document.getElementById('statusMessage');
-                this.loaderIcon = document.getElementById('loaderIcon');
-                this.successCheck = document.getElementById('successCheck');
-
-                this.currentProgress = 0;
-                this.targetProgress = 0;
-                this.isLoading = false;
-
-                // Status messages for different stages
-                this.statusMessages = [
-                    "Connecting to our farm...",
-                    "Loading fresh milk inventory...",
-                    "Preparing customer app link...",
-                    "Gathering delivery routes...",
-                    "Setting up farm dashboard...",
-                    "Sending customer app link...",
-                    "Finalizing your farm experience..."
-                ];
-
-                this.currentMessageIndex = 0;
-            }
-
-            updateProgress(percentage) {
-                this.targetProgress = percentage;
-                const circumference = 2 * Math.PI * 70; // radius = 70
-                const offset = circumference - (percentage / 100) * circumference;
-
-                // Smooth animation to target percentage
-                const animateProgress = () => {
-                    if (this.currentProgress < this.targetProgress) {
-                        this.currentProgress += 1;
-                        const currentOffset = circumference - (this.currentProgress / 100) * circumference;
-                        this.progressCircle.style.strokeDashoffset = currentOffset;
-                        this.progressPercentage.textContent = this.currentProgress + '%';
-
-                        requestAnimationFrame(animateProgress);
-                    }
-                };
-
-                requestAnimationFrame(animateProgress);
-            }
-
-            updateStatus(message) {
-                this.statusMessage.style.animation = 'none';
-                this.statusMessage.offsetHeight; // Trigger reflow
-                this.statusMessage.textContent = message;
-                this.statusMessage.style.animation = 'status-slide 0.5s ease-in-out';
-            }
-
-            showLoader() {
-                this.loader.classList.add('show');
-                this.isLoading = true;
-                this.startLoadingSequence();
-            }
-
-            hideLoader() {
-                this.loader.classList.remove('show');
-                this.isLoading = false;
-            }
-
-            startLoadingSequence() {
-                const sequence = [
-                    { progress: 5, message: this.statusMessages[0], delay: 500 },
-                    { progress: 15, message: this.statusMessages[1], delay: 800 },
-                    { progress: 25, message: this.statusMessages[2], delay: 600 },
-                    { progress: 45, message: this.statusMessages[3], delay: 700 },
-                    { progress: 65, message: this.statusMessages[4], delay: 600 },
-                    { progress: 85, message: this.statusMessages[5], delay: 800 },
-                    { progress: 100, message: this.statusMessages[6], delay: 500 }
-                ];
-
-                let currentStep = 0;
-
-                const executeStep = () => {
-                    if (currentStep < sequence.length && this.isLoading) {
-                        const step = sequence[currentStep];
-
-                        this.updateProgress(step.progress);
-                        this.updateStatus(step.message);
-
-                        // Special handling for 100%
-                        if (step.progress === 100) {
-                            setTimeout(() => {
-                                this.showSuccess();
-                            }, 1000);
-                        }
-
-                        currentStep++;
-
-                        setTimeout(executeStep, step.delay);
-                    }
-                };
-
-                executeStep();
-            }
-
-            showSuccess() {
-                // Hide loader icon and show success check
-                this.loaderIcon.style.display = 'none';
-                this.successCheck.style.display = 'block';
-
-                // Update status
-                this.updateStatus('Customer app link sent successfully! 🎉');
-
-                // Hide loader after showing success
-                setTimeout(() => {
-                    this.hideLoader();
-                }, 2000);
-            }
-
-            // Trigger loader manually
-            trigger() {
-                this.showLoader();
-            }
-        }
-
-        // Initialize page and loader
-        document.addEventListener('DOMContentLoaded', function() {
-            try {
-                // Initialize farm loader
-                window.farmLoader = new FarmLoader();
-
-                // Show loader automatically after page load
-                console.log('🌾 Farm loader initialized successfully!');
-                console.log('💡 To manually trigger: triggerFarmLoader()');
-                console.log('🔧 To debug: debugLoader()');
-
-                // Disable auto-loader for login page
-                console.log('🔒 Login page - Auto-loader disabled');
-
-                // Auto-hide flash messages
-                setTimeout(function() {
-                    const alerts = document.querySelectorAll('.farm-alert');
-                    alerts.forEach(alert => {
-                        alert.style.animation = 'fadeOut 0.5s ease-out forwards';
-                        setTimeout(() => alert.remove(), 500);
-                    });
-                }, 4000);
-
-                // Add subtle hover effects to farm images
-                const farmImages = document.querySelectorAll('.farm-visual-elements > div');
-                farmImages.forEach(img => {
-                    img.addEventListener('mouseenter', function() {
-                        this.style.transform = 'scale(1.05)';
-                        this.style.transition = 'transform 0.3s ease';
-                    });
-
-                    img.addEventListener('mouseleave', function() {
-                        this.style.transform = 'scale(1)';
-                    });
-                });
-
-                // Login form - no loader trigger needed
-                const loginForm = document.querySelector('form');
-                if (loginForm) {
-                    console.log('📝 Login form found - proceeding with normal form submission');
-                }
-
-                // Login button - normal form submission
-                const loginButton = document.querySelector('.farm-btn');
-                if (loginButton) {
-                    console.log('🔑 Login button found - normal form submission enabled');
-                }
-
-            } catch (error) {
-                console.error('Error initializing farm loader:', error);
-                // Fallback - try to show a simple loader
-                const loader = document.getElementById('farmLoader');
-                if (loader) {
-                    loader.style.display = 'flex';
-                    loader.classList.add('show');
-                }
-            }
-        });
-
-        // Add CSS for fade out animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fadeOut {
-                from { opacity: 1; }
-                to { opacity: 0; }
-            }
-        `;
-        document.head.appendChild(style);
-
-        // Expose loader for manual triggering
-        function triggerFarmLoader() {
-            console.log('Triggering farm loader...');
-            if (window.farmLoader) {
-                window.farmLoader.trigger();
-            } else {
-                console.warn('Farm loader not initialized, trying manual trigger...');
-                const loader = document.getElementById('farmLoader');
-                if (loader) {
-                    loader.classList.add('show');
-                    // Manual animation if class fails
-                    setTimeout(() => {
-                        const progressCircle = document.getElementById('progressCircle');
-                        const progressPercentage = document.getElementById('progressPercentage');
-                        const statusMessage = document.getElementById('statusMessage');
-
-                        let progress = 0;
-                        const interval = setInterval(() => {
-                            progress += 10;
-                            if (progressPercentage) progressPercentage.textContent = progress + '%';
-                            if (statusMessage) {
-                                if (progress === 30) statusMessage.textContent = 'Sending customer app link...';
-                                else if (progress === 100) {
-                                    statusMessage.textContent = 'Customer app link sent successfully! 🎉';
-                                    clearInterval(interval);
-                                    setTimeout(() => loader.classList.remove('show'), 2000);
-                                }
-                            }
-                        }, 500);
-                    }, 100);
-                }
-            }
-        }
-
-        // Debug function
-        function debugLoader() {
-            console.log('=== FARM LOADER DEBUG ===');
-            console.log('Window farmLoader exists:', !!window.farmLoader);
-            console.log('Loader element exists:', !!document.getElementById('farmLoader'));
-            console.log('Current URL:', window.location.href);
-
-            // Test image loading
-            const testImg = new Image();
-            testImg.onload = () => console.log('✅ farm1.png loaded successfully');
-            testImg.onerror = () => console.error('❌ farm1.png failed to load');
-            testImg.src = '/Lord-Krishna-In-a-Forest-With-Cow-Natural-Image.jpg?v=' + Date.now();
-        }
-
-        // Auto-run debug on console errors
-        window.addEventListener('error', function(e) {
-            console.error('JavaScript Error:', e.error);
-            debugLoader();
-        });
-    </script>
 </body>
 </html>

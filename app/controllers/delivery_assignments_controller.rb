@@ -776,6 +776,7 @@ class DeliveryAssignmentsController < ApplicationController
         )
 
         # Save the delivery schedule
+        debugger
         delivery_schedule.save!
         created_schedules += 1
 
