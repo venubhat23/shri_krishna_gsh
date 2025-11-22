@@ -1382,7 +1382,7 @@
 <body>
   <%
     # Calculate if any product has GST
-    has_gst = @invoice_items.any? { |item| item.product&.is_gst_applicable }
+    has_gst = @invoice_items.any? { |item| item.product&.is_gst_applicable? }
 
     # Calculate totals with proper GST breakdown
     subtotal_amount = 0
@@ -1641,7 +1641,7 @@
           end 
         %>
         <% if total_igst > 0 %>
-          <% igst_rate = @invoice_items.sum { |item| item.product&.is_gst_applicable ? (item.product.total_igst_percentage || 0) : 0 } / @invoice_items.select { |item| item.product&.is_gst_applicable }.count rescue 0 %>
+          <% igst_rate = @invoice_items.sum { |item| item.product&.is_gst_applicable? ? (item.product.total_igst_percentage || 0) : 0 } / @invoice_items.select { |item| item.product&.is_gst_applicable? }.count rescue 0 %>
           <div class="tax-line">
             <span>IGST @<%= igst_rate %>%</span>
             <span>₹<%= number_with_delimiter(total_igst.round(2), delimiter: ',') %></span>

@@ -547,7 +547,7 @@
         # Add to subtotal (sum of all item amounts)
         subtotal_amount += base_amount
 
-        if item.product&.is_gst_applicable
+        if item.product&.is_gst_applicable?
           # For GST applicable items, add to taxable amount and calculate GST
           taxable_amount += base_amount
 
@@ -659,7 +659,7 @@
               <td class="right-align">
                 <% 
                   base_amount = item.quantity * (item.unit_price || 0)
-                  if item.product&.is_gst_applicable
+                  if item.product&.is_gst_applicable?
                     total_gst_rate = (item.product.total_cgst_percentage || 0) + (item.product.total_sgst_percentage || 0) + (item.product.total_igst_percentage || 0)
                     tax_amount = (base_amount * total_gst_rate) / 100
                   else
@@ -750,7 +750,7 @@
                 sgst_groups = {}
                 
                 @invoice_items.each do |item|
-                  if item.product&.is_gst_applicable
+                  if item.product&.is_gst_applicable?
                     base_amount = item.quantity * (item.unit_price || 0)
                     
                     cgst_rate = item.product.total_cgst_percentage || 0

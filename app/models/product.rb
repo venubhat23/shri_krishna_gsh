@@ -142,6 +142,21 @@ class Product < ApplicationRecord
     (cgst || 0) + (sgst || 0) + (igst || 0)
   end
 
+  def total_cgst_percentage
+    return 0 unless is_gst_applicable?
+    cgst || 0
+  end
+
+  def total_sgst_percentage
+    return 0 unless is_gst_applicable?
+    sgst || 0
+  end
+
+  def total_igst_percentage
+    return 0 unless is_gst_applicable?
+    igst || 0
+  end
+
   def cgst_amount_for(base_amount)
     return 0 unless is_gst_applicable?
     (base_amount * (cgst || 0) / 100).round(2)

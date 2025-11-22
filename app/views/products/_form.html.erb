@@ -205,12 +205,12 @@
 
   <!-- GST Section -->
   <div class="mb-3">
-    <%= form.label :is_gst_applicable, class: "form-label fw-bold" do %>
+    <%= form.label :is_gst_applicable?, class: "form-label fw-bold" do %>
       <i class="fas fa-file-invoice-dollar me-1"></i>Is GST Applicable?
     <% end %>
     <div>
-      <%= form.check_box :is_gst_applicable, { class: "form-check-input", id: "is_gst_applicable_checkbox" }, true, false %>
-      <%= form.label :is_gst_applicable, "Yes", class: "form-check-label", for: "is_gst_applicable_checkbox" %>
+      <%= form.check_box :is_gst_applicable?, { class: "form-check-input", id: "is_gst_applicable?_checkbox" }, true, false %>
+      <%= form.label :is_gst_applicable?, "Yes", class: "form-check-label", for: "is_gst_applicable?_checkbox" %>
     </div>
   </div>
   <div id="gst-fields" style="<%= product.is_gst_applicable? ? '' : 'display:none;' %>">
@@ -283,7 +283,7 @@
       }, false);
     });
     // GST field toggle
-    var gstCheckbox = document.getElementById('is_gst_applicable_checkbox');
+    var gstCheckbox = document.getElementById('is_gst_applicable?_checkbox');
     if (gstCheckbox) {
       gstCheckbox.addEventListener('change', function() {
         document.getElementById('gst-fields').style.display = this.checked ? '' : 'none';

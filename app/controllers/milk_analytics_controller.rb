@@ -42,7 +42,7 @@ class MilkAnalyticsController < ApplicationController
     get_procurement_schedules
 
     # Set up vendors for dropdown - optimized single query
-    vendor_names = current_user.procurement_assignments.distinct.pluck(:vendor_name).compact.sort
+    vendor_names = current_user.procurement_assignments.joins(:procurement_schedule).distinct.pluck('procurement_schedules.vendor_name').compact.sort
     @vendors = vendor_names.map { |name| OpenStruct.new(id: name, name: name) }
 
     respond_to do |format|
@@ -280,11 +280,12 @@ class MilkAnalyticsController < ApplicationController
 
       # Delete associated procurement assignments
       procurement_assignments = current_user.procurement_assignments
+                                           .joins(:procurement_schedule)
                                            .where(
-                                             vendor_name: schedule.vendor_name,
+                                             'procurement_schedules.vendor_name' => schedule.vendor_name,
                                              product_id: schedule.product_id
                                            )
-                                           .where(date: schedule.from_date..schedule.to_date)
+                                           .where(scheduled_date: schedule.from_date..schedule.to_date)
 
       deleted_records[:deleted_assignments] = procurement_assignments.count
       procurement_assignments.destroy_all
@@ -391,7 +392,7 @@ class MilkAnalyticsController < ApplicationController
     
     # Apply vendor filter if specified
     if params[:vendor_filter].present?
-      @assignments = @assignments.where(vendor_name: params[:vendor_filter])
+      @assignments = @assignments.joins(:procurement_schedule).where('procurement_schedules.vendor_name' => params[:vendor_filter])
     end
     
     Rails.logger.info "Calendar View Debug: Found #{@assignments.count} assignments"
@@ -499,7 +500,7 @@ class MilkAnalyticsController < ApplicationController
     end
     
     # Available vendors for dropdown - get distinct vendor names with fake IDs
-    vendor_names = current_user.procurement_assignments.distinct.pluck(:vendor_name).compact.sort
+    vendor_names = current_user.procurement_assignments.joins(:procurement_schedule).distinct.pluck('procurement_schedules.vendor_name').compact.sort
     @vendors = vendor_names.map.with_index { |name, index| OpenStruct.new(id: name, name: name) }
   end
 
@@ -1808,6 +1809,12 @@ class MilkAnalyticsController < ApplicationController
 
   def authenticate_user!
     require_login
+
+    # MilkAnalyticsController requires admin user access only
+    unless current_user
+      redirect_to root_path, alert: 'Access denied. Admin access required.'
+      return
+    end
   end
   
   def save_report_to_database(report_type, from_date, to_date, report_data)
@@ -1855,7 +1862,7 @@ class MilkAnalyticsController < ApplicationController
       procurement_assignments = current_user.procurement_assignments.for_date_range(@start_date, @end_date)
       
       # Calculate basic metrics with safe defaults
-      @total_vendors = procurement_assignments.reorder('').distinct.count(:vendor_name) || 0
+      @total_vendors = procurement_assignments.joins(:procurement_schedule).reorder('').distinct.count('procurement_schedules.vendor_name') || 0
       @total_liters = procurement_assignments.sum('COALESCE(actual_quantity, planned_quantity)') || 0
       @total_cost = procurement_assignments.sum { |a| a.actual_quantity ? (a.actual_cost || 0) : (a.planned_cost || 0) }
       
@@ -2358,7 +2365,7 @@ class MilkAnalyticsController < ApplicationController
       end
       
       # 1. Total Vendors - COUNT(DISTINCT vendor_name) with normalization
-      unique_vendor_names = assignments_query.reorder('').pluck(:vendor_name)
+      unique_vendor_names = assignments_query.joins(:procurement_schedule).reorder('').pluck('procurement_schedules.vendor_name')
         .map { |name| name&.strip&.downcase }
         .compact
         .uniq
@@ -2731,7 +2738,7 @@ class MilkAnalyticsController < ApplicationController
     total_amount = assignments_query.reorder('').sum('planned_quantity * procurement_assignments.buying_price') || 0
 
     # Calculate unique vendor count with normalization
-    unique_vendor_count = assignments_query.reorder('').pluck(:vendor_name)
+    unique_vendor_count = assignments_query.joins(:procurement_schedule).reorder('').pluck('procurement_schedules.vendor_name')
       .map { |name| name&.strip&.downcase }
       .compact
       .uniq
