@@ -409,43 +409,71 @@
   </div>
 </div>
 
-<!-- Success Modal -->
-<div class="modal fade" id="successModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-      <div class="modal-body text-center py-5">
-        <div class="success-icon mb-4">
-          <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+<!-- Enhanced Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header border-0 pb-0">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center px-5 pb-5">
+        <!-- Success Animation -->
+        <div class="success-animation mb-4">
+          <div class="success-checkmark">
+            <div class="success-checkmark-circle">
+              <div class="success-checkmark-stem"></div>
+              <div class="success-checkmark-kick"></div>
+            </div>
+          </div>
         </div>
-        <h4 class="modal-title mb-3">Enhanced Import Successful!</h4>
-        <div id="importResults" class="mb-4">
-          <div class="row">
-            <div class="col-md-4">
-              <div class="import-stat">
-                <div class="stat-number text-success" id="customersCreated">0</div>
-                <div class="stat-label">Customers Created</div>
+
+        <!-- Success Title -->
+        <h2 class="success-title mb-3">Enhanced Import Successful!</h2>
+        <p class="success-subtitle text-muted mb-5" id="successMessage">Enhanced import completed successfully!</p>
+
+        <!-- Import Results Cards -->
+        <div id="importResults" class="row g-4 mb-5">
+          <div class="col-md-4">
+            <div class="result-card result-card-customers">
+              <div class="result-card-icon">
+                <i class="fas fa-users"></i>
+              </div>
+              <div class="result-card-content">
+                <div class="result-number" id="customersCreated">0</div>
+                <div class="result-label">CUSTOMERS CREATED</div>
               </div>
             </div>
-            <div class="col-md-4">
-              <div class="import-stat">
-                <div class="stat-number text-primary" id="schedulesCreated">0</div>
-                <div class="stat-label">Schedules Created</div>
+          </div>
+          <div class="col-md-4">
+            <div class="result-card result-card-schedules">
+              <div class="result-card-icon">
+                <i class="fas fa-calendar-check"></i>
+              </div>
+              <div class="result-card-content">
+                <div class="result-number" id="schedulesCreated">0</div>
+                <div class="result-label">SCHEDULES CREATED</div>
               </div>
             </div>
-            <div class="col-md-4">
-              <div class="import-stat">
-                <div class="stat-number text-warning" id="assignmentsCreated">0</div>
-                <div class="stat-label">Assignments Created</div>
+          </div>
+          <div class="col-md-4">
+            <div class="result-card result-card-assignments">
+              <div class="result-card-icon">
+                <i class="fas fa-tasks"></i>
+              </div>
+              <div class="result-card-content">
+                <div class="result-number" id="assignmentsCreated">0</div>
+                <div class="result-label">ASSIGNMENTS CREATED</div>
               </div>
             </div>
           </div>
         </div>
-        <p class="text-muted mb-4" id="successMessage">Enhanced import completed successfully!</p>
-        <div class="d-flex justify-content-center gap-3">
-          <button type="button" class="btn btn-primary" id="goToCustomersBtn">
+
+        <!-- Action Buttons -->
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+          <button type="button" class="btn btn-primary btn-lg px-4" id="goToCustomersBtn">
             <i class="fas fa-users me-2"></i>View Customers
           </button>
-          <button type="button" class="btn btn-outline-secondary" id="goToSchedulesBtn">
+          <button type="button" class="btn btn-outline-secondary btn-lg px-4" id="goToSchedulesBtn">
             <i class="fas fa-calendar me-2"></i>View Schedules
           </button>
         </div>
@@ -1277,15 +1305,446 @@ Sample Customer,7777777777,789 Pine St Bangalore,sample@example.com,GST789,PAN78
   border-left: 4px solid #dc3545;
 }
 
-/* Success animation */
-.success-icon {
-  animation: successPulse 0.6s ease-in-out;
+/* Enhanced Success Modal Styles */
+.modal-content {
+  border-radius: 24px !important;
+  overflow: hidden;
 }
 
-@keyframes successPulse {
-  0% { transform: scale(0.8); opacity: 0; }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); opacity: 1; }
+.modal-header {
+  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  opacity: 0.6;
+  padding: 1rem;
+}
+
+.btn-close:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Success Animation */
+.success-animation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: successZoomIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes successZoomIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(-180deg);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1) rotate(-90deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* Animated Checkmark */
+.success-checkmark {
+  width: 80px;
+  height: 80px;
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.success-checkmark-circle {
+  width: 80px;
+  height: 80px;
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+}
+
+.success-checkmark-circle::after {
+  content: '';
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  animation: successRipple 0.6s ease-out;
+}
+
+@keyframes successRipple {
+  0% {
+    width: 0px;
+    height: 0px;
+    opacity: 1;
+  }
+  100% {
+    width: 80px;
+    height: 80px;
+    opacity: 0;
+  }
+}
+
+.success-checkmark-stem {
+  position: absolute;
+  width: 3px;
+  height: 20px;
+  background-color: #ffffff;
+  left: 32px;
+  top: 37px;
+  border-radius: 2px;
+  transform-origin: bottom;
+  transform: rotate(-45deg);
+  animation: successStem 0.3s ease-in-out 0.3s both;
+}
+
+.success-checkmark-kick {
+  position: absolute;
+  width: 12px;
+  height: 3px;
+  background-color: #ffffff;
+  left: 30px;
+  top: 50px;
+  border-radius: 2px;
+  transform-origin: left bottom;
+  transform: rotate(45deg);
+  animation: successKick 0.2s ease-in-out 0.5s both;
+}
+
+@keyframes successStem {
+  0% {
+    height: 0;
+    opacity: 0;
+  }
+  100% {
+    height: 20px;
+    opacity: 1;
+  }
+}
+
+@keyframes successKick {
+  0% {
+    width: 0;
+    opacity: 0;
+  }
+  100% {
+    width: 12px;
+    opacity: 1;
+  }
+}
+
+/* Success Title */
+.success-title {
+  font-weight: 800;
+  color: #1f2937;
+  font-size: 2.25rem;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: successTitleSlide 0.6s ease-out 0.4s both;
+}
+
+@keyframes successTitleSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.success-subtitle {
+  font-size: 1.1rem;
+  font-weight: 500;
+  animation: successSubtitleFade 0.6s ease-out 0.6s both;
+}
+
+@keyframes successSubtitleFade {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced Result Cards */
+.result-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 20px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  animation: resultCardSlide 0.6s ease-out both;
+}
+
+.result-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  z-index: 1;
+}
+
+.result-card:nth-child(1) {
+  animation-delay: 0.8s;
+}
+
+.result-card:nth-child(2) {
+  animation-delay: 1s;
+}
+
+.result-card:nth-child(3) {
+  animation-delay: 1.2s;
+}
+
+@keyframes resultCardSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.result-card:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  transform: translateY(-8px) scale(1.02);
+}
+
+.result-card-customers::before {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.result-card-schedules::before {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.result-card-assignments::before {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.result-card-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  font-size: 24px;
+  color: white;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.result-card-customers .result-card-icon {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.result-card-schedules .result-card-icon {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.result-card-assignments .result-card-icon {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.result-card-icon::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+  animation: iconShimmer 2s ease-in-out infinite;
+}
+
+@keyframes iconShimmer {
+  0%, 100% {
+    opacity: 0;
+    transform: rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: rotate(180deg);
+  }
+}
+
+.result-number {
+  font-size: 3rem;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 0.75rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.result-card-customers .result-number {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.result-card-schedules .result-number {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.result-card-assignments .result-number {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.result-label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #6b7280;
+  opacity: 0.8;
+}
+
+/* Enhanced Action Buttons */
+.btn-lg {
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  animation: buttonSlideUp 0.6s ease-out 1.4s both;
+}
+
+@keyframes buttonSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile Responsive Enhancements */
+@media (max-width: 768px) {
+  .modal-dialog {
+    margin: 1rem;
+  }
+
+  .modal-body {
+    padding: 2rem 1.5rem !important;
+  }
+
+  .success-checkmark,
+  .success-checkmark-circle {
+    width: 60px;
+    height: 60px;
+  }
+
+  .success-checkmark-stem {
+    left: 24px;
+    top: 28px;
+    height: 15px;
+  }
+
+  .success-checkmark-kick {
+    left: 22px;
+    top: 37px;
+    width: 9px;
+  }
+
+  .success-title {
+    font-size: 1.75rem;
+  }
+
+  .success-subtitle {
+    font-size: 1rem;
+  }
+
+  .result-card {
+    padding: 1.5rem 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .result-card-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+    margin-bottom: 1rem;
+  }
+
+  .result-number {
+    font-size: 2.25rem;
+  }
+
+  .result-label {
+    font-size: 0.75rem;
+  }
+
+  .btn-lg {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    width: 100%;
+    margin-bottom: 0.75rem;
+  }
+
+  .d-flex.justify-content-center {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 576px) {
+  .modal-body {
+    padding: 1.5rem 1rem !important;
+  }
+
+  .success-title {
+    font-size: 1.5rem;
+  }
+
+  .result-card {
+    padding: 1.25rem 0.875rem;
+  }
+
+  .result-number {
+    font-size: 2rem;
+  }
+
+  .btn-lg {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.9rem;
+  }
 }
 
 /* Responsive adjustments */

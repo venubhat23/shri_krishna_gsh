@@ -307,8 +307,7 @@ class CustomersController < ApplicationController
     begin
       require 'csv'
       csv = CSV.parse(csv_data.strip, headers: true, header_converters: :symbol)
-
-      # Check for required headers
+      # Check for required headers - only customer data is required
       required_headers = [:name, :phone_number, :address]
       optional_headers = [:email, :gst_number, :pan_number, :member_id, :latitude, :longitude, :delivery_person_id, :product_id, :quantity, :start_date, :end_date]
 
@@ -378,6 +377,7 @@ class CustomersController < ApplicationController
           row_errors << "Invalid email format"
         end
 
+        # Only validate delivery-related fields if they're provided
         if row[:delivery_person_id].present? && !User.delivery_people.exists?(id: row[:delivery_person_id])
           row_errors << "Delivery person ID #{row[:delivery_person_id]} not found"
         end
@@ -396,6 +396,21 @@ class CustomersController < ApplicationController
 
         if row[:end_date].present? && !valid_date?(row[:end_date])
           row_errors << "Invalid end date format (use YYYY-MM-DD)"
+        end
+
+        # Check if delivery assignment fields are partially provided
+        delivery_fields = [row[:delivery_person_id], row[:product_id], row[:quantity], row[:start_date], row[:end_date]]
+        non_blank_delivery_fields = delivery_fields.select(&:present?)
+
+        if non_blank_delivery_fields.any? && non_blank_delivery_fields.length < 5
+          missing_delivery_fields = []
+          missing_delivery_fields << "delivery_person_id" if row[:delivery_person_id].blank?
+          missing_delivery_fields << "product_id" if row[:product_id].blank?
+          missing_delivery_fields << "quantity" if row[:quantity].blank?
+          missing_delivery_fields << "start_date" if row[:start_date].blank?
+          missing_delivery_fields << "end_date" if row[:end_date].blank?
+
+          row_errors << "For delivery assignments, all fields are required: #{missing_delivery_fields.join(', ')}"
         end
 
         if row_errors.any?
@@ -420,11 +435,22 @@ class CustomersController < ApplicationController
           valid_count: valid_rows
         }
       else
+        # Check how many rows have complete delivery assignment data
+        rows_with_delivery = csv.count do |row|
+          [row[:delivery_person_id], row[:product_id], row[:quantity], row[:start_date], row[:end_date]].all?(&:present?)
+        end
+
+        success_message = "✓ CSV is valid! Found #{valid_rows} customers ready for import."
+        if rows_with_delivery > 0
+          success_message += " #{rows_with_delivery} will have delivery assignments created."
+        end
+
         render json: {
           valid: true,
-          message: "✓ CSV is valid! Found #{valid_rows} customers ready for enhanced import with delivery assignments.",
+          message: success_message,
           row_count: valid_rows,
-          headers: csv.headers
+          headers: csv.headers,
+          rows_with_delivery: rows_with_delivery
         }
       end
 
@@ -457,9 +483,15 @@ class CustomersController < ApplicationController
   # Download enhanced CSV template
   def download_enhanced_template
     template_content = Customer.enhanced_csv_template
-    
+
     respond_to do |format|
       format.csv do
+        send_data template_content,
+                  filename: 'customers_enhanced_template.csv',
+                  type: 'text/csv',
+                  disposition: 'attachment'
+      end
+      format.html do
         send_data template_content,
                   filename: 'customers_enhanced_template.csv',
                   type: 'text/csv',

@@ -270,10 +270,10 @@ class Customer < ApplicationRecord
         return result
       end
       
-      # Validate required headers for enhanced format
-      required_headers = [:name, :phone_number, :address, :email, :gst_number, :pan_number, :delivery_person_id, :product_id, :quantity, :start_date, :end_date]
+      # Validate required headers for enhanced format - only customer data is required
+      required_headers = [:name, :phone_number, :address]
       missing_headers = required_headers - csv.headers.compact.map(&:to_sym)
-      
+
       if missing_headers.any?
         result[:message] = "Missing required columns: #{missing_headers.join(', ')}"
         return result
@@ -315,32 +315,44 @@ class Customer < ApplicationRecord
             next
           end
           
-          # Validate delivery person exists
-          delivery_person = User.find_by(id: row[:delivery_person_id], role: 'delivery_person')
-          if row[:delivery_person_id].present? && delivery_person.nil?
-            result[:errors] << "Row #{row_number}: Invalid delivery person ID #{row[:delivery_person_id]}"
-            next
-          end
-          
-          # Validate product exists
-          product = Product.find_by(id: row[:product_id])
-          if row[:product_id].present? && product.nil?
-            result[:errors] << "Row #{row_number}: Invalid product ID #{row[:product_id]}"
-            next
-          end
-          
-          # Validate dates
-          begin
-            start_date = Date.parse(row[:start_date].to_s) if row[:start_date].present?
-            end_date = Date.parse(row[:end_date].to_s) if row[:end_date].present?
-            
-            if start_date && end_date && start_date > end_date
-              result[:errors] << "Row #{row_number}: Start date cannot be after end date"
+          # Initialize variables for optional delivery assignment fields
+          delivery_person = nil
+          product = nil
+          start_date = nil
+          end_date = nil
+
+          # Validate delivery person exists (if provided)
+          if row[:delivery_person_id].present?
+            delivery_person = User.find_by(id: row[:delivery_person_id], role: 'delivery_person')
+            if delivery_person.nil?
+              result[:errors] << "Row #{row_number}: Invalid delivery person ID #{row[:delivery_person_id]}"
               next
             end
-          rescue ArgumentError
-            result[:errors] << "Row #{row_number}: Invalid date format. Use YYYY-MM-DD format"
-            next
+          end
+
+          # Validate product exists (if provided)
+          if row[:product_id].present?
+            product = Product.find_by(id: row[:product_id])
+            if product.nil?
+              result[:errors] << "Row #{row_number}: Invalid product ID #{row[:product_id]}"
+              next
+            end
+          end
+          
+          # Validate dates (if provided)
+          if row[:start_date].present? || row[:end_date].present?
+            begin
+              start_date = Date.parse(row[:start_date].to_s) if row[:start_date].present?
+              end_date = Date.parse(row[:end_date].to_s) if row[:end_date].present?
+
+              if start_date && end_date && start_date > end_date
+                result[:errors] << "Row #{row_number}: Start date cannot be after end date"
+                next
+              end
+            rescue ArgumentError
+              result[:errors] << "Row #{row_number}: Invalid date format. Use YYYY-MM-DD format"
+              next
+            end
           end
           
           # Check if customer already exists
@@ -378,8 +390,8 @@ class Customer < ApplicationRecord
             next
           end
           
-          # Create delivery schedule and assignments if optional fields provided
-          if row[:product_id].present? && row[:quantity].present? && row[:start_date].present? && row[:end_date].present?
+          # Create delivery schedule and assignments if ALL optional fields are provided
+          if product.present? && row[:quantity].present? && start_date.present? && end_date.present?
             schedule = DeliverySchedule.create(
               customer_id: customer.id,
               user_id: delivery_person&.id || current_user.id,
