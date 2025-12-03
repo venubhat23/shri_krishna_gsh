@@ -279,9 +279,9 @@ class Customer < ApplicationRecord
         return result
       end
       
-      # Check user limit (maximum 200 customers)
-      if csv.length > 200
-        result[:message] = "Maximum 200 customers allowed per bulk import. Your file contains #{csv.length} rows."
+      # Check user limit (maximum 50 customers)
+      if csv.length > 50
+        result[:message] = "Maximum 50 customers allowed per bulk import. Your file contains #{csv.length} rows."
         return result
       end
       
@@ -444,7 +444,7 @@ class Customer < ApplicationRecord
   
   # Enhanced CSV template for bulk import with delivery assignments
   def self.enhanced_csv_template
-    "name,phone_number,address,email,gst_number,pan_number,delivery_person_id,product_id,quality,start_date,end_date\n" +
+    "name,phone_number,address,email,gst_number,pan_number,delivery_person_id,product_id,quantity,start_date,end_date\n" +
     "John Doe,9999999999,123 Main St Delhi,john@example.com,GST123,PAN123,1,1,5,2024-01-01,2024-01-31\n" +
     "Jane Smith,8888888888,456 Oak Ave Mumbai,jane@example.com,GST456,PAN456,2,2,3,2024-01-01,2024-01-31\n"
   end

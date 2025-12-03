@@ -84,7 +84,7 @@
           </li>
           <li class="mb-2">
             <i class="fas fa-check text-success me-2"></i>
-            Maximum 50 customers per import for optimal performance
+            Maximum 50 customers per import (optimized for performance)
           </li>
         </ul>
       </div>
@@ -99,7 +99,7 @@
               <strong>Column 7 (Delivery Person):</strong><br>
               • delivery_person_id (ID from system)<br><br>
               <strong>Columns 8-9 (Product & Quantity):</strong><br>
-              • product_id (ID from system), quality<br><br>
+              • product_id (ID from system), quantity<br><br>
               <strong>Columns 10-11 (Schedule Dates):</strong><br>
               • start_date, end_date (YYYY-MM-DD format)
             </div>
@@ -317,7 +317,7 @@
             id="csvData" 
             name="csv_data"
             rows="15" 
-            placeholder="Paste your enhanced CSV data here...&#10;&#10;Format: name,phone_number,address,email,gst_number,pan_number,delivery_person_id,product_id,quality,start_date,end_date&#10;&#10;Example:&#10;John Doe,9999999999,123 Main St Delhi,john@example.com,GST123,PAN123,1,1,5,2024-01-01,2024-01-31&#10;Jane Smith,8888888888,456 Oak Ave Mumbai,jane@example.com,GST456,PAN456,2,2,3,2024-01-01,2024-01-31"></textarea>
+            placeholder="Paste your enhanced CSV data here...&#10;&#10;Format: name,phone_number,address,email,gst_number,pan_number,delivery_person_id,product_id,quantity,start_date,end_date&#10;&#10;Example:&#10;John Doe,9999999999,123 Main St Delhi,john@example.com,GST123,PAN123,1,1,5,2024-01-01,2024-01-31&#10;Jane Smith,8888888888,456 Oak Ave Mumbai,jane@example.com,GST456,PAN456,2,2,3,2024-01-01,2024-01-31"></textarea>
           <div class="csv-counter">
             <small class="text-muted">
               <span id="lineCount">0</span> lines • 
@@ -681,7 +681,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function loadSampleData() {
-    csvData.value = `name,phone_number,address,email,gst_number,pan_number,delivery_person_id,product_id,quality,start_date,end_date
+    csvData.value = `name,phone_number,address,email,gst_number,pan_number,delivery_person_id,product_id,quantity,start_date,end_date
 John Doe,9999999999,123 Main St Delhi,john@example.com,GST123,PAN123,1,1,5,2024-01-01,2024-01-31
 Jane Smith,8888888888,456 Oak Ave Mumbai,jane@example.com,GST456,PAN456,2,2,3,2024-01-01,2024-01-31
 Sample Customer,7777777777,789 Pine St Bangalore,sample@example.com,GST789,PAN789,1,2,2,2024-01-15,2024-02-15`;

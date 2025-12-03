@@ -307,6 +307,16 @@ class CustomersController < ApplicationController
     begin
       require 'csv'
       csv = CSV.parse(csv_data.strip, headers: true, header_converters: :symbol)
+
+      # Check customer limit (maximum 50 customers)
+      if csv.length > 50
+        render json: {
+          valid: false,
+          message: "Maximum 50 customers allowed per bulk import. Your file contains #{csv.length} rows."
+        }
+        return
+      end
+
       # Check for required headers - only customer data is required
       required_headers = [:name, :phone_number, :address]
       optional_headers = [:email, :gst_number, :pan_number, :member_id, :latitude, :longitude, :delivery_person_id, :product_id, :quantity, :start_date, :end_date]
