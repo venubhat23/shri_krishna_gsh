@@ -309,13 +309,6 @@ class CustomersController < ApplicationController
       csv = CSV.parse(csv_data.strip, headers: true, header_converters: :symbol)
 
       # Check customer limit (maximum 50 customers)
-      if csv.length > 50
-        render json: {
-          valid: false,
-          message: "Maximum 50 customers allowed per bulk import. Your file contains #{csv.length} rows."
-        }
-        return
-      end
 
       # Check for required headers - only customer data is required
       required_headers = [:name, :phone_number, :address]
@@ -374,7 +367,7 @@ class CustomersController < ApplicationController
 
         if row[:phone_number].blank?
           row_errors << "Phone number is required"
-        elsif !valid_phone_number?(row[:phone_number])
+        elsif row[:phone_number].to_s.strip.downcase != 'na' && !valid_phone_number?(row[:phone_number])
           row_errors << "Invalid phone number format (must be 10 digits)"
         end
 
@@ -382,8 +375,8 @@ class CustomersController < ApplicationController
           row_errors << "Address is required"
         end
 
-        # Validate optional fields if present
-        if row[:email].present? && !valid_email?(row[:email])
+        # Validate optional fields if present (skip if NA or empty)
+        if row[:email].present? && row[:email].to_s.strip.downcase != 'na' && !valid_email?(row[:email])
           row_errors << "Invalid email format"
         end
 
@@ -480,7 +473,8 @@ class CustomersController < ApplicationController
   end
 
   def valid_email?(email)
-    email.to_s.match?(/\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i)
+    # More lenient email validation - just check for @ and domain structure
+    email.to_s.match?(/\A[^@\s]+@[^@\s]+\.[^@\s]+\z/i)
   end
 
   def valid_date?(date_str)

@@ -204,15 +204,15 @@ class Customer < ApplicationRecord
           next
         end
         
-        # Create customer
+        # Create customer - handle NA values
         customer = Customer.new(
           name: row[:name].to_s.strip,
           phone_number: row[:phone_number].to_s.strip,
           address: row[:address].to_s.strip,
-          email: row[:email].to_s.strip.presence,
-          gst_number: row[:gst_number].to_s.strip.presence,
-          pan_number: row[:pan_number].to_s.strip.presence,
-          member_id: row[:member_id].to_s.strip.presence,
+          email: normalize_na_value(row[:email]),
+          gst_number: normalize_na_value(row[:gst_number]),
+          pan_number: normalize_na_value(row[:pan_number]),
+          member_id: normalize_na_value(row[:member_id]),
           user: current_user
         )
         
@@ -280,10 +280,6 @@ class Customer < ApplicationRecord
       end
       
       # Check user limit (maximum 50 customers)
-      if csv.length > 50
-        result[:message] = "Maximum 50 customers allowed per bulk import. Your file contains #{csv.length} rows."
-        return result
-      end
       
       imported_count = 0
       delivery_assignments_created = 0
@@ -366,14 +362,14 @@ class Customer < ApplicationRecord
             next
           end
           
-          # Create customer (columns 1-6)
+          # Create customer (columns 1-6) - handle NA values
           customer = Customer.new(
             name: row[:name].to_s.strip,
-            phone_number: row[:phone_number].to_s.strip,
+            phone_number: normalize_na_value(row[:phone_number]),
             address: row[:address].to_s.strip,
-            email: row[:email].to_s.strip.presence,
-            gst_number: row[:gst_number].to_s.strip.presence,
-            pan_number: row[:pan_number].to_s.strip.presence,
+            email: normalize_na_value(row[:email]),
+            gst_number: normalize_na_value(row[:gst_number]),
+            pan_number: normalize_na_value(row[:pan_number]),
             delivery_person_id: delivery_person&.id,
             user: current_user
           )
@@ -441,12 +437,20 @@ class Customer < ApplicationRecord
     
     result
   end
-  
+
+  # Helper method to normalize NA values to nil
+  def self.normalize_na_value(value)
+    return nil if value.blank?
+    cleaned_value = value.to_s.strip
+    return nil if cleaned_value.downcase == 'na'
+    cleaned_value.presence
+  end
+
   # Enhanced CSV template for bulk import with delivery assignments
   def self.enhanced_csv_template
     "name,phone_number,address,email,gst_number,pan_number,delivery_person_id,product_id,quantity,start_date,end_date\n" +
     "John Doe,9999999999,123 Main St Delhi,john@example.com,GST123,PAN123,1,1,5,2024-01-01,2024-01-31\n" +
-    "Jane Smith,8888888888,456 Oak Ave Mumbai,jane@example.com,GST456,PAN456,2,2,3,2024-01-01,2024-01-31\n"
+    "Jane Smith,8888888888,456 Oak Ave Mumbai,NA,NA,NA,2,2,3,2024-01-01,2024-01-31\n"
   end
   
   # Instance methods
