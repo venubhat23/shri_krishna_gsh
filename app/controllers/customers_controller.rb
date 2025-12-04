@@ -289,9 +289,7 @@ class CustomersController < ApplicationController
       }
       return
     end
-    
     result = Customer.enhanced_bulk_import(csv_data, current_user)
-    
     render json: result
   end
   
@@ -311,9 +309,8 @@ class CustomersController < ApplicationController
       # Check customer limit (maximum 50 customers)
 
       # Check for required headers - only customer data is required
-      required_headers = [:name, :phone_number, :address]
+      required_headers = [:name, :phone_number]
       optional_headers = [:email, :gst_number, :pan_number, :member_id, :latitude, :longitude, :delivery_person_id, :product_id, :quantity, :start_date, :end_date]
-
       # Check if any required headers are missing
       missing_headers = required_headers - csv.headers.compact.map(&:to_sym)
 
@@ -351,7 +348,6 @@ class CustomersController < ApplicationController
         }
         return
       end
-
       # Validate data content
       errors = []
       valid_rows = 0
@@ -422,7 +418,6 @@ class CustomersController < ApplicationController
           valid_rows += 1
         end
       end
-
       if errors.any?
         # Limit error display to first 10 errors
         error_message = "Found #{errors.length} validation errors:\n\n"

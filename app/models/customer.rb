@@ -25,7 +25,7 @@ class Customer < ApplicationRecord
   # Validations
   validates :name, presence: true, length: { minimum: 2, maximum: 100 }
   validates :phone_number, presence: true
-  validates :address, presence: true, length: { minimum: 5, maximum: 255 }
+  validates :address, presence: true, length: { minimum: 2, maximum: 255 }
   validates :user_id, presence: true
   validates :member_id, uniqueness: { allow_blank: true }, allow_blank: true
   validates :latitude, numericality: { 
@@ -285,32 +285,51 @@ class Customer < ApplicationRecord
       delivery_assignments_created = 0
       delivery_schedules_created = 0
       
+      # Pre-load existing customers to avoid N+1 queries - split into chunks for better performance
+      customer_combinations = csv.map do |row|
+        next if row[:name].blank? || row[:phone_number].blank?
+        [row[:name].to_s.strip, row[:phone_number].to_s.strip]
+      end.compact.uniq
+      existing_customers = {}
+      unless customer_combinations.empty?
+        # Process in chunks of 50 to avoid massive queries
+        customer_combinations.each_slice(50) do |chunk|
+          conditions = chunk.map { |name, phone| "(name = ? AND phone_number = ?)" }.join(" OR ")
+          params = chunk.flatten
+
+          Customer.where(conditions, *params).find_each do |customer|
+            existing_customers["#{customer.name}|#{customer.phone_number}"] = customer
+          end
+        end
+      end
       ActiveRecord::Base.transaction do
         csv.each_with_index do |row, index|
           row_number = index + 2 # +2 because index starts at 0 and we have headers
-          
+
           # Skip empty rows
           if row[:name].blank? && row[:phone_number].blank? && row[:address].blank?
             result[:skipped_rows] << "Row #{row_number}: Empty row"
             next
           end
-          
+
           # Validate required fields
           if row[:name].blank?
             result[:errors] << "Row #{row_number}: Name is required"
             next
           end
-          
-          if row[:phone_number].blank?
-            result[:errors] << "Row #{row_number}: Phone number is required"
+
+          # Normalize phone number and check if it's valid
+          normalized_phone = normalize_na_value(row[:phone_number])
+          if normalized_phone.blank?
+            result[:errors] << "Row #{row_number}: Phone number is required (NA values not allowed)"
             next
           end
-          
+          # Normalize address and check if it's valid
           if row[:address].blank?
-            result[:errors] << "Row #{row_number}: Address is required"
+            result[:errors] << "Row #{row_number}: Address is required (NA values not allowed)"
             next
           end
-          
+
           # Initialize variables for optional delivery assignment fields
           delivery_person = nil
           product = nil
@@ -334,7 +353,7 @@ class Customer < ApplicationRecord
               next
             end
           end
-          
+
           # Validate dates (if provided)
           if row[:start_date].present? || row[:end_date].present?
             begin
@@ -350,18 +369,14 @@ class Customer < ApplicationRecord
               next
             end
           end
-          
-          # Check if customer already exists
-          existing_customer = Customer.find_by(
-            name: row[:name].to_s.strip,
-            phone_number: row[:phone_number].to_s.strip
-          )
-          
+          # Check if customer already exists using pre-loaded data
+          customer_key = "#{row[:name].to_s.strip}|#{row[:phone_number].to_s.strip}"
+          existing_customer = existing_customers[customer_key]
+
           if existing_customer
             result[:errors] << "Row #{row_number}: Customer '#{row[:name]}' with phone '#{row[:phone_number]}' already exists"
             next
           end
-          
           # Create customer (columns 1-6) - handle NA values
           customer = Customer.new(
             name: row[:name].to_s.strip,
@@ -427,7 +442,14 @@ class Customer < ApplicationRecord
       result[:imported_count] = imported_count
       result[:delivery_assignments_created] = delivery_assignments_created
       result[:delivery_schedules_created] = delivery_schedules_created
-      result[:message] = "Enhanced import completed successfully"
+      result[:skipped_count] = result[:errors].size + result[:skipped_rows].size
+      result[:total_processed] = csv.size
+
+      if imported_count == 0 && result[:skipped_count] > 0
+        result[:message] = "No new customers imported. #{result[:skipped_count]} rows skipped (duplicates or errors)"
+      else
+        result[:message] = "Enhanced import completed: #{imported_count} customers imported, #{result[:skipped_count]} rows skipped"
+      end
       
     rescue CSV::MalformedCSVError => e
       result[:message] = "Invalid CSV format: #{e.message}"
