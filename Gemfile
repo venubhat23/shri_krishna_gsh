@@ -78,7 +78,7 @@ gem "thruster", require: false
 # gem "image_processing", "~> 1.2"
 
 # AWS SDK for S3 integration
-gem "aws-sdk-s3", "~> 1.0"
+gem "aws-sdk-s3", "~> 1.205"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
